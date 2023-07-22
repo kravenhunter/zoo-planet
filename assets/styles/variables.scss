@@ -1,0 +1,18 @@
+:root {
+   // font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+   
+   // font-weight: 400;
+    --color-text-light:#FFFFFF;
+    --color-text-dark:#000000;
+    --color-link: #646cff;
+    --color-link-hover: #535bf2;
+    color-scheme: light dark;
+    color: rgba(255, 255, 255, 0.87);
+    background-color: #001114;
+    --indexSize:calc(1vw + 1vh);
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-text-size-adjust: 100%;
+  }
