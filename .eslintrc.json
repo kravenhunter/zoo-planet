@@ -5,6 +5,7 @@
     "node": true
   },
   "extends": ["@antfu", "prettier"],
+  "ignorePatterns": [".gitignore", ".prettierignore"],
   "rules": {
     "no-console": "off",
     "no-undef": "off",
