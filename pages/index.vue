@@ -3,6 +3,7 @@ import type { ITest } from 'types/ITest';
 
 const val: ITest = {};
 val.body = 'aewferf';
+const val1 = '';
 </script>
 
 <template>
