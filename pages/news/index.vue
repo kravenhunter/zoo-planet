@@ -1,10 +1,7 @@
 <script setup lang="ts"></script>
 
 <template>
-  <div class="defaultLayout">
-    <UiAddHeader />
-    <slot />
-  </div>
+  <div>News</div>
 </template>
 
 <style scoped></style>

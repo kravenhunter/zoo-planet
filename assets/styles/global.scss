@@ -5,18 +5,35 @@
 *,
 *::before,
 *::after {
-	box-sizing: inherit;
+  box-sizing: inherit;
 }
 body {
-	font-family: montserrat, sans-serif;
+  font-family: montserrat, sans-serif;
 }
 
 a {
-	/*  font-weight: 500; */
-	color: inherit;
-	text-decoration: inherit;
+  /*  font-weight: 500; */
+  color: inherit;
+  text-decoration: inherit;
 }
 
 li {
-	list-style: none;
+  list-style: none;
+}
+
+h1 {
+  //30px
+  font-size: calc(var(--indexSize) * 1.5);
+}
+h2 {
+  //20px
+  font-size: var(--indexSize);
+}
+h3 {
+  //18px
+  font-size: calc(var(--indexSize) * 0.8);
+}
+h4 {
+  //16px
+  font-size: calc(var(--indexSize) * 0.7);
 }
