@@ -12,6 +12,11 @@
     "valid-typeof": "off",
     //"valid-typeof": ["error", { "requireStringLiterals": true }]
     "spaced-comment": "off",
-    "sort-imports": "off"
+    "sort-imports": "off",
+    "vue/attributes-order": "off",
+    "import/order": 0,
+    "no-debugger": "off",
+    "no-restricted-syntax": "off",
+    "antfu/top-level-function": "off"
   }
 }
