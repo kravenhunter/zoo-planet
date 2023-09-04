@@ -1,31 +1,33 @@
 <script setup lang="ts">
+import { onMounted, useState } from "#imports";
+
 interface ILinks {
   name: string;
   path: string;
 }
 const links: ILinks[] = [
-  { name: 'Home', path: '/' },
-  { name: 'News', path: '/news' },
-  { name: 'Business', path: '/business' },
-  { name: 'Magazine', path: '/magazine' },
-  { name: 'Sport', path: '/sport' },
-  { name: 'Art', path: '/art' },
-  { name: 'Culture', path: '/culture' },
-  { name: 'Politics', path: '/politics' },
-  { name: 'Style', path: '/style' },
-  { name: 'Travel', path: '/travel' },
+  { name: "Home", path: "/" },
+  { name: "News", path: "/news" },
+  { name: "Business", path: "/business" },
+  { name: "Magazine", path: "/magazine" },
+  { name: "Sport", path: "/sport" },
+  { name: "Art", path: "/art" },
+  { name: "Culture", path: "/culture" },
+  { name: "Politics", path: "/politics" },
+  { name: "Style", path: "/style" },
+  { name: "Travel", path: "/travel" },
 ];
 
-const activeLink = useState<string | null>('activeLink', () => 'Home');
+const activeLink = useState<string | null>("activeLink", () => "Home");
 // const activeLink = (name: string) => useState<string | null>(name);
 
 onMounted(() => {
-  document.querySelectorAll('.link').forEach((el) => {
-    el.addEventListener('click', (event) => {
+  document.querySelectorAll(".link").forEach((el) => {
+    el.addEventListener("click", (event) => {
       // activeLink.value = event?.target?.inerText;
       // activeLink.value = el?.text;
       activeLink.value = el?.textContent;
-      console.log('activeLink', activeLink);
+      console.log("activeLink", activeLink);
 
       console.log(el);
     });
