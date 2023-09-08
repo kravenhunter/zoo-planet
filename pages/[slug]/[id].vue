@@ -1,17 +1,20 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useRoute } from "#imports";
+
+const route = useRoute();
+</script>
 
 <template>
   <div class="wrapper">
-    <ul class="text-center">
-      <li v-for="n in 5" :key="n">{{ n }}</li>
-    </ul>
+    <InfoAbout v-if="route.params.id === 'about'" />
+    <TestComponent v-if="route.params.id === 'test'" />
   </div>
 </template>
 
 <style scoped lang="scss">
 .wrapper {
-  height: 100vh;
-  font-size: 1rem;
+  height: 100%;
+
   display: grid;
 }
 </style>

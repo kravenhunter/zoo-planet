@@ -23,55 +23,55 @@ const education = [
     text: `The Fighting Extinction Schools Program engages students and teachers in real-world learning for wildlife. Become a Fighting Extinction School by completing a curriculum-linked sequence of learning with your students and sharing with Zoos Victoria online. Create your own Fighting Extinction Schools journey by choosing one, or all the opportunities below including; school excursions, digital programs, education resources, teacher professional development, and more.`,
   },
   {
-    source: "images/our_programs.jpg",
+    source: "/images/our_programs.jpg",
     title: "educaour programstion",
     subtitle: "",
     text: "Get the most up-to-date information and strategies for teaching real-world content that you can use straight away. Available exclusively for Zoos Victoria Teacher Members.",
   },
   {
-    source: "images/tranings.jpg",
+    source: "/images/tranings.jpg",
     title: "tranings & courses",
     subtitle: "",
     text: "Get the most up-to-date information and strategies for teaching real-world content that you can use straight away. Available exclusively for Zoos Victoria Teacher Members.",
   },
   {
-    source: "images/comunity.jpg",
+    source: "/images/comunity.jpg",
     title: "comunity education",
     subtitle: "",
     text: "Get the most up-to-date information and strategies for teaching real-world content that you can use straight away. Available exclusively for Zoos Victoria Teacher Members.",
   },
   {
-    source: "images/development.jpg",
+    source: "/images/development.jpg",
     title: "profeccional development",
     subtitle: "",
     text: "Get the most up-to-date information and strategies for teaching real-world content that you can use straight away. Available exclusively for Zoos Victoria Teacher Members.",
   },
   {
-    source: "images/learning.jpg",
+    source: "/images/learning.jpg",
     title: "digital learning",
     subtitle: "",
     text: "Get the most up-to-date information and strategies for teaching real-world content that you can use straight away. Available exclusively for Zoos Victoria Teacher Members.",
   },
   {
-    source: "images/science.jpg",
+    source: "/images/science.jpg",
     title: "institute of science",
     subtitle: "",
     text: "Get the most up-to-date information and strategies for teaching real-world content that you can use straight away. Available exclusively for Zoos Victoria Teacher Members.",
   },
   {
-    source: "images/rino.jpg",
+    source: "/images/rino.jpg",
     title: "A baby rino arrived an our  Zoo",
     subtitle: "",
     text: "Get the most up-to-date information and strategies for teaching real-world content that you can use straight away. Available exclusively for Zoos Victoria Teacher Members.",
   },
   {
-    source: "images/monkey.jpg",
+    source: "/images/monkey.jpg",
     title: "insight into the wild day-today life of the zoo planet in the ... ",
     subtitle: "",
     text: "Get the most up-to-date information and strategies for teaching real-world content that you can use straight away. Available exclusively for Zoos Victoria Teacher Members.",
   },
   {
-    source: "images/dolphins.jpg",
+    source: "/images/dolphins.jpg",
     title: "swim with our friends dolphins",
     subtitle: "",
     text: "Get the most up-to-date information and strategies for teaching real-world content that you can use straight away. Available exclusively for Zoos Victoria Teacher Members.",
@@ -106,7 +106,7 @@ val.body = "aewferf";
 <template>
   <div class="body">
     <section class="offer">
-      <Image source="images/citten_bg.jpg" class="image_offer">
+      <Image source="/images/citten_bg.jpg" class="image_offer">
         <article class="offer_block">
           <Card class="align-self-center" :enable-slot="true">
             <h1 class="text-center text-white">
@@ -138,7 +138,7 @@ val.body = "aewferf";
             <v-card color="transparent">
               <div class="panda_card">
                 <v-avatar class="ma-3 panda_img" size="181" rounded="50">
-                  <v-img src="images/panda.jpg" cover></v-img>
+                  <v-img src="/images/panda.jpg" cover></v-img>
                 </v-avatar>
                 <div class="panda_hourse">
                   <div class="clock">
@@ -162,7 +162,7 @@ val.body = "aewferf";
               <div class="rabbit_block" v-for="n in 2" :key="n">
                 <div class="rabbit">
                   <v-avatar class="mx-3 mb-4" size="50" rounded="0">
-                    <v-img src="images/rabbit_in_hat.svg"></v-img>
+                    <v-img src="/images/rabbit_in_hat.svg"></v-img>
                   </v-avatar>
                 </div>
 
@@ -176,10 +176,10 @@ val.body = "aewferf";
         </article>
       </Image>
     </section>
-    <section class="galary_wrapper">
+    <!--     <section class="galary_wrapper">
       <v-img src="images/parrot_bg.jpg" alt="parrot_bg">
         <div class="galary_block">
-          <article class="galary_list first_grid">
+          <div class="galary_list first_grid">
             <Card
               class="align-self-start description"
               :title-card="data[0].title"
@@ -197,15 +197,46 @@ val.body = "aewferf";
               </v-btn>
             </Card>
 
-            <v-img class="parrot" src="images/parrot.jpg" cover alt="parrot" />
-            <v-img class="lynx" src="images/lynx.jpg" cover alt="lynx" />
+            <v-img class="parrot" src="images/parrot_galary.jpg" cover alt="parrot" />
+            <v-img class="lynx" src="images/lynx_galary.jpg" cover alt="lynx" />
             <v-img class="opossums" src="images/animal1.jpg" cover alt="opossums" />
-          </article>
+          </div>
 
-          <article class="galary_list first_grid">
+          <div class="galary_list first_grid">
             <v-img class="red_bear" src="images/red_bear.jpg" cover alt="red_bear" />
             <v-img class="coala" src="images/coala.jpg" cover alt="coala" />
             <v-img class="bober" src="images/bober.jpg" cover alt="bober" />
+          </div>
+        </div>
+      </v-img>
+    </section> -->
+    <section class="galary_wrapper">
+      <v-img src="/images/parrot_bg.jpg" alt="parrot_bg">
+        <div class="galary">
+          <article class="galary_first">
+            <CardItem
+              class="main"
+              title-card="Australian beaches"
+              text-card=" All of our animals are gently handled from the moment they arrive at the shop and are even put on a “probationary” period of 2-4 weeks prior to customer availability."
+              button-title="See all animals"
+              :button-slot="true">
+              <v-btn
+                class="px-10 py- 10 text-subtitle-1"
+                color="#ffc107"
+                variant="outlined"
+                size="large"
+                append-icon="mdi-paw">
+                <span>See all animals</span>
+              </v-btn>
+            </CardItem>
+            <CardItem image-source="/images/parrot_galary.jpg" class="parrot" image-heigth="100%" />
+            <CardItem image-source="/images/lynx_galary.jpg" class="lynx" />
+            <CardItem image-source="/images/animal1.jpg" class="opossums" />
+          </article>
+          <article class="galary_second">
+            <CardItem class="red_bear" image-source="/images/red_bear.jpg" />
+            <CardItem class="coala" image-source="/images/coala.jpg" />
+            <CardItem class="bober" image-source="/images/bober.jpg" />
           </article>
         </div>
       </v-img>
@@ -213,15 +244,40 @@ val.body = "aewferf";
     <section class="education_wrapper">
       <div class="education_block">
         <article class="title_block">
-          <Card
+          <!--           <Card
             class="align-self-center description"
             title-align="center"
             text-align="center"
             :title-card="education[0].title"
-            :text-card="education[0].text" />
+            :text-card="education[0].text" /> -->
+
+          <CardItem
+            class="description"
+            :title-card="education[0].title"
+            :text-card="education[0].text"
+            title-align="text-center"
+            text-align="text-center" />
         </article>
         <article class="articles_block">
-          <Card
+          <CardItem
+            v-for="(item, i) in education.slice(1, 7)"
+            :key="i"
+            class="description"
+            color-title="#395A03"
+            :image-source="item.source"
+            :title-card="item.title"
+            :text-card="item.text"
+            :button-slot="true"
+            button-title="Learn more">
+            <v-btn
+              class="px-10 text-subtitle-1"
+              color="#ffc107"
+              size="x-large"
+              append-icon="mdi-paw">
+              <span>Learn more</span>
+            </v-btn>
+          </CardItem>
+          <!--   <Card
             v-for="(item, i) in education.slice(1, 7)"
             :key="i"
             class="align-self-center description"
@@ -233,7 +289,7 @@ val.body = "aewferf";
             <v-btn class="px-10 text-subtitle-1" color="#ffc107" :height="57" append-icon="mdi-paw">
               <span>Learn more</span>
             </v-btn>
-          </Card>
+          </Card> -->
         </article>
       </div>
     </section>
@@ -241,12 +297,19 @@ val.body = "aewferf";
       <v-img class="lynx_bg" src="images/lynx_bg.jpg" cover alt=" lynx_bg">
         <article class="conversation">
           <div class="conversation_title">
-            <Card
+            <!--   <Card
               class="align-self-center description"
               title-align="center"
-              text-align="center"
+              text-align="center" 
               :title-card="education[0].title"
-              :text-card="education[0].text" />
+              :text-card="education[0].text" /> -->
+
+            <CardItem
+              class="description"
+              :title-card="education[0].title"
+              :text-card="education[0].text"
+              title-align="text-center"
+              text-align="text-center" />
           </div>
           <div class="conversation_icons">
             <div class="conversation_icon" v-for="(icon, i) in conversationIcons" :key="i">
@@ -266,15 +329,40 @@ val.body = "aewferf";
     <section class="last_news education_wrapper">
       <div class="education_block">
         <article class="title_block">
-          <Card
+          <!--           <Card
             class="align-self-center description"
-            title-align="center"
+            title-align="center"  
             text-align="center"
             :title-card="data[1].title"
-            :text-card="data[1].text" />
+            :text-card="data[1].text" /> -->
+          <CardItem
+            class="description"
+            :title-card="data[1].title"
+            :text-card="data[1].text"
+            title-align="text-center"
+            text-align="text-center" />
         </article>
         <article class="articles_block">
-          <Card
+          <CardItem
+            v-for="(item, i) in education.slice(7, 10)"
+            :key="i"
+            class="description"
+            color-title="#395A03"
+            :image-source="item.source"
+            :title-card="item.title"
+            :text-card="item.text"
+            :button-slot="true"
+            button-title="Learn more">
+            <v-btn
+              class="px-10 text-subtitle-1"
+              color="#ffc107"
+              size="x-large"
+              append-icon="mdi-paw">
+              <span>Learn more</span>
+            </v-btn>
+          </CardItem>
+
+          <!--    <Card
             v-for="(item, i) in education.slice(7, 10)"
             :key="i"
             class="align-self-center description"
@@ -286,7 +374,7 @@ val.body = "aewferf";
             <v-btn class="px-10 text-subtitle-1" color="#ffc107" :height="57" append-icon="mdi-paw">
               <span>Learn more</span>
             </v-btn>
-          </Card>
+          </Card> -->
         </article>
       </div>
     </section>
@@ -348,49 +436,85 @@ val.body = "aewferf";
     }
   }
 }
+.grid_list {
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  grid-auto-rows: 250px;
+  gap: 15px;
+  & .description {
+    grid-column: span 2;
+    grid-row: 1;
+  }
+  & .parrot {
+    grid-column: 1;
+    grid-row: span 2;
+  }
+  & .lynx {
+    grid-column: 2;
+    grid-row: 2;
+  }
+  & .opossums {
+    grid-column: 2;
+    grid-row: 3;
+  }
+  & .red_bear {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+  & .coala {
+    grid-column: 1;
+    grid-row: 3;
+  }
+  & .bober {
+    grid-column: 2;
+    grid-row: 3;
+  }
+}
 .galary_wrapper {
   background-color: #07060b;
-  & .galary_block {
-    height: 100%;
+  & .galary {
+    padding-top: 50px;
     display: grid;
     grid-template-columns: repeat(2, minmax(auto, 600px));
     justify-content: center;
-    align-content: center;
-    column-gap: 15px;
-    & .first_grid {
+    column-gap: 20px;
+    & .galary_first {
       display: grid;
-      grid-template-columns: repeat(2, auto);
-      grid-auto-rows: 250px;
-      gap: 15px;
-      & .description {
+      grid-template-columns: 1fr 1fr;
+      justify-content: center;
+      gap: 20px;
+
+      & .main {
         grid-column: span 2;
-        grid-row: 1;
       }
       & .parrot {
         grid-column: 1;
-        grid-row: span 2;
+        grid-row: 2 / 4;
       }
-      & .lynx {
-        grid-column: 2;
-        grid-row: 2;
-      }
-      & .opossums {
-        grid-column: 2;
-        grid-row: 3;
-      }
-
+      /*   & .lynx {
+    grid-column: 2;
+    grid-row: 2;
+  }
+  & .opossums {
+    grid-column: 2;
+    grid-row: 3;
+  } */
+    }
+    & .galary_second {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
       & .red_bear {
         grid-column: span 2;
-        grid-row: span 2;
       }
-      & .coala {
-        grid-column: 1;
-        grid-row: 3;
-      }
-      & .bober {
-        grid-column: 2;
-        grid-row: 3;
-      }
+      /*   & .coala {
+          grid-column: 1;
+          grid-row: 3;
+        }
+        & .bober {
+          grid-column: 2;
+          grid-row: 3;
+        } */
     }
   }
 }

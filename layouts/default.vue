@@ -18,7 +18,7 @@ const navTop = [
   },
   {
     title: "Donate",
-    link: "/info/donate",
+    link: "/info/test",
   },
 ];
 const navigationMain = [
