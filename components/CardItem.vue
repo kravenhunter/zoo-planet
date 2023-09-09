@@ -1,9 +1,11 @@
 <script setup lang="ts">
 defineProps({
   classCard: String,
+  classContent: String,
   imageSource: String,
   imageTitle: String,
   imageHeigth: String,
+  imageWidth: String,
   buttonSlot: Boolean,
   icon: String,
   titleCard: String,
@@ -18,6 +20,7 @@ defineProps({
   buttonAlign: String,
   buttonClass: String,
   iconButton: String,
+  inline: Boolean,
   fontTitleSize: {
     type: String,
     default: "1.2rem",
@@ -62,7 +65,7 @@ defineProps({
   </v-card>
  -->
 
-  <v-card :color="colorbg" :elevation="shadowCard" :class="classCard">
+  <v-card v-if="!inline" :color="colorbg" :elevation="shadowCard" :class="classCard">
     <v-img
       v-if="imageSource"
       :height="imageHeigth"
@@ -95,18 +98,39 @@ defineProps({
     <v-card-actions v-else-if="buttonTitle && buttonSlot" :class="buttonAlign">
       <slot />
     </v-card-actions>
+  </v-card>
+  <v-card v-else :color="colorbg" :elevation="3">
+    <v-container>
+      <v-row>
+        <v-col cols="12">
+          <v-card :color="colorbg" :elevation="0">
+            <div class="d-flex flex-no-wrap justify-space-between">
+              <v-img
+                v-if="imageSource"
+                :height="imageHeigth"
+                :width="imageWidth"
+                :src="imageSource"
+                cover
+                class="align-end text-white">
+                <v-card-title v-if="imageTitle" :class="titleAlign">{{ imageTitle }}</v-card-title>
+              </v-img>
+              <div :class="classContent">
+                <v-card-title v-if="titleCard" :class="titleAlign" class="text-h5">
+                  {{ titleCard }}
+                </v-card-title>
+                <v-card-text v-if="subtitleCard" class="py-4" :class="sunTitleAlign">
+                  {{ subtitleCard }}
+                </v-card-text>
 
-    <!--  <v-btn
-        class="px-10"
-        :size="buttonSize"
-        color="#FFC107"
-        variant="outlined"
-        :append-icon="iconButton">
-        <v-card-text class="pa-0" :class="btnTextSize"> {{ buttonTitle }}</v-card-text>
-      </v-btn> -->
-    <!--  <v-card-actions v-if="enablseButtonSlot" :class="buttonAlign">
-      <slot />
-    </v-card-actions> -->
+                <v-card-actions>
+                  <slot />
+                </v-card-actions>
+              </div>
+            </div>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
   </v-card>
 </template>
 

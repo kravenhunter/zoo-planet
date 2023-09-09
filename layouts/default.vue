@@ -5,8 +5,8 @@ const showSearch = ref(false);
 
 const navTop = [
   {
-    title: "Visit Our Zoo",
-    link: "/",
+    title: "Shop",
+    link: "/info/shop",
   },
 
   {
@@ -21,10 +21,14 @@ const navTop = [
     title: "Donate",
     link: "/info/test",
   },
+  {
+    title: "Membership",
+    link: "/info/membership",
+  },
 ];
 const navigationMain = [
   {
-    title: "Visit",
+    title: "Visit Our Zoo",
     link: "/",
   },
   {
@@ -33,19 +37,12 @@ const navigationMain = [
   },
   {
     title: "What’s On",
-    link: "/",
+    link: "/info/whats_on",
   },
-  {
-    title: "Shop",
-    link: "/",
-  },
+
   {
     title: "Tickets",
-    link: "/",
-  },
-  {
-    title: "Membership",
-    link: "/",
+    link: "/info/tickets",
   },
 ];
 const socials = [

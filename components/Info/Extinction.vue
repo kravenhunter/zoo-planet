@@ -289,7 +289,7 @@ const communityLinks = [
         & .second_list {
           display: grid;
           grid-template-columns: repeat(3, minmax(auto, 300px));
-          gap: 20px;
+          justify-content: space-between;
         }
       }
     }
