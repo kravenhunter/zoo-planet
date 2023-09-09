@@ -7,6 +7,7 @@ const route = useRoute();
 <template>
   <div class="wrapper">
     <InfoAbout v-if="route.params.id === 'about'" />
+    <InfoExtinction v-if="route.params.id === 'extinction'" />
     <TestComponent v-if="route.params.id === 'test'" />
   </div>
 </template>

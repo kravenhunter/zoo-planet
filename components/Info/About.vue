@@ -78,41 +78,18 @@ const communityLinks = [
     description: `Learn more about the Zoos Victoria community.`,
   },
 ];
-
-const conversationIcons = [
-  {
-    iconName: "majesticons:earth-sphere",
-    title: "Act for the Wild",
-  },
-  {
-    iconName: "game-icons:materials-science",
-    title: "Science & Recourch",
-  },
-  {
-    iconName: "mdi:environment",
-    title: "Wild Life conversation",
-  },
-  {
-    iconName: "streamline:natrue-ecology-recycle-1-sign-environment-protect-save-arrows",
-    title: "Environmental Sustainbility",
-  },
-  {
-    iconName: "game-icons:night-vision",
-    title: "Our Vision",
-  },
-];
 </script>
 
 <template>
   <section class="about">
-    <article class="about_card">
+    <article class="card">
       <CardItem
-        class="about_card_main"
+        class="card_main"
         :image-source="aboutList[0].sourceTitle"
         :image-title="aboutList[0].title"
         title-align="text-center pb-10"
         font-title-size="2rem" />
-      <article class="about_card_list">
+      <article class="card_list">
         <div class="saving_wildlife">
           <CardItem
             colorbg="#f2f2f2"
@@ -193,11 +170,10 @@ const conversationIcons = [
 
 <style scoped lang="scss">
 .about_wrapper {
-  padding: 20px 0;
   height: 100%;
   background-color: var(--color-grey);
 }
-.about_card {
+.card {
   display: grid;
   background-color: var(--color-grey);
 

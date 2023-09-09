@@ -8,6 +8,7 @@ const navTop = [
     title: "Visit Our Zoo",
     link: "/",
   },
+
   {
     title: "Education",
     link: "/info/education",
@@ -27,8 +28,8 @@ const navigationMain = [
     link: "/",
   },
   {
-    title: "Fighting Extonction",
-    link: "/",
+    title: "Fighting Extinction",
+    link: "/info/extinction",
   },
   {
     title: "What’s On",
@@ -117,7 +118,9 @@ const socials = [
                 color="white"
                 variant="text"
                 class="mx-2"
-                rounded="xl">
+                rounded="xl"
+                router
+                :to="link.link">
                 {{ link.title }}
               </v-btn>
             </v-row>
