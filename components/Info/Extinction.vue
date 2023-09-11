@@ -106,7 +106,9 @@ const communityLinks = [
             :title-card="extinction[2].title"
             :text-card="extinction[2].description"
             font-title-size="2rem" />
-          <CardItem :image-source="extinction[2].sourceTitle" />
+          <NuxtLink to="/info/species">
+            <CardItem :image-source="extinction[2].sourceTitle" />
+          </NuxtLink>
         </div>
         <div class="help">
           <CardItem

@@ -37,12 +37,12 @@ const navigationMain = [
   },
   {
     title: "What’s On",
-    link: "/info/whats_on",
+    link: "/info/news",
   },
 
   {
     title: "Tickets",
-    link: "/info/tickets",
+    link: "/info/ticket",
   },
 ];
 const socials = [
@@ -227,12 +227,11 @@ const socials = [
           <div class="footer_list">
             <ul>
               <li class="title">Terms & Conditions</li>
-              <li class="text-subtitle-2">Hours & Rates</li>
-              <li class="text-subtitle-2">Plan Your Visit</li>
-              <li class="text-subtitle-2">Zoo Map</li>
+              <li class="text-subtitle-2">Privacy</li>
+              <li class="text-subtitle-2">Sit emap</li>
+              <li class="text-subtitle-2">News</li>
               <li class="text-subtitle-2">What’s On</li>
-              <li class="text-subtitle-2">Venues & Functions</li>
-              <li class="text-subtitle-2">Membership</li>
+              <li><NuxtLink class="text-subtitle-2" to="/info/contact">Contact Us</NuxtLink></li>
             </ul>
           </div>
         </div>
@@ -331,112 +330,3 @@ const socials = [
   }
 }
 </style>
-<!--    <v-icon :size="50">mdi-clock-time-four-outline</v-icon> -->
-<!--  <v-item-group v-model="model" class="d-flex justify-sm-space-between px-6 pt-2 pb-6">
-  <div>
-    <v-sheet class="d-flex mb-6 bg-surface-variant" height="100">
-      <v-sheet class="ma-2 pa-2">Flex item</v-sheet>
-      <v-sheet class="ma-2 pa-2 align-self-center">align-self-baseline</v-sheet>
-      <v-sheet class="ma-2 pa-2">Flex item</v-sheet>
-    </v-sheet>
-  </div>
-</template> -->
-<!-- <template>
-  <div>
-    <v-container class="bg-surface-variant">
-      <v-row no-gutters style="height: 150px">
-        <v-col justify-self="start" align-self="start">
-          <v-sheet class="pa-2 ma-2"> .align-self-start </v-sheet>
-        </v-col>
-
-        <v-col align-self="center">
-          <v-sheet class="pa-2 ma-2"> .align-self-center </v-sheet>
-        </v-col>
-
-        <v-col align-self="end">
-          <v-sheet class="pa-2 ma-2"> .align-self-end </v-sheet>
-        </v-col>
-      </v-row>
-    </v-container>
-  </div>
-</template> -->
-<!--  <v-card-actions>
-                <v-btn
-                  color="#FFC107"
-                  variant="outlined"
-                  prepend-icon="mdi-check-circle"
-                  append-icon="mdi-account-circle"
-                  v-bind="props">
-                  <template #prepend>
-                    <v-icon color="success"></v-icon>
-                  </template>
-                  Button
-                  <template #append>
-                    <v-icon color="warning"></v-icon>
-                  </template>
-                </v-btn>
-              </v-card-actions> -->
-
-<!-- 
-<template>
-  <v-app id="inspire">
-    <v-system-bar>
-      <v-spacer></v-spacer>
-
-      <v-icon>mdi-square</v-icon>
-
-      <v-icon>mdi-circle</v-icon>
-
-      <v-icon>mdi-triangle</v-icon>
-    </v-system-bar>
-
-    <v-navigation-drawer v-model="drawer">
-      <v-sheet color="grey-lighten-4" class="pa-4">
-        <v-avatar class="mb-4" color="grey-darken-1" size="64"></v-avatar>
-
-        <div>john@google.com</div>
-      </v-sheet>
-
-      <v-divider></v-divider>
-
-      <v-list>
-        <v-list-item
-          v-for="[icon, text] in links"
-          :key="icon"
-          :prepend-icon="icon"
-          :title="text"
-          link></v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-
-    <v-main>
-      <v-container class="py-8 px-6" fluid>
-        <v-row>
-          <v-col v-for="card in cards" :key="card" cols="12">
-            <v-card>
-              <v-list lines="two">
-                <v-list-subheader :title="card"></v-list-subheader>
-
-                <template v-for="n in 6" :key="n">
-                  <v-list-item>
-                    <template #prepend>
-                      <v-avatar color="grey-darken-1"></v-avatar>
-                    </template>
-
-                    <v-list-item-title :title="`Message ${n}`"></v-list-item-title>
-
-                    <v-list-item-subtitle
-                      title="Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil repellendus distinctio similique"></v-list-item-subtitle>
-                  </v-list-item>
-
-                  <v-divider v-if="n !== 6" :key="`divider-${n}`" inset></v-divider>
-                </template>
-              </v-list>
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-main>
-  </v-app>
-</template>
- -->

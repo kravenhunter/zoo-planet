@@ -2,25 +2,31 @@
 defineProps({
   classCard: String,
   classContent: String,
+  buttonClass: String,
+  subtitleCard: String,
+  titleCard: String,
+  textCard: String,
   imageSource: String,
   imageTitle: String,
+  maxHeightCard: String,
   imageHeigth: String,
   imageWidth: String,
-  buttonSlot: Boolean,
   icon: String,
-  titleCard: String,
+
   titleAlign: String,
-  subtitleCard: String,
+
   sunTitleAlign: String,
-  textCard: String,
+
   textAlign: String,
   buttonTitle: String,
   btnTextSize: String,
   buttonSize: String,
   buttonAlign: String,
-  buttonClass: String,
+
   iconButton: String,
   inline: Boolean,
+  buttonSlot: Boolean,
+  textSlot: Boolean,
   fontTitleSize: {
     type: String,
     default: "1.2rem",
@@ -65,7 +71,12 @@ defineProps({
   </v-card>
  -->
 
-  <v-card v-if="!inline" :color="colorbg" :elevation="shadowCard" :class="classCard">
+  <v-card
+    v-if="!inline"
+    :color="colorbg"
+    :elevation="shadowCard"
+    :class="classCard"
+    :max-height="maxHeightCard">
     <v-img
       v-if="imageSource"
       :height="imageHeigth"
@@ -80,8 +91,11 @@ defineProps({
       {{ subtitleCard }}
     </v-card-subtitle>
 
-    <v-card-text v-if="textCard" :class="textAlign">
+    <v-card-text v-if="textCard && !textSlot" :class="textAlign">
       {{ textCard }}
+    </v-card-text>
+    <v-card-text v-else-if="textCard && textSlot" :class="textAlign">
+      <slot />
     </v-card-text>
 
     <v-card-actions v-if="buttonTitle && !buttonSlot" :class="buttonAlign">

@@ -329,12 +329,6 @@ val.body = "aewferf";
     <section class="last_news education_wrapper">
       <div class="education_block">
         <article class="title_block">
-          <!--           <Card
-            class="align-self-center description"
-            title-align="center"  
-            text-align="center"
-            :title-card="data[1].title"
-            :text-card="data[1].text" /> -->
           <CardItem
             class="description"
             :title-card="data[1].title"
