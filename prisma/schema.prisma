@@ -1,0 +1,113 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+model Education {
+  id                 String      @id @default(uuid())
+  timeStamp          DateTime    @default(now())
+ imageBgLink         String 
+  title              String     
+  description        String
+  extraeDscription   String?
+}
+model FightingExtinction {
+  id                 String      @id @default(uuid())
+  timeStamp          DateTime    @default(now())
+  imageBgLink        String 
+  title              String     
+  description        String
+  extraeDscription   String?
+}
+
+
+model AboutUs {
+  id                 String      @id @default(uuid())
+  timeStamp          DateTime    @default(now())
+ imageBgLink         String 
+  title              String     
+  description        String
+  extraeDscription   String?
+}
+model ContactUs {
+  id                String      @id @default(uuid())
+  timeStamp         DateTime    @default(now())
+ imageBgLink        String 
+  title             String     
+  description       String
+  extraeDscription  String?
+}
+
+model Ticket {
+  id                String      @id @default(uuid())
+  timeStamp         DateTime    @default(now())
+  imageBgLink       String 
+  title             String     
+  description       String
+  extraeDscription  String?   
+
+}
+model TicketPrice {
+  id                String      @id @default(uuid())
+  timeStamp         DateTime    @default(now()) 
+  adult             String     
+  childCategoryFirst  String
+  childCategorySecond String
+  concession          String   
+  seniors             String   
+}
+
+model Membership {
+  id                String      @id @default(uuid())
+  timeStamp         DateTime    @default(now())
+  imageBgLink       String 
+  title             String     
+  description       String
+  extraeDscription  String?   
+
+}
+
+model MembershipPrice {
+  id                String      @id @default(uuid())
+  timeStamp         DateTime    @default(now()) 
+  adult             String     
+  childCategoryFirst   String
+  childCategorySecond  String
+  concession           String   
+  seniors              String 
+  teacher              String 
+  supporter            String    
+}
+
+model Post {
+  id                String      @id @default(uuid())
+  timeStamp         DateTime    @default(now())
+  title             String     
+  imageBgLink       String 
+  description       String
+  category          Category
+  extraeDscription  String?
+}
+
+enum Category {
+   Education
+   FightingExtinction
+   News
+}
+
+model ContentPages {
+  id                 String      @id @default(uuid())
+  timeStamp          DateTime    @default(now())
+  imageBgLink         String 
+  title              String  
+  subTitle           String?  
+  shortDescription   String 
+  description        String
+  extraeDscription   String?
+}

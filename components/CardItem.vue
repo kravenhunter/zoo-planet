@@ -113,7 +113,7 @@ defineProps({
       <slot />
     </v-card-actions>
   </v-card>
-  <v-card v-else :color="colorbg" :elevation="3">
+  <v-card v-else :color="colorbg" :class="classCard" :elevation="3">
     <v-container>
       <v-row>
         <v-col cols="12">
@@ -136,7 +136,7 @@ defineProps({
                   {{ subtitleCard }}
                 </v-card-text>
 
-                <v-card-actions>
+                <v-card-actions :class="buttonAlign">
                   <slot />
                 </v-card-actions>
               </div>

@@ -1,17 +1,18 @@
-import { defineStore } from 'pinia';
+import { computed, ref } from "#imports";
+import { defineStore } from "pinia";
 
 // Composition API
-export const useCounterStore = defineStore('counter', () => {
-	const count = ref(0);
+export const useCounterStore = defineStore("counter", () => {
+  const count = ref(0);
 
-	const doubleCount = computed(() => count.value * 2);
+  const doubleCount = computed(() => count.value * 2);
 
-	function increment() {
-		count.value++;
-	}
-	console.log(count.value);
+  function increment() {
+    count.value++;
+  }
+  console.log(count.value);
 
-	return { count, doubleCount, increment };
+  return { count, doubleCount, increment };
 });
 
 // Options API

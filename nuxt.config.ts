@@ -1,8 +1,15 @@
+/* eslint-disable n/prefer-global/process */
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: false },
   imports: { autoImport: false },
   modules: ["@pinia/nuxt", "@vueuse/nuxt"],
+  runtimeConfig: {
+    public: {
+      supabaseUrl: process.env.SUPABASE_URL,
+      supabaseKey: process.env.SUPABASE_KEY,
+    },
+  },
   app: {
     pageTransition: { name: "blog", mode: "out-in" },
     head: {
