@@ -5,7 +5,7 @@ const prismaCLient = new PrismaClient();
 
 export default defineEventHandler(async () => {
   try {
-    const result = await prismaCLient.membershipPrice.findMany();
+    const result = await prismaCLient.ticketPrice.findMany();
     if (!result) {
       // throw new Error("");
       throw createError({

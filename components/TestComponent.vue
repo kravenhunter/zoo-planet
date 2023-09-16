@@ -317,6 +317,7 @@ onMounted(() => {
             <v-btn type="submit" block class="mt-2">Submit</v-btn>
           </v-form>
           <v-btn type="submit" block class="mt-2" @click="logOut">Log Out</v-btn>
+          <v-btn type="button" block class="mt-2" to="/guard">Gou to Admin</v-btn>
         </v-sheet>
 
         <v-fade-transition hide-on-leave>

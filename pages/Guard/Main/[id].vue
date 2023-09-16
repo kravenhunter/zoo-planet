@@ -1,23 +1,36 @@
 <script setup lang="ts">
-import { definePageMeta, onMounted, reactive, ref, useFetch, useRoute } from "#imports";
-import { useImageStorage } from "@/composables/states";
+import {
+  computed,
+  definePageMeta,
+  onMounted,
+  reactive,
+  ref,
+  useFetch,
+  useRoute,
+  watch,
+} from "#imports";
 import { useMainContentStore } from "@/stores/mainContentStore";
+import { usePostStore } from "@/stores/postStore";
+import type { ContentPages, Post } from "@prisma/client";
 import { storeToRefs } from "pinia";
 
 const route = useRoute();
-const currentId = "8feccc19-4820-460a-a29e-e5e469d7bc1cc";
-const titleNews = [
-  {
-    id: "8feccc19-4820-460a-a29e-e5e469d7bc1cc",
-    title: "latest news",
-    sourceTitle: "/images/zoo_4.jpg",
-    subtitle: "",
-    text: "All of our animals are gently handled from the moment they arrive at the shop and are even put on a “probationary” period of 2-4 weeks prior to customer availability.",
-  },
-];
-const { pendingData } = storeToRefs(useMainContentStore());
+
+// Main Content Data
+//pendingData - returns undefined by default or object
+const { mainPages, pendingData } = storeToRefs(useMainContentStore());
 const { addPageContent, updatePageContent, getContentByTitle } = useMainContentStore();
-const supabaseStorage = useImageStorage();
+
+//  Articles
+const { postlist } = storeToRefs(usePostStore());
+
+const newsMainPageContent = ref<ContentPages>();
+const latestNewsList = ref<Post[]>();
+
+newsMainPageContent.value = mainPages.value?.find((el) =>
+  el.subTitle?.toLocaleLowerCase().includes(String(route.params.id)),
+);
+
 const state = reactive({
   title: "",
   subTitle: "",
@@ -26,14 +39,19 @@ const state = reactive({
   description: "",
   extraeDscription: "",
 });
-
+const isEmpty = computed(() => {
+  if (!newsMainPageContent.value?.title && !newsMainPageContent.value?.shortDescription) {
+    return true;
+  }
+  return false;
+});
 const rules = [
   (value: string) => {
     if (value) {
       return true;
     }
 
-    return "You must enter a first name.";
+    return "The ield is empty.";
   },
 ];
 const fileData = ref<0 | FileList | undefined>();
@@ -47,12 +65,28 @@ const uploadImage = async (event: Event) => {
 };
 
 const addPost = async () => {
-  fileData.value && (await addPageContent(fileData.value, state));
+  if (newsMainPageContent.value) {
+    pendingData.value = !pendingData.value;
+
+    await updatePageContent(newsMainPageContent.value?.id, fileData.value, {
+      imageBgLink: newsMainPageContent.value?.imageBgLink,
+      title: newsMainPageContent.value?.title,
+      subTitle: newsMainPageContent.value?.subTitle ?? undefined,
+      shortDescription: newsMainPageContent.value?.shortDescription,
+      description: newsMainPageContent.value?.description,
+      extraeDscription: newsMainPageContent.value?.extraeDscription ?? undefined,
+    });
+  }
 };
 
 const getPostById = async (id: string) => {
   try {
-    const { data: response, error } = await useFetch(`/api/prisma/post/search-by-id/${id}`);
+    // const { data: response, error } = await useFetch(`/api/prisma/post/search-by-id/${id}`);
+    const {
+      data: response,
+      error,
+      refresh,
+    } = await useFetch(`/api/prisma/post/search-by-id/${id}`);
     if (error) {
       throw error;
     }
@@ -66,48 +100,86 @@ const getPostById = async (id: string) => {
     console.log(error);
   }
 };
+watch(pendingData, (curr, prev) => {
+  console.log("Prev", prev);
+  console.log("Curr", curr);
+});
+function getElement() {
+  //v-overlay v-overlay--active
+  const catchClick = document.querySelector(".v-overlay-container .v-overlay");
+  catchClick?.addEventListener("click", (event: Event) => event.stopPropagation());
+  console.log(catchClick);
+}
 onMounted(() => {
   /*   getAuth(); */
+  /*   getElement(); */
 });
 
 definePageMeta({
   layout: "admin-layout",
-  /*   middleware: ["auth"], */
 });
 </script>
 
 <template>
   <section class="edit">
-    <v-container fluid>
-      <v-row>
-        <v-col>
-          <div class="content_item">
-            <v-sheet class="pa-2">
-              <v-form @submit.prevent="addPost">
-                <v-text-field v-model="state.title" :rules="rules" label="Title"></v-text-field>
-                <v-text-field
-                  v-model="state.subTitle"
-                  :rules="rules"
-                  label="SubTitle"></v-text-field>
-                <v-file-input clearable label="File input" @change="uploadImage"></v-file-input>
-                <v-text-field
-                  v-model="state.shortDescription"
-                  :rules="rules"
-                  label="Shord Description"></v-text-field>
-
+    <article v-if="newsMainPageContent">
+      <v-overlay tabindex="0" :model-value="pendingData" class="align-center justify-center">
+        <v-progress-circular color="primary" indeterminate size="64"></v-progress-circular>
+      </v-overlay>
+      <v-container fluid>
+        <v-row>
+          <v-col>
+            <div class="content_item">
+              <v-sheet class="pa-2">
+                <div class="loading" v-if="pendingData">
+                  <p>Loading.....</p>
+                </div>
+                <v-btn
+                  :disabled="isEmpty"
+                  :loading="pendingData"
+                  type="button"
+                  block
+                  class="mt-2"
+                  color="success"
+                  @click="addPost"
+                  >Add new</v-btn
+                >
+                <v-form>
+                  <v-text-field
+                    v-model="newsMainPageContent.title"
+                    :rules="rules"
+                    label="Title"></v-text-field>
+                  <v-text-field
+                    v-model="newsMainPageContent.subTitle"
+                    :rules="rules"
+                    label="SubTitle"></v-text-field>
+                  <v-file-input clearable label="File input" @change="uploadImage"></v-file-input>
+                  <v-text-field
+                    v-model="newsMainPageContent.shortDescription"
+                    :rules="rules"
+                    label="Shord Description"></v-text-field>
+                </v-form>
                 <span class="text-subtitle-1 pl-5">Description</span>
-                <UiElementsAddEditor v-model:value="state.description" />
-                <v-btn type="submit" block class="mt-2" color="success">Add new</v-btn>
-              </v-form>
-            </v-sheet>
-          </div>
-        </v-col>
-        <v-col>
-          <div class="editor_content bg-white mt-5" v-html="state.description"></div>
-        </v-col>
-      </v-row>
-    </v-container>
+                <UiElementsAddEditor v-model:value="newsMainPageContent.description" />
+              </v-sheet>
+            </div>
+          </v-col>
+          <v-col>
+            <div
+              class="editor_content bg-white mt-5"
+              v-html="newsMainPageContent.description"></div>
+          </v-col>
+        </v-row>
+      </v-container>
+    </article>
   </section>
 </template>
 
-<style scoped></style>
+<style scoped lang="scss">
+/* .v-overlay {
+  pointer-events: all;
+  &--active {
+    pointer-events: all;
+  }
+} */
+</style>

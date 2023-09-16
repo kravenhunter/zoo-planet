@@ -1,18 +1,57 @@
 <script setup lang="ts">
-const nav = [
-  { title: "My News", icon: "mdi-folder" },
-  { title: "Species", icon: "mdi-account-multiple" },
-  { title: "Fighting Extintion", icon: "mdi-star" },
-  { title: "Education", icon: "mdi-history" },
-  { title: "About Us", icon: "mdi-check-circle" },
-  { title: "Contact Us", icon: "mdi-upload" },
-  { title: "Membership", icon: "mdi-square" },
-  { title: "Donate", icon: "mdi-cloud-upload" },
-  { title: "Tickets", icon: "mdi-history" },
-];
+import { onMounted } from "#imports";
+import { useBookingStore } from "@/stores/bookingStore";
+import { useContactsStore } from "@/stores/contactsStore";
+import { useMainContentStore } from "@/stores/mainContentStore";
+import { usePostStore } from "@/stores/postStore";
+import { storeToRefs } from "pinia";
 
+//Contacts Data
+const { contactPage } = storeToRefs(useContactsStore());
+const { loadContacts } = useContactsStore();
+
+const { mainPages } = storeToRefs(useMainContentStore());
+const { loadPagesContent } = useMainContentStore();
+
+//  Articles
+const { postlist } = storeToRefs(usePostStore());
+const { loadPostList } = usePostStore();
+
+// Membership Prices & Table
+const { membershipTable, ticketTable } = storeToRefs(useBookingStore());
+const { loadTables } = useBookingStore();
+
+if (!mainPages.value) {
+  await loadPagesContent();
+}
+if (!postlist.value) {
+  await loadPostList();
+}
+
+if (!membershipTable.value && !ticketTable.value) {
+  await loadTables();
+}
+if (!contactPage.value) {
+  await loadContacts();
+}
+const nav = [
+  { title: "My News", icon: "mdi-folder", to: "/guard/section/news" },
+  { title: "Species", icon: "mdi-account-multiple", to: "/guard/section/species" },
+  { title: "Fighting Extintion", icon: "mdi-star", to: "/guard/section/fighting" },
+  { title: "Education", icon: "mdi-history", to: "/guard/section/education" },
+  { title: "About Us", icon: "mdi-check-circle", to: "/guard/section/aboutus" },
+  { title: "Contact Us", icon: "mdi-upload", to: "/guard/section/contactus" },
+  { title: "Membership", icon: "mdi-square", to: "/guard/section/membership" },
+  { title: "Tickets", icon: "mdi-history", to: "/guard/section/tickets" },
+  { title: "Donate", icon: "mdi-cloud-upload", to: "/guard/section/donate" },
+];
+/* const { $supabaseStore } = useNuxtApp(); */
 const open = ["Details"];
 const isOpen = false;
+/* const check = () => {
+  console.log($supabaseStore);
+}; */
+onMounted(() => {});
 </script>
 
 <template>
@@ -40,8 +79,9 @@ const isOpen = false;
           <template #prepend>
             <v-icon size="30" :icon="item.icon"></v-icon>
           </template>
-
-          <v-list-item-title v-text="item.title"></v-list-item-title>
+          <NuxtLink :to="item.to">
+            <v-list-item-title v-text="item.title"></v-list-item-title>
+          </NuxtLink>
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
@@ -60,4 +100,8 @@ const isOpen = false;
   </v-layout>
 </template>
 
-<style scoped></style>
+<style scoped lang="scss">
+.customLayout {
+  min-height: 100vh;
+}
+</style>

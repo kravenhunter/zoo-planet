@@ -2,6 +2,7 @@
 import { definePageMeta, useRoute } from "#imports";
 
 const route = useRoute();
+
 definePageMeta({
   layout: "admin-layout",
   /*   middleware: ["auth"], */
@@ -9,10 +10,14 @@ definePageMeta({
 </script>
 
 <template>
-  <section class="tables">
-    <GuardTablesMemberShip v-if="route.params.id === 'membership'" />
-    <GuardTablesTickets v-if="route.params.id === 'tickets'" />
+  <section class="edit">
+    <GuardContactEdit />
   </section>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.editor_content {
+  max-height: 1316px;
+  overflow-y: auto;
+}
+</style>

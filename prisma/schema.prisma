@@ -38,10 +38,19 @@ model AboutUs {
 model ContactUs {
   id                String      @id @default(uuid())
   timeStamp         DateTime    @default(now())
- imageBgLink        String 
+  imageBgLink        String 
   title             String     
   description       String
   extraeDscription  String?
+  phone             String
+  email             String
+  socialLink_1       String?
+  socialLink_2       String?
+  socialLink_3       String?
+  socialLink_4       String?
+  socialLink_5       String?
+  copyright          String 
+     
 }
 
 model Ticket {
@@ -99,6 +108,7 @@ enum Category {
    Education
    FightingExtinction
    News
+   Species
 }
 
 model ContentPages {
