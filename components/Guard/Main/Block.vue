@@ -88,7 +88,7 @@ const addTickets = async () => {
 
 //Checking ROutes
 if (router.params.id === "news") {
-  newsMainPageContent.value = mainPages.value?.find((el) => el.subTitle === "Latest News");
+  newsMainPageContent.value = mainPages.value?.find((el) => el.subTitle === "News");
   latestNewsList.value = postlist.value?.filter((el) => el.category === "News");
 }
 if (router.params.id === "fighting") {
@@ -104,7 +104,7 @@ if (router.params.id === "education") {
   latestNewsList.value = postlist.value?.filter((el) => el.category === "Education");
 }
 if (router.params.id === "aboutus") {
-  newsMainPageContent.value = mainPages.value?.find((el) => el.subTitle === "About Us");
+  newsMainPageContent.value = mainPages.value?.find((el) => el.subTitle === "AboutUs");
 }
 if (router.params.id === "membership") {
   newsMainPageContent.value = mainPages.value?.find((el) => el.subTitle === "Membership");
@@ -115,6 +115,9 @@ if (router.params.id === "membership") {
 }
 if (router.params.id === "tickets") {
   newsMainPageContent.value = mainPages.value?.find((el) => el.subTitle === "Tickets");
+}
+if (router.params.id === "donate") {
+  newsMainPageContent.value = mainPages.value?.find((el) => el.subTitle === "Donate");
 }
 if (router.params.id === "contactus") {
   contactPage.value?.length && (contacts.value = contactPage.value[0]);
@@ -411,38 +414,8 @@ if (router.params.id === "contactus") {
           </article>
         </v-col>
       </v-row>
-      <div v-if="contacts">
-        <v-container>
-          <v-col>
-            <v-list lines="two" class="bg-grey-darken-4">
-              <v-list-subheader class="text-h6 text-white" title="Content Page"></v-list-subheader>
-              <v-list-item>
-                <CardItem
-                  image-heigth="200"
-                  image-width="200"
-                  :inline="true"
-                  class="card_main"
-                  class-card="justify-start"
-                  class-content="d-flex flex-column align-self-center "
-                  colorbg="grey-darken-4"
-                  :image-source="contacts?.imageBgLink"
-                  font-title-size="2rem"
-                  :title-card="contacts?.title"
-                  :subtitle-card="contacts?.description"
-                  button-title="Edit"
-                  button-align="align-center"
-                  :button-slot="true">
-                </CardItem>
-              </v-list-item>
-            </v-list>
-          </v-col>
-        </v-container>
-        <v-row>
-          <v-col cols="12">
-            <GuardContactEdit />
-          </v-col>
-        </v-row>
-      </div>
+      <LazyGuardContactBlock v-if="contacts" :contact-data="contacts" />
+
       <LazyGuardSpeciesList v-if="router.params.id === 'species'" />
       <LazyGuardTablesTickets v-if="router.params.id === 'tickets'" />
     </v-container>

@@ -41,7 +41,18 @@ const uploadImage = async (event: Event) => {
   const fileEvent = event.target as HTMLInputElement;
   fileData.value = fileEvent.files?.length && fileEvent.files;
 };
-
+const loadingDelay = (result: string | null) => {
+  setTimeout(() => {
+    isLoadingContacts.value = false;
+    if (result) {
+      titleResult.value = result;
+      colorIcon.value = result.toLocaleLowerCase();
+      result === "Success" && (iconResult.value = "mdi-check-circle-outline");
+      result === "Error" && (iconResult.value = "mdi-close-thick");
+      dialogModal.value = !dialogModal.value;
+    }
+  }, 3000);
+};
 const addPost = async () => {
   isLoadingContacts.value = !isLoadingContacts.value;
   if (contacts.value) {
@@ -60,17 +71,7 @@ const addPost = async () => {
       copyright: contacts.value.copyright,
     });
 
-    setTimeout(() => {
-      isLoadingContacts.value = false;
-      if (result) {
-        titleResult.value = result;
-        colorIcon.value = result.toLocaleLowerCase();
-        result === "Success" && (iconResult.value = "mdi-check-circle-outline");
-        result === "Error" && (iconResult.value = "mdi-close-thick");
-        dialogModal.value = !dialogModal.value;
-      }
-      console.log(isLoadingContacts.value);
-    }, 3000);
+    loadingDelay(result);
   }
 };
 </script>

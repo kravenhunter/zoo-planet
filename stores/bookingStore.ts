@@ -5,18 +5,15 @@ import type { IMembershipPrice } from "types/IMembershipPrice";
 import type { ITicketPrice } from "types/ITicketPrice";
 
 export const useBookingStore = defineStore("booking-store", () => {
-  const membershipTable = ref<MembershipPrice[]>();
-  const ticketTable = ref<TicketPrice[]>();
+  const membershipTable = ref<MembershipPrice[] | null>();
+  const ticketTable = ref<TicketPrice[] | null>();
   const loadingMemberPrices = ref<boolean>(false);
 
   async function loadTables() {
     try {
       const resutlTicketable = useFetch<TicketPrice[]>(`/api/prisma/ticket/list`);
       const resutlMemberTable = useFetch<MembershipPrice[]>(`/api/prisma/membership/list`);
-      const promiseAll = await Promise.all<TicketPrice[], MembershipPrice[]>([
-        resutlTicketable,
-        resutlMemberTable,
-      ]);
+      const promiseAll = await Promise.all([resutlTicketable, resutlMemberTable]);
 
       const { data: ticketResponce, error: errorTicket } = promiseAll[0];
       const { data: memberResponce, error: errorMember } = promiseAll[1];
@@ -47,10 +44,7 @@ export const useBookingStore = defineStore("booking-store", () => {
           body: JSON.stringify(unlimitedEntry),
         },
       );
-      const promiseAll = await Promise.all<string>([
-        respoonseSinglePrice,
-        respoonseUnlimitedPrices,
-      ]);
+      const promiseAll = await Promise.all([respoonseSinglePrice, respoonseUnlimitedPrices]);
       console.log(promiseAll);
 
       const { data: singleEntry, error: errorMonth } = promiseAll[0];
@@ -78,7 +72,7 @@ export const useBookingStore = defineStore("booking-store", () => {
         method: "post",
         body: JSON.stringify(stateYaer),
       });
-      const promiseAll = await Promise.all<string>([responseMonth, responeYar]);
+      const promiseAll = await Promise.all([responseMonth, responeYar]);
       console.log(promiseAll);
       const { data: respoonseMonth, error: errorMonth } = promiseAll[0];
       const { data: respoonseYar, error: errorYar } = promiseAll[1];
@@ -115,7 +109,7 @@ export const useBookingStore = defineStore("booking-store", () => {
           body: JSON.stringify(stateYaer),
         },
       );
-      const promiseAll = await Promise.all<string>([responseMonth, responeYar]);
+      const promiseAll = await Promise.all([responseMonth, responeYar]);
       console.log(promiseAll);
 
       const { data: respoonseMonth, error: errorMonth } = promiseAll[0];
@@ -155,10 +149,7 @@ export const useBookingStore = defineStore("booking-store", () => {
           body: JSON.stringify(unlimitedEntry),
         },
       );
-      const promiseAll = await Promise.all<string>([
-        respoonseSinglePrice,
-        respoonseUnlimitedPrices,
-      ]);
+      const promiseAll = await Promise.all([respoonseSinglePrice, respoonseUnlimitedPrices]);
       console.log(promiseAll);
 
       const { data: singleEntry, error: errorMonth } = promiseAll[0];

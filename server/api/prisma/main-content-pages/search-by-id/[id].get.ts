@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
         id: event?.context?.params?.id,
       },
     });
-    console.log(result);
+
     if (!result) {
       // throw new Error("");
       throw createError({

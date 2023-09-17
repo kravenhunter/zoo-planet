@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { onMounted } from "#imports";
+import { useAlertDialog } from "@/composables/states";
 import { useBookingStore } from "@/stores/bookingStore";
 import { useContactsStore } from "@/stores/contactsStore";
 import { useMainContentStore } from "@/stores/mainContentStore";
@@ -26,6 +27,7 @@ const { loadPostList } = usePostStore();
 const { membershipTable, ticketTable } = storeToRefs(useBookingStore());
 const { loadTables } = useBookingStore();
 
+const alertDialog = useAlertDialog();
 if (!mainPages.value) {
   await loadPagesContent();
 }
@@ -42,20 +44,9 @@ if (!contactPage.value) {
 if (!specieList.value) {
   await loadSpeciesList();
 }
-const nav = [
-  { title: "My News", icon: "mdi-folder", to: "/guard/section/news" },
-  { title: "Species", icon: "mdi-account-multiple", to: "/guard/section/species" },
-  { title: "Fighting Extintion", icon: "mdi-star", to: "/guard/section/fighting" },
-  { title: "Education", icon: "mdi-history", to: "/guard/section/education" },
-  { title: "About Us", icon: "mdi-check-circle", to: "/guard/section/aboutus" },
-  { title: "Contact Us", icon: "mdi-upload", to: "/guard/section/contactus" },
-  { title: "Membership", icon: "mdi-square", to: "/guard/section/membership" },
-  { title: "Tickets", icon: "mdi-history", to: "/guard/section/tickets" },
-  { title: "Donate", icon: "mdi-cloud-upload", to: "/guard/section/donate" },
-];
+
 /* const { $supabaseStore } = useNuxtApp(); */
-const open = ["Details"];
-const isOpen = false;
+
 /* const check = () => {
   console.log($supabaseStore);
 }; */
@@ -64,47 +55,42 @@ onMounted(() => {});
 
 <template>
   <v-layout class="customLayout rounded rounded-md bg-black">
-    <v-navigation-drawer color="black pt-10  bg-grey-darken-4">
-      <v-list v-model:opened="open">
-        <v-list-item
-          prepend-avatar="https://cdn.vuetifyjs.com/images/john.png"
-          title="John Leider"
-          subtitle="john@google.com">
-        </v-list-item>
-        <v-list-group value="Details">
-          <template #activator="{ props }">
-            <v-list-item
-              v-bind="props"
-              prepend-icon="mdi-cog-outline"
-              title="More Details :"></v-list-item>
-          </template>
-          <v-list-item title="State :" subtitle="Administrator"> </v-list-item>
-        </v-list-group>
-      </v-list>
-      <v-divider></v-divider>
-      <v-list>
-        <v-list-item v-for="(item, i) in nav" :key="i" :value="item" color="success">
-          <template #prepend>
-            <v-icon size="30" :icon="item.icon"></v-icon>
-          </template>
-          <NuxtLink :to="item.to">
-            <v-list-item-title v-text="item.title"></v-list-item-title>
-          </NuxtLink>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
+    <UiGuardSideBar />
+    <UiGuardTopBar />
 
-    <v-app-bar class="bg-grey-darken-4" title="Application bar">
-      <template #prepend>
-        <v-avatar size="40">
-          <v-icon color="success" icon="$vuetify" size="50"></v-icon>
-        </v-avatar>
-      </template>
-    </v-app-bar>
-
-    <v-main class="d-flex align-center justify-center">
+    <!-- <v-main class="d-flex align-center justify-center"> -->
+    <!--     <v-main class="d-flex align-center justify-center">
       <slot />
-    </v-main>
+    </v-main> -->
+
+    <div class="d-flex flex-column position-relative w-100">
+      <div
+        class="position-absolute d-flex justify-end"
+        style="width: 95%; z-index: 100; top: 4.5rem">
+        <div class="alert">
+          <v-fade-transition hide-on-leave>
+            <v-alert v-if="alertDialog.dialogModal" :color="alertDialog.colorIcon" variant="tonal">
+              <div class="d-flex align-center justify-center">
+                <v-icon
+                  :color="alertDialog.colorIcon"
+                  :icon="alertDialog.iconResult"
+                  size="25"></v-icon>
+                <v-card-title class="font-weight-bold">{{ alertDialog.titleResult }}</v-card-title>
+              </div>
+
+              <template #append>
+                <v-btn size="20" variant="text" @click="alertDialog.dialogModal = false">
+                  <v-icon :color="alertDialog.colorIcon" icon="$close" size="20"></v-icon>
+                </v-btn>
+              </template>
+            </v-alert>
+          </v-fade-transition>
+        </div>
+      </div>
+      <v-main class="d-flex align-center justify-center">
+        <slot />
+      </v-main>
+    </div>
   </v-layout>
 </template>
 

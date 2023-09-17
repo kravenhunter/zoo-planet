@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref, useRoute } from "#imports";
+import { reactive, ref, useRoute } from "#imports";
 import { useBookingStore } from "@/stores/bookingStore";
 import { useMainContentStore } from "@/stores/mainContentStore";
 import type { ContentPages } from "@prisma/client";
@@ -43,10 +43,10 @@ const updatePrices = async (id: string) => {
 
 const tableRow = [{ title: "Monthly" }, { title: "Yearly" }];
 
-onMounted(async () => {
-  !membershipTable.value && (await loadTables);
-  console.log(membershipTable.value);
-});
+// onMounted(async () => {
+//   !membershipTable.value && (await loadTables);
+//   console.log(membershipTable.value);
+// });
 </script>
 
 <template>

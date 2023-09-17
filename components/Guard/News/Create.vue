@@ -1,11 +1,9 @@
 <script setup lang="ts">
 import { computed, reactive, ref } from "#imports";
-
+import { delayLoading, useIsLoading } from "@/composables/states";
 import { usePostStore } from "@/stores/postStore";
-import { storeToRefs } from "pinia";
 
 //pendingData - returns false or true
-const { pendingData } = storeToRefs(usePostStore());
 
 const { createPost } = usePostStore();
 
@@ -16,10 +14,11 @@ const state = reactive({
   description: "",
   extraeDscription: "",
 });
-const dialogModal = ref(false);
-const titleResult = ref("");
-const iconResult = ref("");
-const colorIcon = ref("");
+// const dialogModal = ref(false);
+// const titleResult = ref("");
+// const iconResult = ref("");
+// const colorIcon = ref("");
+const pendingData = useIsLoading();
 
 const selected = ref("Education");
 const category = ["Education", "FightingExtinction", "News"];
@@ -50,21 +49,14 @@ const uploadImage = async (event: Event) => {
 };
 
 const addPost = async () => {
+  pendingData.value = true;
   if (fileData.value) {
     pendingData.value = !pendingData.value;
     state.category = selected.value;
     const result = await createPost(fileData.value, state);
 
-    setTimeout(() => {
-      pendingData.value = false;
-      if (result) {
-        titleResult.value = result;
-        colorIcon.value = result.toLocaleLowerCase();
-        result === "Success" && (iconResult.value = "mdi-check-circle-outline");
-        result === "Error" && (iconResult.value = "mdi-close-thick");
-        dialogModal.value = !dialogModal.value;
-      }
-    }, 3000);
+    // loadingDelay(result);
+    delayLoading(result);
   }
 };
 </script>
@@ -75,30 +67,11 @@ const addPost = async () => {
       <v-progress-circular color="primary" indeterminate size="64"></v-progress-circular>
     </v-overlay>
 
-    <v-container class="position-relative d-flex justify-end" fluid>
-      <div class="position-absolute">
-        <v-fade-transition hide-on-leave>
-          <v-alert v-if="dialogModal" :color="colorIcon" variant="tonal">
-            <div class="d-flex align-center justify-center">
-              <v-icon :color="colorIcon" :icon="iconResult" size="25"></v-icon>
-              <v-card-title class="font-weight-bold">{{ titleResult }}</v-card-title>
-            </div>
-
-            <template #append>
-              <v-btn size="20" variant="text" @click="dialogModal = false">
-                <v-icon :color="colorIcon" icon="$close" size="20"></v-icon>
-              </v-btn>
-            </template>
-          </v-alert>
-        </v-fade-transition>
-      </div>
+    <v-container class="d-flex" fluid>
       <v-row>
         <v-col>
           <div class="content_item">
             <v-sheet class="pa-2">
-              <div class="loading" v-if="pendingData">
-                <p>Loading.....</p>
-              </div>
               <v-btn
                 :disabled="isEmpty"
                 :loading="pendingData"

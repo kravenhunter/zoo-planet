@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, useRoute } from "#imports";
+import { delayLoading, useIsLoading } from "@/composables/states";
 import { usePostStore } from "@/stores/postStore";
 import type { Post } from "@prisma/client";
 import { storeToRefs } from "pinia";
@@ -7,13 +8,14 @@ import { storeToRefs } from "pinia";
 const route = useRoute();
 
 //Modal data
-const dialogModal = ref(false);
-const titleResult = ref("");
-const iconResult = ref("");
-const colorIcon = ref("");
+// const dialogModal = ref(false);
+// const titleResult = ref("");
+// const iconResult = ref("");
+// const colorIcon = ref("");
+const pendingData = useIsLoading();
 
 //pendingData - returns undefined by default or object
-const { pendingData, postlist } = storeToRefs(usePostStore());
+const { postlist } = storeToRefs(usePostStore());
 
 const { updatePost } = usePostStore();
 const currentPost = ref<Post>();
@@ -43,27 +45,33 @@ const uploadImage = async (event: Event) => {
   const fileEvent = event.target as HTMLInputElement;
   fileEvent.files?.length && (fileData.value = fileEvent.files);
 };
+// const loadingDelay = (result: string | null) => {
+//   setTimeout(() => {
+//     pendingData.value = false;
+//     if (result) {
+//       titleResult.value = result;
+//       colorIcon.value = result.toLocaleLowerCase();
+//       result === "Success" && (iconResult.value = "mdi-check-circle-outline");
+//       result === "Error" && (iconResult.value = "mdi-close-thick");
+//       dialogModal.value = !dialogModal.value;
+//     }
+//   }, 3000);
+// };
 
 const addPost = async () => {
-  pendingData.value = !pendingData.value;
+  // pendingData.value = !pendingData.value;
+  pendingData.value = true;
   if (currentPost.value) {
     const result = await updatePost(currentPost.value?.id, fileData.value, {
-      title: currentPost.value?.title,
+      title: currentPost.value.title,
       imageBgLink: currentPost.value?.imageBgLink,
       category: selected.value,
       description: currentPost.value?.description,
       extraeDscription: currentPost.value?.extraeDscription,
     });
-    setTimeout(() => {
-      pendingData.value = false;
-      if (result) {
-        titleResult.value = result;
-        colorIcon.value = result.toLocaleLowerCase();
-        result === "Success" && (iconResult.value = "mdi-check-circle-outline");
-        result === "Error" && (iconResult.value = "mdi-close-thick");
-        dialogModal.value = !dialogModal.value;
-      }
-    }, 3000);
+
+    // loadingDelay(result);
+    delayLoading(result);
   }
 };
 </script>
@@ -75,7 +83,7 @@ const addPost = async () => {
     </v-overlay>
 
     <v-container v-if="currentPost" class="position-relative d-flex justify-end" fluid>
-      <div class="position-absolute">
+      <!--       <div class="position-absolute">
         <v-fade-transition hide-on-leave>
           <v-alert v-if="dialogModal" :color="colorIcon" variant="tonal">
             <div class="d-flex align-center justify-center">
@@ -90,7 +98,7 @@ const addPost = async () => {
             </template>
           </v-alert>
         </v-fade-transition>
-      </div>
+      </div> -->
       <v-row>
         <v-col>
           <div class="content_item">

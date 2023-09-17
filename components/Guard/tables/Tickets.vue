@@ -7,8 +7,8 @@ import type { ITicketPrice } from "types/ITicketPrice";
 
 const route = useRoute();
 const dialogModal = ref(false);
-const titleResult = ref("");
-const iconResult = ref("");
+const titleResult = ref("Success");
+const iconResult = ref("mdi-check-circle-outline");
 const colorIcon = ref("");
 const { ticketTable, loadingMemberPrices } = storeToRefs(useBookingStore());
 const { addTicketPrices, updateTicketPrices } = useBookingStore();
@@ -32,21 +32,23 @@ stateYaer.value = {
   concession: ticketTable.value?.length ? ticketTable.value[1].concession : "",
   seniors: ticketTable.value?.length ? ticketTable.value[1].seniors : "",
 };
-
+const loadingDelay = (result: string | null) => {
+  setTimeout(() => {
+    loadingMemberPrices.value = false;
+    if (result) {
+      titleResult.value = result;
+      colorIcon.value = result.toLocaleLowerCase();
+      result === "Success" && (iconResult.value = "mdi-check-circle-outline");
+      result === "Error" && (iconResult.value = "mdi-close-thick");
+      dialogModal.value = !dialogModal.value;
+    }
+  }, 3000);
+};
 const addPrices = async () => {
   if (stateMonth.value && stateYaer.value) {
     loadingMemberPrices.value = !loadingMemberPrices.value;
     const result = await addTicketPrices(stateMonth.value, stateYaer.value);
-    setTimeout(() => {
-      loadingMemberPrices.value = !loadingMemberPrices.value;
-      if (result) {
-        titleResult.value = result;
-        colorIcon.value = result.toLocaleLowerCase();
-        result === "Success" && (iconResult.value = "mdi-check-circle-outline");
-        result === "Error" && (iconResult.value = "mdi-close-thick");
-        dialogModal.value = !dialogModal.value;
-      }
-    }, 3000);
+    loadingDelay(result);
   }
 };
 const updatePrices = async (id: string) => {
@@ -58,16 +60,7 @@ const updatePrices = async (id: string) => {
       stateMonth.value,
       stateYaer.value,
     );
-    setTimeout(() => {
-      loadingMemberPrices.value = !loadingMemberPrices.value;
-      if (result) {
-        titleResult.value = result;
-        colorIcon.value = result.toLocaleLowerCase();
-        result === "Success" && (iconResult.value = "mdi-check-circle-outline");
-        result === "Error" && (iconResult.value = "mdi-close-thick");
-        dialogModal.value = !dialogModal.value;
-      }
-    }, 3000);
+    loadingDelay(result);
   }
 };
 
@@ -82,9 +75,9 @@ const tableRow = [{ title: "Monthly" }, { title: "Yearly" }];
     <v-container class="py-8 px-6 position-relative d-flex justify-end">
       <div class="position-absolute">
         <v-fade-transition hide-on-leave>
-          <v-alert v-if="dialogModal" :color="colorIcon" variant="tonal">
+          <v-alert v-if="!dialogModal" color="error" variant="flat">
             <div class="d-flex align-center justify-center">
-              <v-icon :color="colorIcon" :icon="iconResult" size="25"></v-icon>
+              <v-icon color="white" :icon="iconResult" size="25"></v-icon>
               <v-card-title class="font-weight-bold">{{ titleResult }}</v-card-title>
             </div>
 

@@ -1,4 +1,4 @@
-import { computed, ref, useFetch } from "#imports";
+import { ref, useFetch } from "#imports";
 
 import type { ContentPages } from "@prisma/client";
 
@@ -11,7 +11,7 @@ import { useImageStorage } from "@/composables/states";
 // import supabaseStete from "@/composables/supabaseStete";
 
 export const useMainContentStore = defineStore("content-store", () => {
-  const mainPages = ref<ContentPages[]>();
+  const mainPages = ref<ContentPages[] | null>();
   const pendingData = ref<boolean>(false);
   const supabaseStorage = useImageStorage();
   // const supabaseStorage = useStoreState();
@@ -21,20 +21,20 @@ export const useMainContentStore = defineStore("content-store", () => {
   // const supabaseStore = getFunc();
 
   const refrashData = ref<CallableFunction>();
-  const isLoading = computed(() => pendingData);
+
   const loadPagesContent = async () => {
     try {
       const {
         data: response,
         error,
         refresh,
-      } = await useFetch("/api/prisma/main-content-pages/list");
+      } = await useFetch<ContentPages[]>("/api/prisma/main-content-pages/list");
 
       if (error.value) {
         throw error.value;
       }
 
-      mainPages.value = response.value as ContentPages[];
+      mainPages.value = response.value;
     } catch (error) {
       console.log(error);
     }
@@ -95,21 +95,13 @@ export const useMainContentStore = defineStore("content-store", () => {
           body: JSON.stringify(content),
         },
       );
-      console.log(pendingData.value);
-
-      setTimeout(() => {
-        pendingData.value = !pendingData.value;
-      }, 3000);
-
       if (error.value) {
         throw error.value;
       }
       return response.value;
     } catch (error) {
       console.log(error);
-      setTimeout(() => {
-        pendingData.value = !pendingData.value;
-      }, 3000);
+
       return "Error";
     }
   };
@@ -130,21 +122,12 @@ export const useMainContentStore = defineStore("content-store", () => {
         },
       );
 
-      setTimeout(() => {
-        pendingData.value = !pendingData.value;
-      }, 3000);
-
-      // throw new Error("");
       if (error.value) {
         throw error.value;
       }
-
       return response.value;
     } catch (error) {
       console.log(error);
-      setTimeout(() => {
-        pendingData.value = !pendingData.value;
-      }, 3000);
 
       return "Error";
     }

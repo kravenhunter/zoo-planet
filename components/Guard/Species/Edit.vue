@@ -67,56 +67,44 @@ const uploadImage = async (event: Event) => {
   const fileEvent = event.target as HTMLInputElement;
   fileData.value = fileEvent.files?.length && fileEvent.files;
 };
-
+const loadingDelay = (result: string | null) => {
+  setTimeout(() => {
+    pendingData.value = !pendingData.value;
+    if (result) {
+      titleResult.value = result;
+      colorIcon.value = result.toLocaleLowerCase();
+      result === "Success" && (iconResult.value = "mdi-check-circle-outline");
+      result === "Error" && (iconResult.value = "mdi-close-thick");
+      dialogModal.value = !dialogModal.value;
+    }
+  }, 3000);
+};
 const addPost = async () => {
-  pendingData.value = !pendingData.value;
+  pendingData.value = false;
 
   if (getRecord?.id) {
-    const result = await updateSpecieContent(getRecord?.id, fileData.value, {
-      title: currentSpecie.value!.title,
-      imageBgLink: currentSpecie.value!.imageBgLink,
-      populationTrend: selectedPopulation.value,
-      habitain: currentSpecie.value!.habitain,
-      countLeft: currentSpecie.value!.countLeft,
-      conservationStatus: selected.value,
-      shordDescription: currentSpecie.value!.shordDescription,
-      description: currentSpecie.value!.description,
-      extraeDscription: currentSpecie.value!.extraeDscription ?? undefined,
-    });
-    setTimeout(() => {
-      pendingData.value = !pendingData.value;
-      if (result) {
-        titleResult.value = result;
-        colorIcon.value = result.toLocaleLowerCase();
-        result === "Success" && (iconResult.value = "mdi-check-circle-outline");
-        result === "Error" && (iconResult.value = "mdi-close-thick");
-        dialogModal.value = !dialogModal.value;
-      }
-    }, 3000);
+    currentSpecie.value!.conservationStatus = selected.value;
+    currentSpecie.value!.populationTrend = selectedPopulation.value;
+    // const result = await updateSpecieContent(getRecord?.id, fileData.value, {
+    //   title: currentSpecie.value!.title,
+    //   imageBgLink: currentSpecie.value!.imageBgLink,
+    //   populationTrend: selectedPopulation.value,
+    //   habitain: currentSpecie.value!.habitain,
+    //   countLeft: currentSpecie.value!.countLeft,
+    //   conservationStatus: selected.value,
+    //   shordDescription: currentSpecie.value!.shordDescription,
+    //   description: currentSpecie.value!.description,
+    //   extraeDscription: currentSpecie.value!.extraeDscription ?? undefined,
+    // });
+    const result = await updateSpecieContent(getRecord?.id, fileData.value, currentSpecie.value!);
+    loadingDelay(result);
   } else {
     if (fileData.value) {
-      const result = await addSpecieContent(fileData.value, {
-        title: currentSpecie.value!.title!,
-        imageBgLink: currentSpecie.value!.imageBgLink,
-        populationTrend: selectedPopulation.value,
-        habitain: currentSpecie.value!.habitain,
-        countLeft: currentSpecie.value!.countLeft,
-        conservationStatus: selected.value,
-        shordDescription: currentSpecie.value!.shordDescription,
-        description: currentSpecie.value!.description,
-        extraeDscription: currentSpecie.value?.extraeDscription ?? undefined,
-      });
+      currentSpecie.value!.conservationStatus = selected.value;
+      currentSpecie.value!.populationTrend = selectedPopulation.value;
 
-      setTimeout(() => {
-        pendingData.value = false;
-        if (result) {
-          titleResult.value = result;
-          colorIcon.value = result.toLocaleLowerCase();
-          result === "Success" && (iconResult.value = "mdi-check-circle-outline");
-          result === "Error" && (iconResult.value = "mdi-close-thick");
-          dialogModal.value = !dialogModal.value;
-        }
-      }, 3000);
+      const result = await addSpecieContent(fileData.value, currentSpecie.value!);
+      loadingDelay(result);
     }
   }
 };

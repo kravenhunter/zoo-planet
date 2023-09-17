@@ -17,7 +17,7 @@ export default defineEventHandler(async (event) => {
         extraeDscription: body.extraeDscription,
       },
     });
-
+    console.log("Update Post", result);
     return "Success";
   } catch (error) {
     console.log(error);
