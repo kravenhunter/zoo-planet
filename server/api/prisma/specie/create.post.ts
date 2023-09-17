@@ -5,31 +5,28 @@ const prismaCLient = new PrismaClient();
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
+  console.log(body);
 
   try {
-    const result = await prismaCLient.contactUs.update({
-      where: { id: event?.context?.params?.id },
+    const postCreate = await prismaCLient.specie.create({
       data: {
         title: body.title,
         imageBgLink: body.imageBgLink,
+        habitain: body.habitain,
+        populationTrend: body.populationTrend,
+        countLeft: body.countLeft,
+        conservationStatus: body.conservationStatus,
+        shordDescription: body.shordDescription,
         description: body.description,
         extraeDscription: body.extraeDscription,
-        phone: body.phone,
-        email: body.email,
-        socialLink_1: body.socialLink_1,
-        socialLink_2: body.socialLink_2,
-        socialLink_3: body.socialLink_3,
-        socialLink_4: body.socialLink_4,
-        socialLink_5: body.socialLink_5,
-        copyright: body.copyright,
       },
     });
-
     return "Success";
   } catch (error) {
     console.log(error);
     return error;
   }
+
   /*  body.array.forEach(async prod => {
       await prismaCLient.orderItem.create({
         data:{

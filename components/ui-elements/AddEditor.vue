@@ -84,22 +84,39 @@ const editor = ref(
             return "Can you add some further context?";
           },
         },
-      }),
-      /*   BulletList.configure({
-        HTMLAttributes: {
-          class: "bullet_class",
+        focus: {
+          HTMLAttributes: {
+            class: "focuse_rule",
+          },
+          mode: "all",
+        },
+        hardBreak: {
+          HTMLAttributes: {
+            class: "hard_breake_rule",
+          },
+          keepMarks: false,
+        },
+        italic: {
+          HTMLAttributes: {
+            class: "italic_rule",
+          },
         },
       }),
-      OrderedList.configure({
-        HTMLAttributes: {
-          class: "order_class",
-        },
-      }),
-      ListItem.configure({
-        HTMLAttributes: {
-          class: "list_class",
-        },
-      }), */
+      // BulletList.configure({
+      //   HTMLAttributes: {
+      //     class: "bullet_class",
+      //   },
+      // }),
+      // OrderedList.configure({
+      //   HTMLAttributes: {
+      //     class: "order_class",
+      //   },
+      // }),
+      // ListItem.configure({
+      //   HTMLAttributes: {
+      //     class: "list_class",
+      //   },
+      // }),
       Youtube.configure({
         HTMLAttributes: {
           class: "video_rule",
@@ -419,6 +436,21 @@ function addImage() {
 }
 .menu_bar_container {
   background-color: black;
+  & .add-youtube {
+    & input {
+      color: white;
+      margin-left: 20px;
+      width: 80px;
+      font-size: 0.7rem;
+      border: 1px solid var(--color-light);
+      border-radius: 5px;
+      padding-left: 10px;
+      &::placeholder {
+        color: aliceblue;
+        font-size: 0.6rem;
+      }
+    }
+  }
 }
 .menu_bar_container .menu_bar_btn {
   margin-left: 10px;

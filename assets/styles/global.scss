@@ -84,15 +84,24 @@ Editor styles
   max-width: 900px;
   display: grid;
 }
+.headers_class {
+  margin: 20px 0;
+}
 .paragraph_class {
   font-size: 18px;
+  margin-bottom: 20px;
+}
+.italic_rule {
+  font-style: italic;
 }
 .hr_class {
   border: none;
   border-top: 2px solid rgba(13, 13, 13, 0.1);
   margin: 2rem 0;
 }
-
+.focuse_rule {
+  border: 2px solid aqua;
+}
 .code_block_rule {
   background: #0d0d0d;
   color: #fff;

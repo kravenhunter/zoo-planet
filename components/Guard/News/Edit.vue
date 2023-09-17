@@ -46,14 +46,25 @@ const uploadImage = async (event: Event) => {
 
 const addPost = async () => {
   pendingData.value = !pendingData.value;
-  currentPost.value?.id &&
-    (await updatePost(currentPost.value?.id, fileData.value, {
+  if (currentPost.value) {
+    const result = await updatePost(currentPost.value?.id, fileData.value, {
       title: currentPost.value?.title,
       imageBgLink: currentPost.value?.imageBgLink,
       category: selected.value,
       description: currentPost.value?.description,
       extraeDscription: currentPost.value?.extraeDscription,
-    }));
+    });
+    setTimeout(() => {
+      pendingData.value = false;
+      if (result) {
+        titleResult.value = result;
+        colorIcon.value = result.toLocaleLowerCase();
+        result === "Success" && (iconResult.value = "mdi-check-circle-outline");
+        result === "Error" && (iconResult.value = "mdi-close-thick");
+        dialogModal.value = !dialogModal.value;
+      }
+    }, 3000);
+  }
 };
 </script>
 
@@ -63,14 +74,27 @@ const addPost = async () => {
       <v-progress-circular color="primary" indeterminate size="64"></v-progress-circular>
     </v-overlay>
 
-    <v-container v-if="currentPost" class="position-relative d-flex justify-center" fluid>
+    <v-container v-if="currentPost" class="position-relative d-flex justify-end" fluid>
+      <div class="position-absolute">
+        <v-fade-transition hide-on-leave>
+          <v-alert v-if="dialogModal" :color="colorIcon" variant="tonal">
+            <div class="d-flex align-center justify-center">
+              <v-icon :color="colorIcon" :icon="iconResult" size="25"></v-icon>
+              <v-card-title class="font-weight-bold">{{ titleResult }}</v-card-title>
+            </div>
+
+            <template #append>
+              <v-btn size="20" variant="text" @click="dialogModal = false">
+                <v-icon :color="colorIcon" icon="$close" size="20"></v-icon>
+              </v-btn>
+            </template>
+          </v-alert>
+        </v-fade-transition>
+      </div>
       <v-row>
         <v-col>
           <div class="content_item">
             <v-sheet class="pa-2">
-              <div class="loading" v-if="pendingData">
-                <p>Loading.....</p>
-              </div>
               <v-btn
                 :disabled="isEmpty"
                 :loading="pendingData"
@@ -79,7 +103,7 @@ const addPost = async () => {
                 class="mt-2"
                 color="success"
                 @click="addPost"
-                >Update</v-btn
+                >update data</v-btn
               >
               <v-form>
                 <v-text-field
@@ -104,35 +128,6 @@ const addPost = async () => {
           <div class="editor_content bg-white mt-5" v-html="currentPost.extraeDscription"></div>
         </v-col>
       </v-row>
-      <v-fade-transition hide-on-leave class="position-absolute w-100 align-self-center">
-        <v-card v-if="dialogModal" append-icon="$close" elevation="16" max-width="500">
-          <template #append>
-            <v-btn icon="$close" variant="text" @click="dialogModal = false"></v-btn>
-          </template>
-
-          <v-divider></v-divider>
-
-          <div class="py-12 text-center">
-            <v-icon class="mb-6" :color="colorIcon" :icon="iconResult" size="128"></v-icon>
-
-            <div class="text-h4 font-weight-bold">{{ titleResult }}</div>
-          </div>
-
-          <v-divider></v-divider>
-
-          <div class="pa-4 text-end">
-            <v-btn
-              class="text-none"
-              color="medium-emphasis"
-              min-width="92"
-              rounded
-              variant="outlined"
-              @click="dialogModal = false">
-              Close
-            </v-btn>
-          </div>
-        </v-card>
-      </v-fade-transition>
     </v-container>
   </section>
 </template>

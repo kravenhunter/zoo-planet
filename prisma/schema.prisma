@@ -121,3 +121,33 @@ model ContentPages {
   description        String
   extraeDscription   String?
 }
+
+model Specie {
+  id                String      @id @default(uuid())
+  timeStamp         DateTime    @default(now())
+  title             String     
+  imageBgLink       String 
+  habitain          String
+  populationTrend    PopulationTrend
+  countLeft          String
+  conservationStatus  ConservationStatus
+  shordDescription       String
+  description        String
+  extraeDscription  String?
+}
+
+enum ConservationStatus  {
+   LC 
+   NT
+   VU
+   EN
+   CR
+   EW
+   EX
+}
+
+enum PopulationTrend  {
+   Decreasing 
+   Increasing
+   Stable
+}

@@ -5,13 +5,13 @@ const prismaCLient = new PrismaClient();
 
 export default defineEventHandler(async (event) => {
   try {
-    const result = await prismaCLient.contactUs.findFirst({
+    const post = await prismaCLient.specie.findFirst({
       where: {
         id: event?.context?.params?.id,
       },
     });
-
-    if (!result) {
+    console.log(post);
+    if (!post) {
       // throw new Error("");
       throw createError({
         statusCode: 405,
@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
       });
     }
 
-    return result;
+    return post;
   } catch (error) {
     console.log(error);
     return error;

@@ -41,72 +41,7 @@ const updatePrices = async (id: string) => {
   await updateMemberShipPrices(id, id, stateMonth, stateYaer);
 };
 
-const membership = {
-  sourceTitle: "/images/volunteer_2.jpg",
-  title: "Membership",
-  subtitle: "Who should we include in the membership?",
-  text: `Your monthly instalment plan will auto-rollover in 12 months. 
-  We will send you a reminder, via email, 28 days before you are due to roll over to update your details or opt out. `,
-};
-
 const tableRow = [{ title: "Monthly" }, { title: "Yearly" }];
-const tableColumn = [
-  { title: "Adult" },
-  { title: "Child (under 16)" },
-  { title: "Zoo Crew (under 16)" },
-  { title: "Concession" },
-  { title: "Senior" },
-  { title: "Teacher (professional membership)" },
-  { title: "Supporter (Zoo entry not included)" },
-];
-
-const monthly = [
-  {
-    price: "$11.50",
-  },
-  {
-    price: "Free",
-  },
-  {
-    price: "$4.50",
-  },
-  {
-    price: "$8.50",
-  },
-  {
-    price: "$10.50",
-  },
-  {
-    price: "$8.25",
-  },
-  {
-    price: "$5.00",
-  },
-];
-
-const yarly = [
-  {
-    price: "$11.50",
-  },
-  {
-    price: "Free",
-  },
-  {
-    price: "$4.50",
-  },
-  {
-    price: "$8.50",
-  },
-  {
-    price: "$10.50",
-  },
-  {
-    price: "$8.25",
-  },
-  {
-    price: "$5.00",
-  },
-];
 
 onMounted(async () => {
   !membershipTable.value && (await loadTables);
@@ -120,7 +55,7 @@ onMounted(async () => {
       <v-progress-circular color="primary" indeterminate size="64"></v-progress-circular>
     </v-overlay>
     <v-container class="py-8 px-6">
-      <v-row>
+      <!--       <v-row>
         <v-col cols="12">
           <v-list lines="two" class="bg-grey-darken-4">
             <v-list-subheader
@@ -155,7 +90,7 @@ onMounted(async () => {
             </v-list-item>
           </v-list>
         </v-col>
-      </v-row>
+      </v-row> -->
       <v-row>
         <v-col cols="12">
           <article class="table pb-16">

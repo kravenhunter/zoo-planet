@@ -4,7 +4,12 @@ import { useBookingStore } from "@/stores/bookingStore";
 import { useContactsStore } from "@/stores/contactsStore";
 import { useMainContentStore } from "@/stores/mainContentStore";
 import { usePostStore } from "@/stores/postStore";
+import { useSpeciesStore } from "@/stores/speciesStore";
 import { storeToRefs } from "pinia";
+
+//Species Data
+const { specieList } = storeToRefs(useSpeciesStore());
+const { loadSpeciesList } = useSpeciesStore();
 
 //Contacts Data
 const { contactPage } = storeToRefs(useContactsStore());
@@ -33,6 +38,9 @@ if (!membershipTable.value && !ticketTable.value) {
 }
 if (!contactPage.value) {
   await loadContacts();
+}
+if (!specieList.value) {
+  await loadSpeciesList();
 }
 const nav = [
   { title: "My News", icon: "mdi-folder", to: "/guard/section/news" },

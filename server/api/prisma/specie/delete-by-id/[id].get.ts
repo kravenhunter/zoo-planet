@@ -5,7 +5,7 @@ const prismaCLient = new PrismaClient();
 
 export default defineEventHandler(async (event) => {
   try {
-    const result = await prismaCLient.contactUs.delete({
+    const result = await prismaCLient.specie.delete({
       where: {
         id: event?.context?.params?.id,
       },

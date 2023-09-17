@@ -1,15 +1,16 @@
 <script setup lang="ts">
 import { ref, useRoute } from "#imports";
+import { useBookingStore } from "@/stores/bookingStore";
 import { useContactsStore } from "@/stores/contactsStore";
 import { useMainContentStore } from "@/stores/mainContentStore";
 import { usePostStore } from "@/stores/postStore";
+import { useSpeciesStore } from "@/stores/speciesStore";
 import type { ContactUs, ContentPages, MembershipPrice, Post, TicketPrice } from "@prisma/client";
 import { storeToRefs } from "pinia";
 
-import { useBookingStore } from "@/stores/bookingStore";
-
 const router = useRoute();
 
+const { specieList } = storeToRefs(useSpeciesStore());
 //Contacts Data
 const { contactPage } = storeToRefs(useContactsStore());
 const contacts = ref<ContactUs>();
@@ -96,7 +97,6 @@ if (router.params.id === "fighting") {
 }
 if (router.params.id === "species") {
   newsMainPageContent.value = mainPages.value?.find((el) => el.subTitle === "Species");
-  latestNewsList.value = postlist.value?.filter((el) => el.category === "Species");
 }
 
 if (router.params.id === "education") {
@@ -443,6 +443,8 @@ if (router.params.id === "contactus") {
           </v-col>
         </v-row>
       </div>
+      <LazyGuardSpeciesList v-if="router.params.id === 'species'" />
+      <LazyGuardTablesTickets v-if="router.params.id === 'tickets'" />
     </v-container>
   </section>
 </template>

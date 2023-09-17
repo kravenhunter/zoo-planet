@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
   console.log(body);
 
   try {
-    const postCreate = await prismaCLient.ContactUs.create({
+    const postCreate = await prismaCLient.contactUs.create({
       data: {
         title: body.title,
         imageBgLink: body.imageBgLink,

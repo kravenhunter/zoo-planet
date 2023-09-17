@@ -2,13 +2,7 @@
 import { ref, useRoute } from "#imports";
 
 const route = useRoute();
-const speciesTitle = {
-  title: "Local threatened species",
-  sourceTitle: "/images/35f9ab0c1f1433fd3c531fc261b36ae2e0075dd0.webp",
-  subtitle: "",
-  description:
-    "Meet the 27 Australian animals we're fighting to protect. These species are on the brink of extinction due to a range of threats. A lesser recognised but very real threat to these species, is that many Victorians do not know they exist, or how they can help. We think the only thing more unjust than wildlife extinction, is the loss of a species that no one knew was in trouble.",
-};
+
 const speciesList = [
   {
     id: 1,

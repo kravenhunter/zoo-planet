@@ -1,38 +1,41 @@
 import { computed, ref, useFetch } from "#imports";
-import supabaseStete from "@/composables/supabaseStete";
-import type { Post } from "@prisma/client";
+
+import type { Specie } from "@prisma/client";
+
 import { defineStore } from "pinia";
-import type { IPost } from "types/IPost";
+
 import { uuid } from "vue-uuid";
 
-// import { useImageStorage } from "@/composables/states";
+import { useImageStorage } from "@/composables/states";
+import type { ISpecie } from "@/types/ISpecie";
 
-export const usePostStore = defineStore("post-store", () => {
-  const postlist = ref<Post[]>();
+// import supabaseStete from "@/composables/supabaseStete";
+
+export const useSpeciesStore = defineStore("species-store", () => {
+  const specieList = ref<Specie[] | null>();
   const pendingData = ref<boolean>(false);
-  // const supabaseStorage = useImageStorage();
+  const supabaseStorage = useImageStorage();
   // const supabaseStorage = useStoreState();
-  const getFunc = supabaseStete();
   // const { $supabaseStore } = useNuxtApp();
-  const supabaseStore = getFunc();
+
+  // const getFunc = supabaseStete();
+  // const supabaseStore = getFunc();
 
   const refrashData = ref<CallableFunction>();
   const isLoading = computed(() => pendingData);
-  const loadPostList = async () => {
+  const loadSpeciesList = async () => {
     try {
-      const { data: response, error, refresh } = await useFetch<Post>("/api/prisma/post/list");
-
-      // const { data: response, error } = await useAsyncData("pagesContent", () =>
-      //   $fetch("/api/prisma/main-content-pages/list"),
-      // );
-
-      // refrashData.value = refresh;
+      const {
+        data: response,
+        error,
+        refresh,
+      } = await useFetch<Specie[]>("/api/prisma/specie/list");
 
       if (error.value) {
         throw error.value;
       }
 
-      postlist.value = response.value;
+      specieList.value = response.value;
     } catch (error) {
       console.log(error);
     }
@@ -65,34 +68,28 @@ export const usePostStore = defineStore("post-store", () => {
     if (fileData) {
       //   const fileName = `${Math.floor(Math.random() * 1000)}${fileData[0]?.name}`;
       const fileName = `${uuid.v4() + fileData[0].name}`;
-      try {
-        const { data, error } = await supabaseStore.storage
-          .from("/images")
-          .upload(fileName, fileData[0]);
-        if (error) {
-          throw error;
-        }
-        console.log(data);
-        urls += data.path;
-
-        console.log(urls);
-        return urls;
-      } catch (error) {
-        console.log(error);
+      const { data, error } = await supabaseStorage.storage
+        .from("/images")
+        .upload(fileName, fileData[0]);
+      if (error) {
+        throw error;
       }
+      console.log(data);
+      urls += data.path;
+
+      console.log(urls);
+      return urls;
     }
     return "image";
   };
-  const getContentByTitle = async (title: string) => {
-    return postlist.value?.find((el) => el.title === title);
-  };
-  const createPost = async (fileData: 0 | FileList | undefined, content: IPost) => {
-    try {
-      if (fileData) {
-        content.imageBgLink = await loadImage(fileData);
-      }
 
-      const { data: response, error } = await useFetch<string>("/api/prisma/post/create", {
+  const getSpecietByTitleName = async (title: string) => {
+    return specieList.value?.find((el) => el.title === title);
+  };
+  const addSpecieContent = async (fileData: FileList, content: ISpecie) => {
+    try {
+      content.imageBgLink = await loadImage(fileData);
+      const { data: response, error } = await useFetch<string>("/api/prisma/specie/create", {
         method: "post",
         body: JSON.stringify(content),
       });
@@ -103,16 +100,21 @@ export const usePostStore = defineStore("post-store", () => {
       return response.value;
     } catch (error) {
       console.log(error);
+
       return "Error";
     }
   };
 
-  const updatePost = async (idPost: string, fileData: FileList | undefined, content: IPost) => {
+  const updateSpecieContent = async (
+    idPost: string,
+    fileData: 0 | FileList | undefined,
+    content: ISpecie,
+  ) => {
     try {
       fileData && (content.imageBgLink = await loadImage(fileData));
 
       const { data: response, error } = await useFetch<string>(
-        `/api/prisma/post/update/${idPost}`,
+        `/api/prisma/specie/update/${idPost}`,
         {
           method: "post",
           body: JSON.stringify(content),
@@ -123,24 +125,23 @@ export const usePostStore = defineStore("post-store", () => {
       if (error.value) {
         throw error.value;
       }
+
       return response.value;
     } catch (error) {
       console.log(error);
+
       return "Error";
     }
   };
-  const getById = async (idPage: string) => {
-    return postlist.value?.find((el) => el.id === idPage);
-  };
-  const deleteById = async (idPage: string) => {
+  const deleteSpecieById = async (idPage: string) => {
     try {
       const { data: response, error } = await useFetch<string>(
-        `/api/prisma/post/delete-by-id/${idPage}`,
+        `/api/prisma/specie/delete-by-id/${idPage}`,
       );
-      console.log(response);
       if (error.value) {
         throw error.value;
       }
+
       return response.value;
     } catch (error) {
       console.log(error);
@@ -148,13 +149,12 @@ export const usePostStore = defineStore("post-store", () => {
     }
   };
   return {
-    postlist,
+    specieList,
     pendingData,
-    getById,
-    loadPostList,
-    createPost,
-    updatePost,
-    getContentByTitle,
-    deleteById,
+    addSpecieContent,
+    getSpecietByTitleName,
+    loadSpeciesList,
+    updateSpecieContent,
+    deleteSpecieById,
   };
 });
