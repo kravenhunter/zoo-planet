@@ -69,18 +69,15 @@ onMounted(() => {});
         style="width: 95%; z-index: 100; top: 4.5rem">
         <div class="alert">
           <v-fade-transition hide-on-leave>
-            <v-alert v-if="alertDialog.dialogModal" :color="alertDialog.colorIcon" variant="tonal">
+            <v-alert v-if="alertDialog.dialogModal" :color="alertDialog.colorIcon" variant="flat">
               <div class="d-flex align-center justify-center">
-                <v-icon
-                  :color="alertDialog.colorIcon"
-                  :icon="alertDialog.iconResult"
-                  size="25"></v-icon>
+                <v-icon color="white" :icon="alertDialog.iconResult" size="25"></v-icon>
                 <v-card-title class="font-weight-bold">{{ alertDialog.titleResult }}</v-card-title>
               </div>
 
               <template #append>
                 <v-btn size="20" variant="text" @click="alertDialog.dialogModal = false">
-                  <v-icon :color="alertDialog.colorIcon" icon="$close" size="20"></v-icon>
+                  <v-icon color="white" icon="$close" size="20"></v-icon>
                 </v-btn>
               </template>
             </v-alert>

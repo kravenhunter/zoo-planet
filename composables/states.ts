@@ -35,11 +35,8 @@ export const useAlertDialog = () =>
 
 export function delayLoading(result: string | null) {
   const alertDialog = useAlertDialog();
-  console.log();
-
   const isLoading = useIsLoading();
-  console.log(alertDialog.value);
-  console.log(isLoading.value);
+
   setTimeout(() => {
     result &&
       (alertDialog.value = {
@@ -50,26 +47,18 @@ export function delayLoading(result: string | null) {
       });
 
     isLoading.value = false;
-  }, 3000);
+  }, 2000);
 }
-// export const useOtherSupabaseObject = () =>
-//   useState<SupabaseClient | null>("supabase-object", () => {
-//     const config = useRuntimeConfig();
-//     const supabaseUrl = config.public.supabaseUrl;
-//     const supabaseKey = config.public.supabaseKey;
-//     const supabase = createClient(supabaseUrl, supabaseKey);
-//   });
+
 let instance: SupabaseClient | null = null;
 export function useImageStorage() {
   const counter = useCounter();
-  // const config = useRuntimeConfig();
-  // const supabaseUrl = config.public.supabaseUrl;
-  // const supabaseKey = config.public.supabaseKey;
-  // const supabase = createClient(supabaseUrl, supabaseKey);
 
-  // const supabaseObject = useSupabaseObject();
   // if (!supabaseObject.value) {
   //   console.log("init", !supabaseObject.value);
+  //   Избавляет от ошибки  POCO при  передачи ссылки createClient реактивной переменной
+  // const supabase = createClient(supabaseUrl, supabaseKey);
+  // копируем объект
   //   supabaseObject.value = JSON.parse(JSON.stringify(supabase));
   // }
   if (!instance) {
@@ -79,16 +68,6 @@ export function useImageStorage() {
     instance = createClient(supabaseUrl, supabaseKey);
     counter.value += 1;
   }
-
-  // console.log(supabaseObject.value);
-  // console.log(supabase);
-  console.log(counter.value);
-
-  // if (!supabaseObject.value) {
-  //   console.log("useSupabaseObject", counter.value + 1);
-
-  //   supabaseObject.value = supabase;
-  // }
 
   return instance;
 }

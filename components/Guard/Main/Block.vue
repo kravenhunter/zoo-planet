@@ -24,67 +24,14 @@ const newsMainPageContent = ref<ContentPages>();
 const latestNewsList = ref<Post[]>();
 
 // Membership Prices & Table
-const { membershipTable, loadingMemberPrices, ticketTable } = storeToRefs(useBookingStore());
-const { updateMemberShipPrices, addTicketPrices, updateTicketPrices } = useBookingStore();
-const tableRow = [{ title: "Monthly" }, { title: "Yearly" }];
+const { membershipTable, ticketTable } = storeToRefs(useBookingStore());
+
 const stateMonth = ref<MembershipPrice>();
 const stateYaer = ref<MembershipPrice>();
 
-const addPrices = async () => {
-  loadingMemberPrices.value = !loadingMemberPrices.value;
-  if (stateMonth.value && stateYaer.value) {
-    await updateMemberShipPrices(
-      stateMonth.value?.id,
-      stateYaer.value.id,
-      {
-        adult: stateMonth.value.adult,
-        childCategoryFirst: stateMonth.value.childCategoryFirst,
-        childCategorySecond: stateMonth.value.childCategorySecond,
-        concession: stateMonth.value.concession,
-        seniors: stateMonth.value.seniors,
-        teacher: stateMonth.value.teacher,
-        supporter: stateMonth.value.supporter,
-      },
-      {
-        adult: stateYaer.value.adult,
-        childCategoryFirst: stateYaer.value.childCategoryFirst,
-        childCategorySecond: stateYaer.value.childCategorySecond,
-        concession: stateYaer.value.concession,
-        seniors: stateYaer.value.seniors,
-        teacher: stateYaer.value.teacher,
-        supporter: stateYaer.value.supporter,
-      },
-    );
-  }
-};
 // Ticket Prices & Table
-const ticketTableHeaders = [
-  { title: "Age Ratio" },
-  { title: "Single Entry" },
-  { title: "Unlimited" },
-];
 const singleState = ref<TicketPrice>();
 const unlimitedSTate = ref<TicketPrice>();
-const addTickets = async () => {
-  if (singleState.value && unlimitedSTate.value) {
-    await addTicketPrices(
-      {
-        adult: singleState.value.adult,
-        childCategoryFirst: singleState.value.childCategoryFirst,
-        childCategorySecond: singleState.value.childCategorySecond,
-        concession: singleState.value.concession,
-        seniors: singleState.value.seniors,
-      },
-      {
-        adult: unlimitedSTate.value.adult,
-        childCategoryFirst: unlimitedSTate.value.childCategoryFirst,
-        childCategorySecond: unlimitedSTate.value.childCategorySecond,
-        concession: unlimitedSTate.value.concession,
-        seniors: unlimitedSTate.value.seniors,
-      },
-    );
-  }
-};
 
 //Checking ROutes
 if (router.params.id === "news") {
@@ -115,6 +62,10 @@ if (router.params.id === "membership") {
 }
 if (router.params.id === "tickets") {
   newsMainPageContent.value = mainPages.value?.find((el) => el.subTitle === "Tickets");
+  if (ticketTable.value?.length) {
+    singleState.value = ticketTable.value[0];
+    unlimitedSTate.value = ticketTable.value[1];
+  }
 }
 if (router.params.id === "donate") {
   newsMainPageContent.value = mainPages.value?.find((el) => el.subTitle === "Donate");
@@ -161,7 +112,7 @@ if (router.params.id === "contactus") {
           </v-list>
         </v-col>
       </v-row>
-      <v-row v-if="latestNewsList?.length">
+      <!--       <v-row v-if="latestNewsList?.length">
         <v-col cols="12">
           <v-btn
             class="px-10 text-subtitle-1 ma-6 text-white text-grey-lighten-5"
@@ -205,8 +156,9 @@ if (router.params.id === "contactus") {
             </v-list-item>
           </v-list>
         </v-col>
-      </v-row>
-      <v-row v-if="stateMonth && stateYaer">
+      </v-row> -->
+      <GuardNewsList v-if="latestNewsList?.length" :latest-news-list="latestNewsList" />
+      <!--     <v-row v-if="stateMonth && stateYaer">
         <v-col cols="12">
           <article class="table pb-16">
             <v-table theme="light">
@@ -293,11 +245,7 @@ if (router.params.id === "contactus") {
                     <v-text-field v-model="stateYaer.supporter" label="$0"></v-text-field>
                   </td>
                 </tr>
-                <!--                 <tr v-for="(item, i) in tableColumn" :key="i">
-                  <td class="pl-7 py-5">{{ item.title }}</td>
-                  <td class="py-5">{{ monthly[i].price }}</td>
-                  <td class="py-5">{{ yarly[i].price }}</td>
-                </tr> -->
+            
                 <tr>
                   <td class="d-flex justify-end align-center py-10">
                     <v-btn
@@ -316,8 +264,12 @@ if (router.params.id === "contactus") {
             </v-table>
           </article>
         </v-col>
-      </v-row>
-      <v-row v-if="singleState && unlimitedSTate">
+      </v-row> -->
+      <LazyGuardTablesMemberShip
+        v-if="router.params.id === 'membership'"
+        :monthly="stateMonth"
+        :yarly="stateYaer" />
+      <!--    <v-row v-if="singleState && unlimitedSTate">
         <v-col cols="12">
           <article class="table pb-16">
             <v-table theme="light">
@@ -413,11 +365,14 @@ if (router.params.id === "contactus") {
             </v-table>
           </article>
         </v-col>
-      </v-row>
+      </v-row> -->
       <LazyGuardContactBlock v-if="contacts" :contact-data="contacts" />
 
       <LazyGuardSpeciesList v-if="router.params.id === 'species'" />
-      <LazyGuardTablesTickets v-if="router.params.id === 'tickets'" />
+      <LazyGuardTablesTickets
+        v-if="router.params.id === 'tickets'"
+        :singl-entry="singleState"
+        :unlimited="unlimitedSTate" />
     </v-container>
   </section>
 </template>

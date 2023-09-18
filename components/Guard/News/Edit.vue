@@ -19,10 +19,10 @@ const { postlist } = storeToRefs(usePostStore());
 
 const { updatePost } = usePostStore();
 const currentPost = ref<Post>();
-currentPost.value = postlist.value?.find((el) => el.id === String(route.params.id));
-
 const selected = ref("Education");
 const category = ["Education", "FightingExtinction", "News"];
+currentPost.value = postlist.value?.find((el) => el.id === String(route.params.id));
+selected.value = currentPost.value ? currentPost.value.category : "Education";
 
 const isEmpty = computed(() => {
   if (currentPost.value?.title && currentPost.value?.description) {

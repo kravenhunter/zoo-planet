@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, reactive, ref } from "#imports";
+import { getCurrentTime } from "@/composables/getTime";
 import { delayLoading, useIsLoading } from "@/composables/states";
 import { usePostStore } from "@/stores/postStore";
 
@@ -51,12 +52,13 @@ const uploadImage = async (event: Event) => {
 const addPost = async () => {
   pendingData.value = true;
   if (fileData.value) {
-    pendingData.value = !pendingData.value;
     state.category = selected.value;
     const result = await createPost(fileData.value, state);
 
     // loadingDelay(result);
+    console.log("Result addPost", getCurrentTime());
     delayLoading(result);
+    console.log("End loading addPost", getCurrentTime());
   }
 };
 </script>

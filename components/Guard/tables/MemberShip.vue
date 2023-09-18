@@ -1,52 +1,55 @@
 <script setup lang="ts">
-import { reactive, ref, useRoute } from "#imports";
+import { reactive } from "#imports";
+import { delayLoading, useIsLoading } from "@/composables/states";
 import { useBookingStore } from "@/stores/bookingStore";
-import { useMainContentStore } from "@/stores/mainContentStore";
-import type { ContentPages } from "@prisma/client";
-import { storeToRefs } from "pinia";
 
-const route = useRoute();
-const { mainPages } = storeToRefs(useMainContentStore());
+import type { MembershipPrice } from "@prisma/client";
 
-const { membershipTable, loadingMemberPrices } = storeToRefs(useBookingStore());
-const { addMembershipPreces, loadTables, updateMemberShipPrices } = useBookingStore();
-const memberContent = ref<ContentPages>();
-memberContent.value = mainPages.value?.find((el) => el.subTitle === String(route.params.id));
+const props = defineProps<{
+  monthly: MembershipPrice | undefined;
+  yarly: MembershipPrice | undefined;
+}>();
 
 const stateMonth = reactive({
-  adult: "",
-  childCategoryFirst: "",
-  childCategorySecond: "",
-  concession: "",
-  seniors: "",
-  teacher: "",
-  supporter: "",
-});
-const stateYaer = reactive({
-  adult: "",
-  childCategoryFirst: "",
-  childCategorySecond: "",
-  concession: "",
-  seniors: "",
-  teacher: "",
-  supporter: "",
+  adult: props.monthly?.adult ?? "",
+  childCategoryFirst: props.monthly?.childCategoryFirst ?? "",
+  childCategorySecond: props.monthly?.childCategorySecond ?? "",
+  concession: props.monthly?.concession ?? "",
+  seniors: props.monthly?.seniors ?? "",
+  teacher: props.monthly?.teacher ?? "",
+  supporter: props.monthly?.supporter ?? "",
 });
 
-const addPrices = async () => {
-  loadingMemberPrices.value = !loadingMemberPrices.value;
-  await addMembershipPreces(stateMonth, stateYaer);
-};
-const updatePrices = async (id: string) => {
-  loadingMemberPrices.value = !loadingMemberPrices.value;
-  await updateMemberShipPrices(id, id, stateMonth, stateYaer);
-};
+const stateYaer = reactive({
+  adult: props.monthly?.adult ?? "",
+  childCategoryFirst: props.yarly?.childCategoryFirst ?? "",
+  childCategorySecond: props.yarly?.childCategorySecond ?? "",
+  concession: props.yarly?.concession ?? "",
+  seniors: props.yarly?.seniors ?? "",
+  teacher: props.yarly?.teacher ?? "",
+  supporter: props.yarly?.supporter ?? "",
+});
+
+const { addMembershipPreces, updateMemberShipPrices } = useBookingStore();
+const loadingMemberPrices = useIsLoading();
 
 const tableRow = [{ title: "Monthly" }, { title: "Yearly" }];
 
-// onMounted(async () => {
-//   !membershipTable.value && (await loadTables);
-//   console.log(membershipTable.value);
-// });
+const addPrices = async () => {
+  loadingMemberPrices.value = true;
+  if (props.monthly?.id && props.yarly?.id) {
+    const result = await updateMemberShipPrices(
+      props.monthly!.id,
+      props.yarly!.id,
+      stateMonth,
+      stateYaer,
+    );
+    delayLoading(result);
+  } else {
+    const result = await addMembershipPreces(stateMonth, stateYaer);
+    delayLoading(result);
+  }
+};
 </script>
 
 <template>
@@ -55,56 +58,11 @@ const tableRow = [{ title: "Monthly" }, { title: "Yearly" }];
       <v-progress-circular color="primary" indeterminate size="64"></v-progress-circular>
     </v-overlay>
     <v-container class="py-8 px-6">
-      <!--       <v-row>
-        <v-col cols="12">
-          <v-list lines="two" class="bg-grey-darken-4">
-            <v-list-subheader
-              class="text-h6 text-white"
-              title="News main content"></v-list-subheader>
-            <v-list-item>
-              <CardItem
-                image-heigth="200"
-                image-width="200"
-                :inline="true"
-                class="card_main"
-                class-card="justify-start"
-                class-content="d-flex flex-column align-self-center "
-                colorbg="grey-darken-4"
-                :image-source="memberContent?.imageBgLink"
-                font-title-size="2rem"
-                :title-card="memberContent?.title"
-                :subtitle-card="memberContent?.shortDescription"
-                button-title="Edit"
-                button-align="align-center"
-                :button-slot="true">
-                <v-btn
-                  class="px-10 text-subtitle-1 mx-auto text-white text-grey-lighten-5"
-                  color="light-blue-darken-4"
-                  variant="flat"
-                  size="large"
-                  :to="{ path: `/guard/main/news` }"
-                  append-icon="mdi-paw">
-                  Edit
-                </v-btn>
-              </CardItem>
-            </v-list-item>
-          </v-list>
-        </v-col>
-      </v-row> -->
       <v-row>
         <v-col cols="12">
           <article class="table pb-16">
             <v-table theme="light">
               <thead class="bg-orange-lighten-5 text-subtitle-2">
-                <tr>
-                  <th></th>
-                  <th>
-                    <div class="loading" v-if="loadingMemberPrices">
-                      <p>Loading.....</p>
-                    </div>
-                  </th>
-                  <th></th>
-                </tr>
                 <tr>
                   <th></th>
                   <th class="py-5 text-left font-weight-bold" v-for="(el, i) in tableRow" :key="i">
@@ -116,57 +74,61 @@ const tableRow = [{ title: "Monthly" }, { title: "Yearly" }];
                 <tr>
                   <td class="pl-7 py-5">Adult</td>
                   <td class="py-5">
-                    <v-text-field v-model="stateMonth.adult" label="$0"></v-text-field>
+                    <v-text-field v-model="stateMonth!.adult" label="$0"></v-text-field>
                   </td>
                   <td class="py-5">
-                    <v-text-field v-model="stateYaer.adult" label="$0"></v-text-field>
+                    <v-text-field v-model="stateYaer!.adult" label="$0"></v-text-field>
                   </td>
                 </tr>
                 <tr>
                   <td class="pl-7 py-5">Child (under 16)</td>
                   <td class="py-5">
-                    <v-text-field v-model="stateMonth.childCategoryFirst" label="$0"></v-text-field>
+                    <v-text-field
+                      v-model="stateMonth!.childCategoryFirst"
+                      label="$0"></v-text-field>
                   </td>
                   <td class="py-5">
-                    <v-text-field v-model="stateYaer.childCategoryFirst" label="$0"></v-text-field>
+                    <v-text-field v-model="stateYaer!.childCategoryFirst" label="$0"></v-text-field>
                   </td>
                 </tr>
                 <tr>
                   <td class="pl-7 py-5">Zoo Crew (under 16)</td>
                   <td class="py-5">
                     <v-text-field
-                      v-model="stateMonth.childCategorySecond"
+                      v-model="stateMonth!.childCategorySecond"
                       label="$0"></v-text-field>
                   </td>
                   <td class="py-5">
-                    <v-text-field v-model="stateYaer.childCategorySecond" label="$0"></v-text-field>
+                    <v-text-field
+                      v-model="stateYaer!.childCategorySecond"
+                      label="$0"></v-text-field>
                   </td>
                 </tr>
                 <tr>
                   <td class="pl-7 py-5">Concession</td>
                   <td class="py-5">
-                    <v-text-field v-model="stateMonth.concession" label="$0"></v-text-field>
+                    <v-text-field v-model="stateMonth!.concession" label="$0"></v-text-field>
                   </td>
                   <td class="py-5">
-                    <v-text-field v-model="stateYaer.concession" label="$0"></v-text-field>
+                    <v-text-field v-model="stateYaer!.concession" label="$0"></v-text-field>
                   </td>
                 </tr>
                 <tr>
                   <td class="pl-7 py-5">Senior</td>
                   <td class="py-5">
-                    <v-text-field v-model="stateMonth.seniors" label="$0"></v-text-field>
+                    <v-text-field v-model="stateMonth!.seniors" label="$0"></v-text-field>
                   </td>
                   <td class="py-5">
-                    <v-text-field v-model="stateYaer.seniors" label="$0"></v-text-field>
+                    <v-text-field v-model="stateYaer!.seniors" label="$0"></v-text-field>
                   </td>
                 </tr>
                 <tr>
                   <td class="pl-7 py-5">Teacher</td>
                   <td class="py-5">
-                    <v-text-field v-model="stateMonth.teacher" label="$0"></v-text-field>
+                    <v-text-field v-model="stateMonth!.teacher" label="$0"></v-text-field>
                   </td>
                   <td class="py-5">
-                    <v-text-field v-model="stateYaer.teacher" label="$0"></v-text-field>
+                    <v-text-field v-model="stateYaer!.teacher" label="$0"></v-text-field>
                   </td>
                 </tr>
                 <tr>
@@ -178,11 +140,7 @@ const tableRow = [{ title: "Monthly" }, { title: "Yearly" }];
                     <v-text-field v-model="stateYaer.supporter" label="$0"></v-text-field>
                   </td>
                 </tr>
-                <!--                 <tr v-for="(item, i) in tableColumn" :key="i">
-                  <td class="pl-7 py-5">{{ item.title }}</td>
-                  <td class="py-5">{{ monthly[i].price }}</td>
-                  <td class="py-5">{{ yarly[i].price }}</td>
-                </tr> -->
+
                 <tr>
                   <td class="d-flex justify-end align-center py-10">
                     <v-btn

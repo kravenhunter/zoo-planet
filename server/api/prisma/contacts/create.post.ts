@@ -5,7 +5,6 @@ const prismaCLient = new PrismaClient();
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
-  console.log(body);
 
   try {
     const postCreate = await prismaCLient.contactUs.create({
@@ -23,7 +22,7 @@ export default defineEventHandler(async (event) => {
         copyright: body.copyright,
       },
     });
-    return "Success";
+    return postCreate;
   } catch (error) {
     console.log(error);
     return error;

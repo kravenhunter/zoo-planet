@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, useRoute } from "#imports";
-
+import { delayLoading, useIsLoading } from "@/composables/states";
 import { useSpeciesStore } from "@/stores/speciesStore";
 
 import { storeToRefs } from "pinia";
@@ -9,9 +9,10 @@ import type { ISpecie } from "types/ISpecie";
 // import type { Specie } from "@prisma/client";
 const route = useRoute();
 //isLoadingContacts - returns false or true
-const { pendingData, specieList } = storeToRefs(useSpeciesStore());
+const { specieList } = storeToRefs(useSpeciesStore());
 
 const { addSpecieContent, updateSpecieContent } = useSpeciesStore();
+const pendingData = useIsLoading();
 
 // const currentSpecie = ref<ISpecie>({
 //         title: "",
@@ -37,10 +38,6 @@ currentSpecie.value = {
   extraeDscription: getRecord?.extraeDscription ?? "",
 };
 
-const dialogModal = ref(false);
-const titleResult = ref("");
-const iconResult = ref("");
-const colorIcon = ref("");
 const selected = ref("LC");
 const conservationStatus = ["LC", "NT", "VU", "EN", "CR", "EW", "EX"];
 const selectedPopulation = ref("Stable");
@@ -67,18 +64,7 @@ const uploadImage = async (event: Event) => {
   const fileEvent = event.target as HTMLInputElement;
   fileData.value = fileEvent.files?.length && fileEvent.files;
 };
-const loadingDelay = (result: string | null) => {
-  setTimeout(() => {
-    pendingData.value = !pendingData.value;
-    if (result) {
-      titleResult.value = result;
-      colorIcon.value = result.toLocaleLowerCase();
-      result === "Success" && (iconResult.value = "mdi-check-circle-outline");
-      result === "Error" && (iconResult.value = "mdi-close-thick");
-      dialogModal.value = !dialogModal.value;
-    }
-  }, 3000);
-};
+
 const addPost = async () => {
   pendingData.value = false;
 
@@ -97,39 +83,23 @@ const addPost = async () => {
     //   extraeDscription: currentSpecie.value!.extraeDscription ?? undefined,
     // });
     const result = await updateSpecieContent(getRecord?.id, fileData.value, currentSpecie.value!);
-    loadingDelay(result);
+    delayLoading(result);
   } else {
     if (fileData.value) {
       currentSpecie.value!.conservationStatus = selected.value;
       currentSpecie.value!.populationTrend = selectedPopulation.value;
 
       const result = await addSpecieContent(fileData.value, currentSpecie.value!);
-      loadingDelay(result);
+      delayLoading(result);
     }
   }
 };
 </script>
 
 <template>
-  <v-container class="position-relative d-flex justify-end" fluid>
-    <div class="position-absolute">
-      <v-fade-transition hide-on-leave>
-        <v-alert v-if="dialogModal" :color="colorIcon" variant="tonal">
-          <div class="d-flex align-center justify-center">
-            <v-icon :color="colorIcon" :icon="iconResult" size="25"></v-icon>
-            <v-card-title class="font-weight-bold">{{ titleResult }}</v-card-title>
-          </div>
-
-          <template #append>
-            <v-btn size="20" variant="text" @click="dialogModal = false">
-              <v-icon :color="colorIcon" icon="$close" size="20"></v-icon>
-            </v-btn>
-          </template>
-        </v-alert>
-      </v-fade-transition>
-    </div>
+  <v-container class="d-flex" fluid>
     <v-row>
-      <v-col cols="12" class="">
+      <v-col cols="12">
         <v-sheet class="pa-2 mx-auto bg-black w-50">
           <v-btn
             :disabled="isEmpty"

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, useRoute } from "#imports";
+import { delayLoading, useIsLoading } from "@/composables/states";
 import { useMainContentStore } from "@/stores/mainContentStore";
-
 import { storeToRefs } from "pinia";
 import type { IContentPage } from "types/IContentPage";
 
@@ -9,15 +9,11 @@ const route = useRoute();
 
 // Main Content Data
 //pendingData - returns undefined by default or object
-const { mainPages, pendingData } = storeToRefs(useMainContentStore());
+const { mainPages } = storeToRefs(useMainContentStore());
 const { addPageContent, updatePageContent } = useMainContentStore();
 
+const pendingData = useIsLoading();
 const newsMainPageContent = ref<IContentPage>();
-
-const dialogModal = ref(false);
-const titleResult = ref("");
-const iconResult = ref("");
-const colorIcon = ref("");
 
 const getRecord = mainPages.value?.find((el) =>
   el.subTitle?.toLocaleLowerCase().includes(String(route.params.id)),
@@ -55,18 +51,7 @@ const uploadImage = async (event: Event) => {
 
   console.log(fileData.value);
 };
-const loadingDelay = (result: string | null) => {
-  setTimeout(() => {
-    pendingData.value = false;
-    if (result) {
-      titleResult.value = result;
-      colorIcon.value = result.toLocaleLowerCase();
-      result === "Success" && (iconResult.value = "mdi-check-circle-outline");
-      result === "Error" && (iconResult.value = "mdi-close-thick");
-      dialogModal.value = !dialogModal.value;
-    }
-  }, 3000);
-};
+
 const addPost = async () => {
   if (newsMainPageContent.value) {
     pendingData.value = !pendingData.value;
@@ -76,11 +61,11 @@ const addPost = async () => {
         fileData.value,
         newsMainPageContent.value,
       );
-      loadingDelay(result);
+      delayLoading(result);
     } else {
       if (fileData.value) {
         const result = await addPageContent(fileData.value, newsMainPageContent.value);
-        loadingDelay(result);
+        delayLoading(result);
       }
     }
   }
@@ -93,23 +78,7 @@ const addPost = async () => {
       <v-overlay tabindex="0" :model-value="pendingData" class="align-center justify-center">
         <v-progress-circular color="primary" indeterminate size="64"></v-progress-circular>
       </v-overlay>
-      <v-container class="position-relative d-flex justify-end" fluid>
-        <div class="position-absolute">
-          <v-fade-transition hide-on-leave>
-            <v-alert v-if="dialogModal" :color="colorIcon" variant="tonal">
-              <div class="d-flex align-center justify-center">
-                <v-icon :color="colorIcon" :icon="iconResult" size="25"></v-icon>
-                <v-card-title class="font-weight-bold">{{ titleResult }}</v-card-title>
-              </div>
-
-              <template #append>
-                <v-btn size="20" variant="text" @click="dialogModal = false">
-                  <v-icon :color="colorIcon" icon="$close" size="20"></v-icon>
-                </v-btn>
-              </template>
-            </v-alert>
-          </v-fade-transition>
-        </div>
+      <v-container class="d-flex" fluid>
         <v-row>
           <v-col cols="12">
             <div class="content_item">

@@ -1,23 +1,19 @@
 <script setup lang="ts">
 import { computed, ref } from "#imports";
 
+import { delayLoading, useIsLoading } from "@/composables/states";
 import { useContactsStore } from "@/stores/contactsStore";
-
 import type { ContactUs } from "@prisma/client";
 import { storeToRefs } from "pinia";
 
 //isLoadingContacts - returns false or true
-const { isLoadingContacts, contactPage } = storeToRefs(useContactsStore());
+const { contactPage } = storeToRefs(useContactsStore());
 
 const { updateContactContent } = useContactsStore();
 
+const isLoadingContacts = useIsLoading();
 const contacts = ref<ContactUs>();
 contacts.value = contactPage.value?.find((el) => el.title === "Contact Us");
-
-const dialogModal = ref(false);
-const titleResult = ref("");
-const iconResult = ref("");
-const colorIcon = ref("");
 
 const isEmpty = computed(() => {
   if (contacts.value?.title && contacts.value.extraeDscription) {
@@ -41,18 +37,7 @@ const uploadImage = async (event: Event) => {
   const fileEvent = event.target as HTMLInputElement;
   fileData.value = fileEvent.files?.length && fileEvent.files;
 };
-const loadingDelay = (result: string | null) => {
-  setTimeout(() => {
-    isLoadingContacts.value = false;
-    if (result) {
-      titleResult.value = result;
-      colorIcon.value = result.toLocaleLowerCase();
-      result === "Success" && (iconResult.value = "mdi-check-circle-outline");
-      result === "Error" && (iconResult.value = "mdi-close-thick");
-      dialogModal.value = !dialogModal.value;
-    }
-  }, 3000);
-};
+
 const addPost = async () => {
   isLoadingContacts.value = !isLoadingContacts.value;
   if (contacts.value) {
@@ -71,29 +56,13 @@ const addPost = async () => {
       copyright: contacts.value.copyright,
     });
 
-    loadingDelay(result);
+    delayLoading(result);
   }
 };
 </script>
 
 <template>
-  <v-container v-if="contacts" class="position-relative d-flex justify-end" fluid>
-    <div class="position-absolute">
-      <v-fade-transition hide-on-leave>
-        <v-alert v-if="dialogModal" :color="colorIcon" variant="tonal">
-          <div class="d-flex align-center justify-center">
-            <v-icon :color="colorIcon" :icon="iconResult" size="25"></v-icon>
-            <v-card-title class="font-weight-bold">{{ titleResult }}</v-card-title>
-          </div>
-
-          <template #append>
-            <v-btn size="20" variant="text" @click="dialogModal = false">
-              <v-icon :color="colorIcon" icon="$close" size="20"></v-icon>
-            </v-btn>
-          </template>
-        </v-alert>
-      </v-fade-transition>
-    </div>
+  <v-container v-if="contacts" class="d-flex" fluid>
     <v-row>
       <v-col cols="12">
         <v-sheet class="pa-2 mx-auto bg-black w-50">

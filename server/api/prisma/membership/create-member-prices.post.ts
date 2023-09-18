@@ -5,7 +5,6 @@ const prismaCLient = new PrismaClient();
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
-  console.log(body);
 
   try {
     const postCreate = await prismaCLient.membershipPrice.create({
@@ -19,7 +18,7 @@ export default defineEventHandler(async (event) => {
         supporter: body.supporter,
       },
     });
-    return "Success";
+    return postCreate;
   } catch (error) {
     console.log(error);
     return error;

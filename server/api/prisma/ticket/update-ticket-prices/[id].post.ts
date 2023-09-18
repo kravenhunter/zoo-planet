@@ -5,7 +5,7 @@ const prismaCLient = new PrismaClient();
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
-  console.log(body);
+
   try {
     const result = await prismaCLient.ticketPrice.update({
       where: { id: event?.context?.params?.id },
@@ -18,7 +18,7 @@ export default defineEventHandler(async (event) => {
       },
     });
 
-    return "Success";
+    return result;
   } catch (error) {
     console.log(error);
     return error;

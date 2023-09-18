@@ -1,13 +1,14 @@
 import { defineEventHandler, readBody } from "#imports";
 import { PrismaClient } from "@prisma/client";
+import { getCurrentTime } from "../../../../composables/getTime";
 
 const prismaCLient = new PrismaClient();
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
-  console.log(body);
 
   try {
+    console.log("Api  Create", getCurrentTime());
     const postCreate = await prismaCLient.post.create({
       data: {
         title: body.title,
@@ -17,9 +18,8 @@ export default defineEventHandler(async (event) => {
         extraeDscription: body.extraeDscription,
       },
     });
-    console.log("Create Post", postCreate);
-
-    return "Success";
+    console.log("Api Result Create", getCurrentTime());
+    return postCreate;
   } catch (error) {
     console.log(error);
     return error;
