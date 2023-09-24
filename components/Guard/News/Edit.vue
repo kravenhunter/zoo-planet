@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, useRoute } from "#imports";
 import { delayLoading, useIsLoading } from "@/composables/states";
-import { usePostStore } from "@/stores/postStore";
+import { useUnionStore } from "@/stores/storeGenerics";
 import type { Post } from "@prisma/client";
 import { storeToRefs } from "pinia";
 
@@ -15,9 +15,10 @@ const route = useRoute();
 const pendingData = useIsLoading();
 
 //pendingData - returns undefined by default or object
-const { postlist } = storeToRefs(usePostStore());
 
-const { updatePost } = usePostStore();
+const { postlist } = storeToRefs(useUnionStore());
+
+const { updateData } = useUnionStore();
 const currentPost = ref<Post>();
 const selected = ref("Education");
 const category = ["Education", "FightingExtinction", "News"];
@@ -39,11 +40,18 @@ const rules = [
     return "Field is empty";
   },
 ];
-const fileData = ref<FileList>();
 
-const uploadImage = async (event: Event) => {
+const filCover = ref<File>();
+const filePreview = ref<File>();
+const selectCoverImage = async (event: Event) => {
   const fileEvent = event.target as HTMLInputElement;
-  fileEvent.files?.length && (fileData.value = fileEvent.files);
+  fileEvent.files?.length && (filCover.value = fileEvent.files[0]);
+  console.log(filCover.value);
+};
+const selectPreviewImage = async (event: Event) => {
+  const fileEvent = event.target as HTMLInputElement;
+  fileEvent.files?.length && (filePreview.value = fileEvent.files[0]);
+  console.log(filePreview.value);
 };
 // const loadingDelay = (result: string | null) => {
 //   setTimeout(() => {
@@ -62,13 +70,21 @@ const addPost = async () => {
   // pendingData.value = !pendingData.value;
   pendingData.value = true;
   if (currentPost.value) {
-    const result = await updatePost(currentPost.value?.id, fileData.value, {
-      title: currentPost.value.title,
-      imageBgLink: currentPost.value?.imageBgLink,
-      category: selected.value,
-      description: currentPost.value?.description,
-      extraeDscription: currentPost.value?.extraeDscription,
-    });
+    const result = await updateData(
+      currentPost.value?.id,
+      filCover.value,
+      filePreview.value,
+      {
+        title: currentPost.value.title,
+        imageBgLink: currentPost.value?.imageBgLink,
+        imagePreviewLink: currentPost.value?.imagePreviewLink ?? undefined,
+        category: selected.value,
+        description: currentPost.value?.description,
+        extraeDscription: currentPost.value?.extraeDscription ?? undefined,
+      },
+      "post",
+      "update",
+    );
 
     // loadingDelay(result);
     delayLoading(result);
@@ -83,22 +99,6 @@ const addPost = async () => {
     </v-overlay>
 
     <v-container v-if="currentPost" class="position-relative d-flex justify-end" fluid>
-      <!--       <div class="position-absolute">
-        <v-fade-transition hide-on-leave>
-          <v-alert v-if="dialogModal" :color="colorIcon" variant="tonal">
-            <div class="d-flex align-center justify-center">
-              <v-icon :color="colorIcon" :icon="iconResult" size="25"></v-icon>
-              <v-card-title class="font-weight-bold">{{ titleResult }}</v-card-title>
-            </div>
-
-            <template #append>
-              <v-btn size="20" variant="text" @click="dialogModal = false">
-                <v-icon :color="colorIcon" icon="$close" size="20"></v-icon>
-              </v-btn>
-            </template>
-          </v-alert>
-        </v-fade-transition>
-      </div> -->
       <v-row>
         <v-col>
           <div class="content_item">
@@ -118,7 +118,14 @@ const addPost = async () => {
                   v-model="currentPost.title"
                   :rules="rules"
                   label="Title"></v-text-field>
-                <v-file-input clearable label="File input" @change="uploadImage"></v-file-input>
+                <v-file-input
+                  clearable
+                  label="Image cover"
+                  @change="selectCoverImage"></v-file-input>
+                <v-file-input
+                  clearable
+                  label="Image preview"
+                  @change="selectPreviewImage"></v-file-input>
                 <v-select v-model="selected" :items="category"></v-select>
                 <v-text-field
                   v-model="currentPost.description"

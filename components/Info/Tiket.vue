@@ -1,4 +1,13 @@
 <script setup lang="ts">
+import type { ContentPages, TicketPrice } from "@prisma/client";
+
+interface Props {
+  ticketMain: ContentPages;
+  singleState: TicketPrice;
+  unlimitedSTate: TicketPrice;
+}
+
+defineProps<Props>();
 const book = {
   source: "/images/unsplash_8uJ0Am-ZdTA.jpg",
   title: "Book tickets ",
@@ -56,30 +65,36 @@ FREE everyday`,
 <template>
   <section class="tikets">
     <article class="main_cover">
-      <CardItem
-        class="card_main"
-        colorbg="#f2f2f2"
-        image-heigth="600"
-        :image-source="book.source"
-        :image-title="book.title"
-        title-align="text-center pb-10"
-        font-title-size="2rem" />
+      <CardColumn heigth-card="450" :enable-card-slot="true">
+        <v-img
+          :src="ticketMain.imageBgLink"
+          class="align-end"
+          gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
+          width="100%"
+          cover>
+          <template #sources>
+            <source :srcset="ticketMain.imageBgLink" />
+          </template>
+          <v-card-title
+            class="text-amber text-center mb-10"
+            v-text="ticketMain.title"></v-card-title>
+        </v-img>
+      </CardColumn>
     </article>
     <v-container>
       <article class="description">
-        <CardItem colorbg="#f2f2f2" :text-card="book.text1" title-align="pb-10" :text-slot="true">
+        <CardColumn
+          v-if="ticketMain"
+          :text-html-card="ticketMain.description"
+          :enable-button="false" />
+        <!-- <CardItem colorbg="#f2f2f2" :text-card="book.text1" title-align="pb-10" :text-slot="true">
           <v-card-text>
             <h1 class="text-subtitle-1 font-weight-bold">{{ book.subtitle1 }}</h1>
             <p class="text-subtitle-2">{{ book.text1 }}</p>
           </v-card-text>
-        </CardItem>
+        </CardItem> -->
       </article>
       <article class="table pb-16">
-        <CardItem
-          color-title="#395A03"
-          :title-card="book.subtitle2"
-          title-align="pb-10"
-          font-title-size="2rem" />
         <v-table theme="light">
           <thead class="bg-orange-lighten-5 text-subtitle-2">
             <tr>
@@ -120,10 +135,30 @@ FREE everyday`,
                 </v-btn>
               </td>
             </tr>
-            <tr v-for="(item, i) in prices" :key="i">
-              <td class="pl-7 py-5">{{ item.person }}</td>
-              <td>{{ item.single }}</td>
-              <td>{{ item.unlimited }}</td>
+            <tr>
+              <td class="pl-7 py-5">Adult</td>
+              <td>{{ singleState.adult }}</td>
+              <td>{{ unlimitedSTate.adult }}</td>
+            </tr>
+            <tr>
+              <td class="pl-7 py-5">Child (4-15 years)</td>
+              <td>{{ singleState.childCategoryFirst }}</td>
+              <td>{{ unlimitedSTate.childCategoryFirst }}</td>
+            </tr>
+            <tr>
+              <td class="pl-7 py-5">Child (0-3 years)</td>
+              <td>{{ singleState.childCategorySecond }}</td>
+              <td>{{ unlimitedSTate.childCategorySecond }}</td>
+            </tr>
+            <tr>
+              <td class="pl-7 py-5">Concession**</td>
+              <td>{{ singleState.concession }}</td>
+              <td>{{ unlimitedSTate.concession }}</td>
+            </tr>
+            <tr>
+              <td class="pl-7 py-5">Seniors**</td>
+              <td>{{ singleState.seniors }}</td>
+              <td>{{ unlimitedSTate.seniors }}</td>
             </tr>
           </tbody>
         </v-table>

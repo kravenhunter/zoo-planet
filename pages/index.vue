@@ -1,7 +1,24 @@
 <script setup lang="ts">
-import type { ITest } from "types/ITest";
+import { ref } from "#imports";
+import { useUnionStore } from "@/stores/storeGenerics";
+import type { ContentPages, Post } from "@prisma/client";
+import { storeToRefs } from "pinia";
 
-const val: ITest = {};
+const { postlist, specieList, mainPages, contactPage, membershipTable, ticketTable } = storeToRefs(
+  useUnionStore(),
+);
+
+// Education Data
+const educationMain = ref<ContentPages>();
+const educationNews = ref<Post[]>();
+educationMain.value = mainPages.value?.find((el) => el.subTitle === "Education");
+educationNews.value = postlist.value?.filter((el) => el.category === "Education");
+
+// News Data
+const newsMain = ref<ContentPages>();
+const lastNews = ref<Post[]>();
+newsMain.value = mainPages.value?.find((el) => el.subTitle === "News");
+lastNews.value = postlist.value?.filter((el) => el.category === "News");
 
 const data = [
   {
@@ -100,13 +117,70 @@ const conversationIcons = [
   },
 ];
 
-val.body = "aewferf";
+const bgImages = [
+  {
+    id: 1,
+    title: "headet main",
+    imageBgLink:
+      "https://epjfkkmrnhyxzevpvbjf.supabase.co/storage/v1/object/public/images/cover/citten_bg.webp",
+  },
+  {
+    id: 2,
+    title: "animals bg",
+
+    imageBgLink:
+      "https://epjfkkmrnhyxzevpvbjf.supabase.co/storage/v1/object/public/images/cover/parrot_bg.webp",
+  },
+  {
+    title: "lynx",
+    id: 3,
+    imageBgLink:
+      "https://epjfkkmrnhyxzevpvbjf.supabase.co/storage/v1/object/public/images/cover/LYNX.webp",
+  },
+  {
+    title: "parrot",
+    id: 4,
+    imageBgLink:
+      "https://epjfkkmrnhyxzevpvbjf.supabase.co/storage/v1/object/public/images/cover/perrot1.webp",
+  },
+  {
+    title: "coala",
+    id: 5,
+    imageBgLink:
+      "https://epjfkkmrnhyxzevpvbjf.supabase.co/storage/v1/object/public/images/cover/coala1.webp",
+  },
+
+  {
+    title: "panda",
+    id: 6,
+    imageBgLink:
+      "https://epjfkkmrnhyxzevpvbjf.supabase.co/storage/v1/object/public/images/cover/panda1.webp",
+  },
+  {
+    title: "opossums",
+    id: 7,
+    imageBgLink:
+      "https://epjfkkmrnhyxzevpvbjf.supabase.co/storage/v1/object/public/images/cover/opossums1.webp",
+  },
+  {
+    title: "bobers",
+    id: 8,
+    imageBgLink:
+      "https://epjfkkmrnhyxzevpvbjf.supabase.co/storage/v1/object/public/images/cover/bobera.webp",
+  },
+  {
+    title: "red bear",
+    id: 9,
+    imageBgLink:
+      "https://epjfkkmrnhyxzevpvbjf.supabase.co/storage/v1/object/public/images/cover/red_bear2.webp",
+  },
+];
 </script>
 
 <template>
   <div class="body">
     <section class="offer">
-      <Image source="/images/citten_bg.jpg" class="image_offer">
+      <Image :source="bgImages[0].imageBgLink" :alt="bgImages[0].title" class="image_offer">
         <article class="offer_block">
           <Card class="align-self-center" :enable-slot="true">
             <h1 class="text-center text-white">
@@ -138,7 +212,7 @@ val.body = "aewferf";
             <v-card color="transparent">
               <div class="panda_card">
                 <v-avatar class="ma-3 panda_img" size="181" rounded="50">
-                  <v-img src="/images/panda.jpg" cover></v-img>
+                  <v-img :src="bgImages[5].imageBgLink" :alt="bgImages[5].title" cover></v-img>
                 </v-avatar>
                 <div class="panda_hourse">
                   <div class="clock">
@@ -176,47 +250,14 @@ val.body = "aewferf";
         </article>
       </Image>
     </section>
-    <!--     <section class="galary_wrapper">
-      <v-img src="images/parrot_bg.jpg" alt="parrot_bg">
-        <div class="galary_block">
-          <div class="galary_list first_grid">
-            <Card
-              class="align-self-start description"
-              :title-card="data[0].title"
-              :text-card="data[0].text"
-              button-title="See all animals"
-              icon="mdi-paw"
-              :enablse-button-slot="true">
-              <v-btn
-                class="px-10 text-subtitle-1"
-                :height="57"
-                color="#FFC107"
-                variant="outlined"
-                append-icon="mdi-paw">
-                See all animals
-              </v-btn>
-            </Card>
 
-            <v-img class="parrot" src="images/parrot_galary.jpg" cover alt="parrot" />
-            <v-img class="lynx" src="images/lynx_galary.jpg" cover alt="lynx" />
-            <v-img class="opossums" src="images/animal1.jpg" cover alt="opossums" />
-          </div>
-
-          <div class="galary_list first_grid">
-            <v-img class="red_bear" src="images/red_bear.jpg" cover alt="red_bear" />
-            <v-img class="coala" src="images/coala.jpg" cover alt="coala" />
-            <v-img class="bober" src="images/bober.jpg" cover alt="bober" />
-          </div>
-        </div>
-      </v-img>
-    </section> -->
     <section class="galary_wrapper">
-      <v-img src="/images/parrot_bg.jpg" alt="parrot_bg">
+      <v-img :src="bgImages[1].imageBgLink" :alt="bgImages[1].title">
         <div class="galary">
           <article class="galary_first">
             <CardItem
               class="main"
-              title-card="Australian beaches"
+              title-card="Our animals"
               text-card=" All of our animals are gently handled from the moment they arrive at the shop and are even put on a “probationary” period of 2-4 weeks prior to customer availability."
               button-title="See all animals"
               :button-slot="true">
@@ -229,81 +270,75 @@ val.body = "aewferf";
                 <span>See all animals</span>
               </v-btn>
             </CardItem>
-            <CardItem image-source="/images/parrot_galary.jpg" class="parrot" image-heigth="100%" />
-            <CardItem image-source="/images/lynx_galary.jpg" class="lynx" />
-            <CardItem image-source="/images/animal1.jpg" class="opossums" />
+            <CardItem
+              :alt="bgImages[3].title"
+              :image-source="bgImages[3].imageBgLink"
+              class="parrot"
+              image-heigth="100%" />
+            <CardItem
+              :alt="bgImages[2].title"
+              :image-source="bgImages[2].imageBgLink"
+              class="lynx" />
+            <CardItem
+              :alt="bgImages[6].title"
+              :image-source="bgImages[6].imageBgLink"
+              class="opossums" />
           </article>
           <article class="galary_second">
-            <CardItem class="red_bear" image-source="/images/red_bear.jpg" />
-            <CardItem class="coala" image-source="/images/coala.jpg" />
-            <CardItem class="bober" image-source="/images/bober.jpg" />
+            <CardItem
+              class="red_bear"
+              :alt="bgImages[8].title"
+              :image-source="bgImages[8].imageBgLink" />
+            <CardItem
+              class="coala"
+              :alt="bgImages[4].title"
+              :image-source="bgImages[4].imageBgLink" />
+            <CardItem
+              class="bober"
+              :alt="bgImages[7].title"
+              :image-source="bgImages[7].imageBgLink" />
           </article>
         </div>
       </v-img>
     </section>
     <section class="education_wrapper">
-      <div class="education_block">
-        <article class="title_block">
-          <!--           <Card
-            class="align-self-center description"
-            title-align="center"
-            text-align="center"
-            :title-card="education[0].title"
-            :text-card="education[0].text" /> -->
-
-          <CardItem
-            class="description"
-            :title-card="education[0].title"
-            :text-card="education[0].text"
-            title-align="text-center"
-            text-align="text-center" />
-        </article>
-        <article class="articles_block">
-          <CardItem
-            v-for="(item, i) in education.slice(1, 7)"
-            :key="i"
-            class="description"
-            color-title="#395A03"
-            :image-source="item.source"
-            :title-card="item.title"
-            :text-card="item.text"
-            :button-slot="true"
-            button-title="Learn more">
-            <v-btn
-              class="px-10 text-subtitle-1"
-              color="#ffc107"
-              size="x-large"
-              append-icon="mdi-paw">
-              <span>Learn more</span>
-            </v-btn>
-          </CardItem>
-          <!--   <Card
-            v-for="(item, i) in education.slice(1, 7)"
-            :key="i"
-            class="align-self-center description"
-            color-title="#395A03"
-            :image-source="item.source"
-            :title-card="item.title"
-            :text-card="item.text"
-            :enablse-button-slot="true">
-            <v-btn class="px-10 text-subtitle-1" color="#ffc107" :height="57" append-icon="mdi-paw">
-              <span>Learn more</span>
-            </v-btn>
-          </Card> -->
-        </article>
-      </div>
+      <ListBlock
+        v-if="educationMain && educationNews"
+        :main-content="educationMain"
+        :news="educationNews" />
     </section>
     <section class="conversation_wrapper">
       <v-img class="lynx_bg" src="images/lynx_bg.jpg" cover alt=" lynx_bg">
-        <article class="conversation">
-          <div class="conversation_title">
-            <!--   <Card
-              class="align-self-center description"
-              title-align="center"
-              text-align="center" 
-              :title-card="education[0].title"
-              :text-card="education[0].text" /> -->
+        <div class="d-flex flex-column h-100">
+          <v-row>
+            <v-container class="d-flex align-center">
+              <CardColumn
+                :title-card="educationMain?.title"
+                class-title="text-amber text-center "
+                :text-card="educationMain?.shortDescription"
+                class-text="text-center"
+                font-title-size="2rem"
+                :enable-button="false" />
+            </v-container>
+            <v-container fluid>
+              <v-row>
+                <v-col class="conversation_icon" v-for="(icon, i) in conversationIcons" :key="i">
+                  <v-avatar class="ma-3" size="104" rounded="50">
+                    <UiElementsIcons
+                      :icon-name="icon.iconName"
+                      color-icon="#FBB03B"
+                      size-width="50"
+                      size-heigth="50" />
+                  </v-avatar>
+                  <span>{{ icon.title }}</span>
+                </v-col>
+              </v-row>
+            </v-container>
+          </v-row>
+        </div>
 
+        <!-- <article class="conversation">
+          <div class="conversation_title">
             <CardItem
               class="description"
               :title-card="education[0].title"
@@ -323,54 +358,14 @@ val.body = "aewferf";
               <span>{{ icon.title }}</span>
             </div>
           </div>
-        </article>
+        </article> -->
       </v-img>
     </section>
     <section class="last_news education_wrapper">
-      <div class="education_block">
-        <article class="title_block">
-          <CardItem
-            class="description"
-            :title-card="data[1].title"
-            :text-card="data[1].text"
-            title-align="text-center"
-            text-align="text-center" />
-        </article>
-        <article class="articles_block">
-          <CardItem
-            v-for="(item, i) in education.slice(7, 10)"
-            :key="i"
-            class="description"
-            color-title="#395A03"
-            :image-source="item.source"
-            :title-card="item.title"
-            :text-card="item.text"
-            :button-slot="true"
-            button-title="Learn more">
-            <v-btn
-              class="px-10 text-subtitle-1"
-              color="#ffc107"
-              size="x-large"
-              append-icon="mdi-paw">
-              <span>Learn more</span>
-            </v-btn>
-          </CardItem>
-
-          <!--    <Card
-            v-for="(item, i) in education.slice(7, 10)"
-            :key="i"
-            class="align-self-center description"
-            color-title="#395A03"
-            :image-source="item.source"
-            :title-card="item.title"
-            :text-card="item.text"
-            :enablse-button-slot="true">
-            <v-btn class="px-10 text-subtitle-1" color="#ffc107" :height="57" append-icon="mdi-paw">
-              <span>Learn more</span>
-            </v-btn>
-          </Card> -->
-        </article>
-      </div>
+      <ListBlock
+        v-if="newsMain && lastNews"
+        :main-content="newsMain"
+        :news="lastNews.slice(0, 3)" />
     </section>
   </div>
 </template>
@@ -386,8 +381,6 @@ val.body = "aewferf";
   gap: 15px;
   &_icons {
     display: flex;
-
-    gap: 100px;
   }
   &_icon {
     display: grid;

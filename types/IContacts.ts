@@ -1,5 +1,6 @@
 export interface IContacts {
   imageBgLink: string;
+  imagePreviewLink?: string;
   title: string;
   description: string;
   extraeDscription?: string;

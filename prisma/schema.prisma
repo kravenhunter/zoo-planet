@@ -12,7 +12,8 @@ datasource db {
 model Education {
   id                 String      @id @default(uuid())
   timeStamp          DateTime    @default(now())
- imageBgLink         String 
+  imageBgLink         String 
+  imagePreviewLink   String?
   title              String     
   description        String
   extraeDscription   String?
@@ -21,6 +22,7 @@ model FightingExtinction {
   id                 String      @id @default(uuid())
   timeStamp          DateTime    @default(now())
   imageBgLink        String 
+  imagePreviewLink   String?
   title              String     
   description        String
   extraeDscription   String?
@@ -30,7 +32,8 @@ model FightingExtinction {
 model AboutUs {
   id                 String      @id @default(uuid())
   timeStamp          DateTime    @default(now())
- imageBgLink         String 
+  imageBgLink         String 
+  imagePreviewLink   String?
   title              String     
   description        String
   extraeDscription   String?
@@ -38,7 +41,8 @@ model AboutUs {
 model ContactUs {
   id                String      @id @default(uuid())
   timeStamp         DateTime    @default(now())
-  imageBgLink        String 
+  imageBgLink        String
+  imagePreviewLink   String? 
   title             String     
   description       String
   extraeDscription  String?
@@ -56,7 +60,8 @@ model ContactUs {
 model Ticket {
   id                String      @id @default(uuid())
   timeStamp         DateTime    @default(now())
-  imageBgLink       String 
+  imageBgLink       String
+  imagePreviewLink   String? 
   title             String     
   description       String
   extraeDscription  String?   
@@ -75,7 +80,8 @@ model TicketPrice {
 model Membership {
   id                String      @id @default(uuid())
   timeStamp         DateTime    @default(now())
-  imageBgLink       String 
+  imageBgLink       String
+  imagePreviewLink   String? 
   title             String     
   description       String
   extraeDscription  String?   
@@ -98,7 +104,8 @@ model Post {
   id                String      @id @default(uuid())
   timeStamp         DateTime    @default(now())
   title             String     
-  imageBgLink       String 
+  imageBgLink       String
+  imagePreviewLink   String? 
   description       String
   category          Category
   extraeDscription  String?
@@ -114,7 +121,8 @@ enum Category {
 model ContentPages {
   id                 String      @id @default(uuid())
   timeStamp          DateTime    @default(now())
-  imageBgLink         String 
+  imageBgLink         String
+  imagePreviewLink   String? 
   title              String  
   subTitle           String?  
   shortDescription   String 
@@ -127,6 +135,7 @@ model Specie {
   timeStamp         DateTime    @default(now())
   title             String     
   imageBgLink       String 
+  imagePreviewLink   String?
   habitain          String
   populationTrend    PopulationTrend
   countLeft          String
@@ -150,4 +159,13 @@ enum PopulationTrend  {
    Decreasing 
    Increasing
    Stable
+}
+
+model PlanPrice {
+  id                String      @id @default(uuid())
+  timeStamp         DateTime    @default(now()) 
+  title             String     
+  admission          String
+  faunaPark          String
+  adultRatio           String   
 }

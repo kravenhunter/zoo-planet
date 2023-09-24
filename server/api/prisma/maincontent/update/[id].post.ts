@@ -5,7 +5,7 @@ const prismaCLient = new PrismaClient();
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
-  console.log(body);
+
   try {
     const result = await prismaCLient.contentPages.update({
       where: { id: event?.context?.params?.id },

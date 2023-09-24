@@ -1,5 +1,8 @@
 <script setup lang="ts">
-const plain = [
+import type { ContentPages, PlanPrice } from "@prisma/client";
+
+defineProps<{ plain?: ContentPages; tables: PlanPrice[] }>();
+const plainText = [
   {
     sourceTitle: "/images/plain_visit.png",
     title: "Plan your visit",
@@ -79,36 +82,30 @@ const prices = [
 </script>
 
 <template>
-  <section class="plain">
-    <article class="main_cover">
-      <CardItem
-        class="card_main"
-        colorbg="#f2f2f2"
-        :image-source="plain[0].sourceTitle"
-        :image-title="plain[0].title"
-        title-align="text-center pb-10"
-        font-title-size="2rem" />
+  <section class="plain" v-if="plain && tables">
+    <article>
+      <CardColumn heigth-card="450" :enable-card-slot="true">
+        <v-img
+          :src="plain.imageBgLink"
+          class="align-end"
+          gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
+          width="100%"
+          cover>
+          <template #sources>
+            <source :srcset="plain.imageBgLink" />
+          </template>
+          <v-card-title class="text-amber text-center mb-10" v-text="plain.title"></v-card-title>
+        </v-img>
+      </CardColumn>
     </article>
-    <v-container>
-      <article class="description">
-        <CardItem
-          colorbg="#f2f2f2"
-          :text-card="plain[1].description"
-          title-align="pb-10"
-          :text-slot="true">
-          <v-card-text>
-            <h1 class="text-h6 pb-16">{{ plain[1].title }}</h1>
-            {{ plain[1].description }}
-          </v-card-text>
-        </CardItem>
-      </article>
-      <article class="table pb-16">
-        <CardItem
-          color-title="#395A03"
-          :title-card="plain[2].title"
-          title-align="pb-10"
-          font-title-size="2rem" />
-        <v-table theme="light">
+    <article>
+      <v-container>
+        <CardColumn
+          class-title="text-green-darken-4 "
+          :text-html-card="plain.description"
+          :enable-button="false" />
+
+        <v-table theme="light" class="table">
           <thead class="bg-orange-lighten-5 text-subtitle-2">
             <tr>
               <th class="pl-7 py-5 text-left font-weight-bold">{{ tableHeaders[0].title }}</th>
@@ -121,19 +118,25 @@ const prices = [
             </tr>
           </thead>
           <tbody class="text-subtitle-2">
-            <tr v-for="(item, i) in prices" :key="i">
-              <td class="pl-7 py-5">{{ item.level }}</td>
-              <td>{{ item.admissionCost }}</td>
-              <td>{{ item.faunaParkCost }}</td>
+            <tr v-for="(item, i) in tables" :key="i">
+              <td class="pl-7 py-5">{{ item.title }}</td>
+              <td>{{ item.admission }}</td>
+              <td>{{ item.faunaPark }}</td>
               <td>{{ item.adultRatio }}</td>
             </tr>
           </tbody>
         </v-table>
-      </article>
-    </v-container>
+        <CardColumn
+          class-title="text-green-darken-4 "
+          v-if="plain.extraeDscription"
+          :text-html-card="plain.extraeDscription"
+          :enable-button="false" />
+      </v-container>
+    </article>
+    <v-container> </v-container>
     <article class="bottom_info">
       <v-container>
-        <CardItem :text-card="plain[2].description" />
+        <CardItem :text-card="plainText[2].description" />
       </v-container>
     </article>
   </section>

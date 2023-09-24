@@ -1,17 +1,18 @@
 <script setup lang="ts">
 import { computed, ref, useRoute } from "#imports";
 import { delayLoading, useIsLoading } from "@/composables/states";
-import { useSpeciesStore } from "@/stores/speciesStore";
 
+import { useUnionStore } from "@/stores/storeGenerics";
 import { storeToRefs } from "pinia";
 import type { ISpecie } from "types/ISpecie";
 
 // import type { Specie } from "@prisma/client";
 const route = useRoute();
 //isLoadingContacts - returns false or true
-const { specieList } = storeToRefs(useSpeciesStore());
 
-const { addSpecieContent, updateSpecieContent } = useSpeciesStore();
+const { specieList } = storeToRefs(useUnionStore());
+
+const { updateData, createData } = useUnionStore();
 const pendingData = useIsLoading();
 
 // const currentSpecie = ref<ISpecie>({
@@ -25,12 +26,19 @@ const pendingData = useIsLoading();
 //         extraeDscription:  "",
 // });
 const currentSpecie = ref<ISpecie>();
+const selected = ref("LC");
+const conservationStatus = ["LC", "NT", "VU", "EN", "CR", "EW", "EX"];
+const selectedPopulation = ref("Stable");
+const popelationStatus = ["Decreasing", "Increasing", "Stable"];
+
 const getRecord = specieList.value?.find((el) => el.id === route.params.id);
+selected.value = getRecord ? getRecord.conservationStatus : "LC";
+selectedPopulation.value = getRecord ? getRecord.populationTrend : "Stable";
 currentSpecie.value = {
   title: getRecord?.title ?? "",
   imageBgLink: getRecord?.imageBgLink ?? "",
   habitain: getRecord?.habitain ?? "",
-  populationTrend: getRecord?.habitain ?? "Stable",
+  populationTrend: getRecord?.populationTrend ?? "Stable",
   countLeft: getRecord?.countLeft ?? "",
   conservationStatus: getRecord?.conservationStatus ?? "EN",
   shordDescription: getRecord?.shordDescription ?? "",
@@ -38,10 +46,6 @@ currentSpecie.value = {
   extraeDscription: getRecord?.extraeDscription ?? "",
 };
 
-const selected = ref("LC");
-const conservationStatus = ["LC", "NT", "VU", "EN", "CR", "EW", "EX"];
-const selectedPopulation = ref("Stable");
-const popelationStatus = ["Decreasing", "Increasing", "Stable"];
 const isEmpty = computed(() => {
   if (currentSpecie.value?.title && currentSpecie.value.description) {
     return false;
@@ -58,15 +62,20 @@ const rules = [
     return "Field is empty";
   },
 ];
-const fileData = ref<0 | FileList | undefined>();
-
-const uploadImage = async (event: Event) => {
+const filCover = ref<File>();
+const filePreview = ref<File>();
+const selectCoverImage = async (event: Event) => {
   const fileEvent = event.target as HTMLInputElement;
-  fileData.value = fileEvent.files?.length && fileEvent.files;
+  fileEvent.files?.length && (filCover.value = fileEvent.files[0]);
+  console.log(filCover.value);
 };
-
+const selectPreviewImage = async (event: Event) => {
+  const fileEvent = event.target as HTMLInputElement;
+  fileEvent.files?.length && (filePreview.value = fileEvent.files[0]);
+  console.log(filePreview.value);
+};
 const addPost = async () => {
-  pendingData.value = false;
+  pendingData.value = true;
 
   if (getRecord?.id) {
     currentSpecie.value!.conservationStatus = selected.value;
@@ -82,14 +91,27 @@ const addPost = async () => {
     //   description: currentSpecie.value!.description,
     //   extraeDscription: currentSpecie.value!.extraeDscription ?? undefined,
     // });
-    const result = await updateSpecieContent(getRecord?.id, fileData.value, currentSpecie.value!);
+    const result = await updateData(
+      getRecord.id,
+      filCover.value,
+      filePreview.value,
+      currentSpecie.value!,
+      "specie",
+      "update",
+    );
     delayLoading(result);
   } else {
-    if (fileData.value) {
+    if (filCover.value && filePreview.value) {
       currentSpecie.value!.conservationStatus = selected.value;
       currentSpecie.value!.populationTrend = selectedPopulation.value;
 
-      const result = await addSpecieContent(fileData.value, currentSpecie.value!);
+      const result = await createData(
+        filCover.value,
+        filePreview.value,
+        currentSpecie.value!,
+        "specie",
+        "create",
+      );
       delayLoading(result);
     }
   }
@@ -116,7 +138,11 @@ const addPost = async () => {
               v-model="currentSpecie!.title"
               :rules="rules"
               label="Title"></v-text-field>
-            <v-file-input clearable label="File input" @change="uploadImage"></v-file-input>
+            <v-file-input clearable label="Image cover" @change="selectCoverImage"></v-file-input>
+            <v-file-input
+              clearable
+              label="Image preview"
+              @change="selectPreviewImage"></v-file-input>
             <v-text-field
               v-model="currentSpecie!.habitain"
               :rules="rules"

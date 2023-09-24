@@ -1,5 +1,14 @@
 <script setup lang="ts">
 import { ref } from "#imports";
+import type { ContentPages, MembershipPrice } from "@prisma/client";
+
+interface Props {
+  membership: ContentPages;
+  stateMonth: MembershipPrice;
+  stateYaer: MembershipPrice;
+}
+
+defineProps<Props>();
 
 const book = {
   source: "/images/unsplash_8uJ0Am-ZdTA.jpg",
@@ -119,13 +128,6 @@ FREE everyday`,
   },
 ];
 
-const membership = {
-  source: "/images/volunteer_2.jpg",
-  title: "Membership",
-  subtitle: "Who should we include in the membership?",
-  text: `Your monthly instalment plan will auto-rollover in 12 months. 
-We will send you a reminder, via email, 28 days before you are due to roll over to update your details or opt out. `,
-};
 const tableRow = [{ title: "Monthly" }, { title: "Yearly" }];
 const tableColumn = [
   { title: "Adult" },
@@ -193,29 +195,28 @@ const person = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 <template>
   <section class="membership">
     <article class="main_cover">
-      <CardItem
-        class="card_main"
-        colorbg="#f2f2f2"
-        image-heigth="600"
-        :image-source="membership.source"
-        :image-title="membership.title"
-        title-align="text-center pb-10"
-        font-title-size="2rem" />
+      <CardColumn heigth-card="450" :enable-card-slot="true">
+        <v-img
+          :src="membership.imageBgLink"
+          class="align-end"
+          gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
+          width="100%"
+          cover>
+          <template #sources>
+            <source :srcset="membership.imageBgLink" />
+          </template>
+          <v-card-title
+            class="text-amber text-center mb-10"
+            v-text="membership.title"></v-card-title>
+        </v-img>
+      </CardColumn>
     </article>
     <v-container>
       <article class="description">
-        <CardItem colorbg="#f2f2f2" :text-card="membership.subtitle" :text-slot="true">
-          <v-card-text>
-            <h1 class="text-subtitle-1 font-weight-bold">How would you like to pay?</h1>
-            <p class="text-subtitle-2">Total price is the same for both options.</p>
-            <p class="text-subtitle-2">{{ membership.text }}</p>
-          </v-card-text>
-        </CardItem>
-        <CardItem colorbg="#f2f2f2" :text-card="membership.subtitle" :text-slot="true">
-          <v-card-text>
-            <h1 class="text-subtitle-1 font-weight-bold">{{ membership.subtitle }}</h1>
-          </v-card-text>
-        </CardItem>
+        <CardColumn
+          v-if="membership"
+          :text-html-card="membership.description"
+          :enable-button="false" />
       </article>
       <v-row>
         <v-col>
@@ -231,13 +232,61 @@ const person = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
                 </tr>
               </thead>
               <tbody class="text-subtitle-2">
-                <tr v-for="(item, i) in tableColumn" :key="i">
+                <tr>
                   <td class="pl-7 py-5">
                     <v-select v-model="selected" :items="person"></v-select>
                   </td>
-                  <td class="py-5">{{ item.title }}</td>
-                  <td class="py-5">{{ monthly[i].price }}</td>
-                  <td class="py-5">{{ yarly[i].price }}</td>
+                  <td class="py-5">Adult</td>
+                  <td class="py-5">{{ stateMonth.adult }}</td>
+                  <td class="py-5">{{ stateYaer.adult }}</td>
+                </tr>
+                <tr>
+                  <td class="pl-7 py-5">
+                    <v-select v-model="selected" :items="person"></v-select>
+                  </td>
+                  <td class="py-5">Child (under 16)</td>
+                  <td class="py-5">{{ stateMonth.childCategoryFirst }}</td>
+                  <td class="py-5">{{ stateYaer.childCategoryFirst }}</td>
+                </tr>
+                <tr>
+                  <td class="pl-7 py-5">
+                    <v-select v-model="selected" :items="person"></v-select>
+                  </td>
+                  <td class="py-5">Zoo Crew (under 16)</td>
+                  <td class="py-5">{{ stateMonth.childCategorySecond }}</td>
+                  <td class="py-5">{{ stateYaer.childCategorySecond }}</td>
+                </tr>
+                <tr>
+                  <td class="pl-7 py-5">
+                    <v-select v-model="selected" :items="person"></v-select>
+                  </td>
+                  <td class="py-5">Concession</td>
+                  <td class="py-5">{{ stateMonth.concession }}</td>
+                  <td class="py-5">{{ stateYaer.concession }}</td>
+                </tr>
+                <tr>
+                  <td class="pl-7 py-5">
+                    <v-select v-model="selected" :items="person"></v-select>
+                  </td>
+                  <td class="py-5">Senior</td>
+                  <td class="py-5">{{ stateMonth.seniors }}</td>
+                  <td class="py-5">{{ stateYaer.seniors }}</td>
+                </tr>
+                <tr>
+                  <td class="pl-7 py-5">
+                    <v-select v-model="selected" :items="person"></v-select>
+                  </td>
+                  <td class="py-5">Teacher (professional membership)</td>
+                  <td class="py-5">{{ stateMonth.teacher }}</td>
+                  <td class="py-5">{{ stateYaer.teacher }}</td>
+                </tr>
+                <tr>
+                  <td class="pl-7 py-5">
+                    <v-select v-model="selected" :items="person"></v-select>
+                  </td>
+                  <td class="py-5">Supporter (Zoo entry not included)</td>
+                  <td class="py-5">{{ stateMonth.supporter }}</td>
+                  <td class="py-5">{{ stateYaer.supporter }}</td>
                 </tr>
               </tbody>
             </v-table>
@@ -248,7 +297,7 @@ const person = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
             <CardItem
               class="card_main"
               image-heigth="100"
-              :image-source="membership.source"
+              :image-source="membership.imageBgLink"
               image-title="Summory" />
             <h6 class="text-subtitle-1 text-center my-3">Zoos Planet Membership</h6>
             <v-table>

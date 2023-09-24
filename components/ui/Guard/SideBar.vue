@@ -1,5 +1,6 @@
 <script setup lang="ts">
 const nav = [
+  { title: "Main Pages", icon: "mdi-folder", to: "/guard/section/main" },
   { title: "My News", icon: "mdi-folder", to: "/guard/section/news" },
   { title: "Species", icon: "mdi-account-multiple", to: "/guard/section/species" },
   { title: "Fighting Extintion", icon: "mdi-star", to: "/guard/section/fighting" },
@@ -9,6 +10,7 @@ const nav = [
   { title: "Membership", icon: "mdi-square", to: "/guard/section/membership" },
   { title: "Tickets", icon: "mdi-history", to: "/guard/section/tickets" },
   { title: "Donate", icon: "mdi-cloud-upload", to: "/guard/section/donate" },
+  { title: "Plain", icon: "mdi-cloud-upload", to: "/guard/section/plan" },
 ];
 const open = ["Details"];
 </script>

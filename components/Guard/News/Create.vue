@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import { computed, reactive, ref } from "#imports";
-import { getCurrentTime } from "@/composables/getTime";
+
 import { delayLoading, useIsLoading } from "@/composables/states";
-import { usePostStore } from "@/stores/postStore";
+import { useUnionStore } from "@/stores/storeGenerics";
 
 //pendingData - returns false or true
 
-const { createPost } = usePostStore();
-
+// const { createPost } = usePostStore();
+const { createData } = useUnionStore();
 const state = reactive({
   title: "",
   imageBgLink: "image",
+  imagePreviewLink: "",
   category: "",
   description: "",
   extraeDscription: "",
@@ -41,24 +42,27 @@ const rules = [
 ];
 const fileData = ref<0 | FileList | undefined>();
 
-const uploadImage = async (event: Event) => {
+const filCover = ref<File>();
+const filePreview = ref<File>();
+const selectCoverImage = async (event: Event) => {
   const fileEvent = event.target as HTMLInputElement;
-  fileData.value = fileEvent.files?.length && fileEvent.files;
-  console.log(event);
-
-  console.log(fileData.value);
+  fileEvent.files?.length && (filCover.value = fileEvent.files[0]);
+  console.log(filCover.value);
 };
-
+const selectPreviewImage = async (event: Event) => {
+  const fileEvent = event.target as HTMLInputElement;
+  fileEvent.files?.length && (filePreview.value = fileEvent.files[0]);
+  console.log(filePreview.value);
+};
 const addPost = async () => {
   pendingData.value = true;
-  if (fileData.value) {
+  if (filCover.value && filePreview.value) {
     state.category = selected.value;
-    const result = await createPost(fileData.value, state);
+    const result = await createData(filCover.value, filePreview.value, state, "post", "create");
 
     // loadingDelay(result);
-    console.log("Result addPost", getCurrentTime());
+
     delayLoading(result);
-    console.log("End loading addPost", getCurrentTime());
   }
 };
 </script>
@@ -86,7 +90,14 @@ const addPost = async () => {
               >
               <v-form>
                 <v-text-field v-model="state.title" :rules="rules" label="Title"></v-text-field>
-                <v-file-input clearable label="File input" @change="uploadImage"></v-file-input>
+                <v-file-input
+                  clearable
+                  label="Image cover"
+                  @change="selectCoverImage"></v-file-input>
+                <v-file-input
+                  clearable
+                  label="Image preview"
+                  @change="selectPreviewImage"></v-file-input>
                 <v-select v-model="selected" :items="category"></v-select>
                 <v-text-field
                   v-model="state.description"

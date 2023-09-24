@@ -12,22 +12,22 @@ import {
   loadData,
   updateData,
 } from "@/composables/genericCrudFunctions";
-import { getCurrentTime } from "@/composables/getTime";
-import { useImageStorage, useSupabaseObject } from "@/composables/states";
+
+// import { getCurrentTime } from "@/composables/getTime";
 
 // import supabaseStete from "@/composables/supabaseStete";
 
 export const usePostStore = defineStore("post-store", () => {
   const postlist = ref<Post[] | null>();
   const pendingData = ref<boolean>(false);
-  const supabaseStore = useImageStorage();
-  const supabaseObject = useSupabaseObject();
+  // const supabaseStore = useImageStorage();
+  // const supabaseObject = useSupabaseObject();
   // const supabaseStorage = useStoreState();
   // const { $supabaseStore } = useNuxtApp();
   // const getFunc = supabaseStete();
   // const supabaseStore = getFunc();
 
-  const refrashData = ref<CallableFunction>();
+  // const refrashData = ref<CallableFunction>();
 
   const loadPostList = async () => {
     const result = await loadData<Post>("post", "list");
@@ -109,12 +109,9 @@ export const usePostStore = defineStore("post-store", () => {
     content: IPost,
   ): Promise<string> => {
     if (fileData) {
-      console.log("Enter createPost", getCurrentTime());
+      // console.log("Enter createPost", getCurrentTime());
 
       const result = await createData<IPost>("post", "create", fileData, content);
-
-      console.log(result);
-      console.log("Result createPost", getCurrentTime());
 
       if (result) {
         postlist.value?.unshift({ ...(result as Post) });

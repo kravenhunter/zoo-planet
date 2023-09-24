@@ -10,13 +10,12 @@ import {
   loadData,
   updateData,
 } from "@/composables/genericCrudFunctions";
-import { useImageStorage } from "@/composables/states";
+
 import type { IContacts } from "types/IContacts";
 
 export const useContactsStore = defineStore("contacts-store", () => {
   const contactPage = ref<ContactUs[] | null>();
   const isLoadingContacts = ref<boolean>(false);
-  const supabaseStorage = useImageStorage();
 
   const loadContacts = async () => {
     const result = await loadData<ContactUs>("contacts", "list");

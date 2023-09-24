@@ -3,6 +3,7 @@ import { useImageStorage } from "@/composables/states";
 
 import { uuid } from "vue-uuid";
 
+import { compressToBestSizeImage } from "@/composables/compressFile";
 import { getCurrentTime } from "@/composables/getTime";
 import type { IMembershipPrice } from "@/types/IMembershipPrice";
 import type { ITicketPrice } from "@/types/ITicketPrice";
@@ -20,7 +21,8 @@ import type { IContentPage } from "types/IContentPage";
 import type { IPost } from "types/IPost";
 import type { ISpecie } from "types/ISpecie";
 
-type ExtendObject = IPost | IContentPage | ISpecie | IContacts | Post;
+// type ExtendObject = IPost | IContentPage | ISpecie | IContacts | Post;
+type ExtendObject = IPost | IContentPage | ISpecie | IContacts;
 type ExtendOfTableObject = ITicketPrice | IMembershipPrice;
 type ExtendOfModels = Post | ContentPages | Specie | ContactUs | AboutUs;
 type ExtendOfTableModels = TicketPrice | MembershipPrice;
@@ -34,6 +36,7 @@ type ReqiestMethod =
   | "create-member-prices"
   | "update-member-prices"
   | "update-ticket-prices";
+
 const apiUrl = "/api/prisma";
 
 /**
@@ -72,23 +75,27 @@ export async function loadImageToStore(fileData: FileList): Promise<string> {
   const supabaseStore = useImageStorage();
 
   let urls = "https://epjfkkmrnhyxzevpvbjf.supabase.co/storage/v1/object/public/images/";
+
   if (fileData) {
     //   const fileName = `${Math.floor(Math.random() * 1000)}${fileData[0]?.name}`;
-    const fileName = `${uuid.v4() + fileData[0].name}`;
-    try {
-      const { data, error } = await supabaseStore.storage
-        .from("/images")
-        .upload(fileName, fileData[0]);
-      if (error) {
-        throw error;
-      }
-      console.log(data);
-      urls += data.path;
+    const fileName = `${uuid.v4()}_compressed_${fileData[0].name}`;
+    const newFile = await compressToBestSizeImage(fileData[0]);
 
-      console.log(urls);
-      return urls;
-    } catch (error) {
-      console.log(error);
+    if (newFile?.compressedFILE) {
+      try {
+        const { data, error } = await supabaseStore.storage
+          .from("images")
+          .upload(fileName, newFile.compressedFILE);
+        if (error) {
+          throw error;
+        }
+
+        urls += data.path;
+
+        return urls;
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
   return "image";
@@ -116,7 +123,7 @@ export async function createData<T extends ExtendObject>(
     try {
       console.log("Enter CreateData", getCurrentTime());
       content.imageBgLink = await loadImageToStore(fileData);
-      const { data: response, error } = await useFetch<ExtendOfModels | null>(getUrls, {
+      const { data: response, error } = await useFetch<ExtendOfModels>(getUrls, {
         method: "post",
         body: JSON.stringify(content),
       });

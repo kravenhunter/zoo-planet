@@ -19,12 +19,9 @@ export const useBookingStore = defineStore("booking-store", () => {
     const ticketResult = loadData<TicketPrice>("ticket", "list");
     const memberResult = loadData<MembershipPrice>("membership", "list");
     const promiseAll = await Promise.all([ticketResult, memberResult]);
-    console.log(promiseAll);
 
     ticketTable.value = promiseAll[0];
     membershipTable.value = promiseAll[1];
-    console.log(ticketTable.value);
-    console.log(membershipTable.value);
   }
 
   const addTicketPrices = async (singleEnty: ITicketPrice, unlimitedEntry: ITicketPrice) => {

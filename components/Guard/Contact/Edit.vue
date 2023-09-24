@@ -1,22 +1,23 @@
 <script setup lang="ts">
-import { computed, ref } from "#imports";
+import { computed, ref, toRefs } from "#imports";
 
 import { delayLoading, useIsLoading } from "@/composables/states";
 import { useContactsStore } from "@/stores/contactsStore";
+import { useUnionStore } from "@/stores/storeGenerics";
 import type { ContactUs } from "@prisma/client";
-import { storeToRefs } from "pinia";
 
+const props = defineProps<{ contacTable: ContactUs }>();
 //isLoadingContacts - returns false or true
-const { contactPage } = storeToRefs(useContactsStore());
+// const { contactPage } = storeToRefs(useContactsStore());
 
 const { updateContactContent } = useContactsStore();
+const { updateData } = useUnionStore();
 
 const isLoadingContacts = useIsLoading();
-const contacts = ref<ContactUs>();
-contacts.value = contactPage.value?.find((el) => el.title === "Contact Us");
+const { contacTable } = toRefs(props);
 
 const isEmpty = computed(() => {
-  if (contacts.value?.title && contacts.value.extraeDscription) {
+  if (contacTable.value?.title && contacTable.value.extraeDscription) {
     return false;
   }
 
@@ -33,28 +34,43 @@ const rules = [
 ];
 const fileData = ref<0 | FileList | undefined>();
 
-const uploadImage = async (event: Event) => {
+const filCover = ref<File>();
+const filePreview = ref<File>();
+const selectCoverImage = async (event: Event) => {
   const fileEvent = event.target as HTMLInputElement;
-  fileData.value = fileEvent.files?.length && fileEvent.files;
+  fileEvent.files?.length && (filCover.value = fileEvent.files[0]);
+  console.log(filCover.value);
 };
-
+const selectPreviewImage = async (event: Event) => {
+  const fileEvent = event.target as HTMLInputElement;
+  fileEvent.files?.length && (filePreview.value = fileEvent.files[0]);
+  console.log(filePreview.value);
+};
 const addPost = async () => {
   isLoadingContacts.value = !isLoadingContacts.value;
-  if (contacts.value) {
-    const result = await updateContactContent(contacts.value.id, fileData.value, {
-      imageBgLink: contacts.value.imageBgLink,
-      title: contacts.value.title,
-      description: contacts.value.description,
-      extraeDscription: contacts.value.extraeDscription ?? undefined,
-      phone: contacts.value.phone,
-      email: contacts.value.email,
-      socialLink_1: contacts.value.socialLink_1 ?? undefined,
-      socialLink_2: contacts.value.socialLink_2 ?? undefined,
-      socialLink_3: contacts.value.socialLink_3 ?? undefined,
-      socialLink_4: contacts.value.socialLink_4 ?? undefined,
-      socialLink_5: contacts.value.socialLink_5 ?? undefined,
-      copyright: contacts.value.copyright,
-    });
+  if (contacTable.value) {
+    const result = await updateData(
+      contacTable.value.id,
+      filCover.value,
+      filePreview.value,
+      {
+        imageBgLink: contacTable.value.imageBgLink,
+        imagePreviewLink: contacTable.value.imagePreviewLink ?? undefined,
+        title: contacTable.value.title,
+        description: contacTable.value.description,
+        extraeDscription: contacTable.value.extraeDscription ?? undefined,
+        phone: contacTable.value.phone,
+        email: contacTable.value.email,
+        socialLink_1: contacTable.value.socialLink_1 ?? undefined,
+        socialLink_2: contacTable.value.socialLink_2 ?? undefined,
+        socialLink_3: contacTable.value.socialLink_3 ?? undefined,
+        socialLink_4: contacTable.value.socialLink_4 ?? undefined,
+        socialLink_5: contacTable.value.socialLink_5 ?? undefined,
+        copyright: contacTable.value.copyright,
+      },
+      "contacts",
+      "update",
+    );
 
     delayLoading(result);
   }
@@ -62,7 +78,7 @@ const addPost = async () => {
 </script>
 
 <template>
-  <v-container v-if="contacts" class="d-flex" fluid>
+  <v-container v-if="contacTable" class="d-flex" fluid>
     <v-row>
       <v-col cols="12">
         <v-sheet class="pa-2 mx-auto bg-black w-50">
@@ -77,36 +93,40 @@ const addPost = async () => {
             >update data</v-btn
           >
           <v-form class="bg-grey-darken-4">
-            <v-text-field v-model="contacts.title" :rules="rules" label="Title"></v-text-field>
-            <v-file-input clearable label="File input" @change="uploadImage"></v-file-input>
-            <v-text-field v-model="contacts.phone" :rules="rules" label="Phone"></v-text-field>
-            <v-text-field v-model="contacts.email" :rules="rules" label="Email"></v-text-field>
+            <v-text-field v-model="contacTable.title" :rules="rules" label="Title"></v-text-field>
+            <v-file-input clearable label="Image cover" @change="selectCoverImage"></v-file-input>
+            <v-file-input
+              clearable
+              label="Image preview"
+              @change="selectPreviewImage"></v-file-input>
+            <v-text-field v-model="contacTable.phone" :rules="rules" label="Phone"></v-text-field>
+            <v-text-field v-model="contacTable.email" :rules="rules" label="Email"></v-text-field>
             <v-text-field
-              v-model="contacts.copyright"
+              v-model="contacTable.copyright"
               :rules="rules"
               label="Copyright"></v-text-field>
             <v-text-field
-              v-model="contacts.socialLink_1"
+              v-model="contacTable.socialLink_1"
               :rules="rules"
               label="Socials"></v-text-field>
             <v-text-field
-              v-model="contacts.socialLink_2"
+              v-model="contacTable.socialLink_2"
               :rules="rules"
               label="Socials"></v-text-field>
             <v-text-field
-              v-model="contacts.socialLink_3"
+              v-model="contacTable.socialLink_3"
               :rules="rules"
               label="Socials"></v-text-field>
             <v-text-field
-              v-model="contacts.socialLink_4"
+              v-model="contacTable.socialLink_4"
               :rules="rules"
               label="Socials"></v-text-field>
             <v-text-field
-              v-model="contacts.socialLink_5"
+              v-model="contacTable.socialLink_5"
               :rules="rules"
               label="Socials"></v-text-field>
             <v-text-field
-              v-model="contacts.description"
+              v-model="contacTable.description"
               :rules="rules"
               label="Shord Description"></v-text-field>
           </v-form>
@@ -117,12 +137,12 @@ const addPost = async () => {
         <v-sheet>
           <v-card-title class="text-center">Description</v-card-title>
           <UiElementsAddEditor
-            v-if="contacts.extraeDscription"
-            v-model:value="contacts.extraeDscription" />
+            v-if="contacTable.extraeDscription"
+            v-model:value="contacTable.extraeDscription" />
         </v-sheet>
       </v-col>
       <v-col cols="6" class="content_news">
-        <div class="editor_content bg-white" v-html="contacts.extraeDscription"></div>
+        <div class="editor_content bg-white" v-html="contacTable.extraeDscription"></div>
       </v-col>
     </v-row>
   </v-container>

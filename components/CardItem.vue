@@ -116,33 +116,7 @@ defineProps({
   <v-card v-else :color="colorbg" :class="classCard" :elevation="3">
     <v-container>
       <v-row>
-        <v-col cols="12">
-          <v-card :color="colorbg" :elevation="0">
-            <div class="d-flex flex-no-wrap justify-space-between">
-              <v-img
-                v-if="imageSource"
-                :height="imageHeigth"
-                :width="imageWidth"
-                :src="imageSource"
-                cover
-                class="align-end text-white">
-                <v-card-title v-if="imageTitle" :class="titleAlign">{{ imageTitle }}</v-card-title>
-              </v-img>
-              <div :class="classContent">
-                <v-card-title v-if="titleCard" :class="titleAlign" class="text-h5">
-                  {{ titleCard }}
-                </v-card-title>
-                <v-card-text v-if="subtitleCard" class="py-4" :class="sunTitleAlign">
-                  {{ subtitleCard }}
-                </v-card-text>
-
-                <v-card-actions :class="buttonAlign">
-                  <slot />
-                </v-card-actions>
-              </div>
-            </div>
-          </v-card>
-        </v-col>
+        <slot />
       </v-row>
     </v-container>
   </v-card>
@@ -156,6 +130,7 @@ defineProps({
     font-size: v-bind(fontTitleSize);
   }
 }
+
 .center {
   text-align: center;
 }

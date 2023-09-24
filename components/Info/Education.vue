@@ -1,72 +1,67 @@
 <script setup lang="ts">
+import type { ContentPages, Post } from "@prisma/client";
+
+interface Props {
+  education: ContentPages;
+  programs: Post[];
+}
+const props = defineProps<Props>();
+
 const carousel = [
   {
-    sourceTitle: "/images/career.jpg",
+    sourceTitle: "/images/education_1.webp",
+    title: "",
+    description: ``,
+  },
+
+  {
+    sourceTitle: "/images/education_2.webp",
     title: "",
     description: ``,
   },
   {
-    sourceTitle: "/images/education_1.jpg",
+    sourceTitle: "/images/education_3.webp",
     title: "",
     description: ``,
   },
   {
-    sourceTitle: "/images/education_3.jpg",
+    sourceTitle: "/images/education_4.webp",
     title: "",
     description: ``,
   },
   {
-    sourceTitle: "/images/education_2.jpg",
+    sourceTitle: "/images/education_5.webp",
     title: "",
     description: ``,
   },
   {
-    sourceTitle: "/images/volunteer_4.jpg",
-    title: "Build Project",
-    description: `Learn more about the Zoos Victoria community.`,
+    sourceTitle: "/images/education_6.webp",
+    title: "",
+    description: ``,
   },
   {
-    sourceTitle: "/images/volunteer_3.jpg",
-    title: "Careers",
-    description: `Learn more about the Zoos Victoria community.`,
+    sourceTitle: "/images/education_7.webp",
+    title: "",
+    description: ``,
   },
   {
-    sourceTitle: "/images/volunteer_2.jpg",
-    title: "Volunteer",
-    description: `Learn more about the Zoos Victoria community.`,
+    sourceTitle: "/images/education_8.webp",
+    title: "",
+    description: ``,
   },
   {
-    sourceTitle: "/images/volunteer_1.jpg",
-    title: "Board, governance, policies &  procurement",
-    description: `Learn more about the Zoos Victoria community.`,
+    sourceTitle: "/images/education_9.webp",
+    title: "",
+    description: ``,
   },
   {
-    sourceTitle: "/images/zoo_4.jpg",
-    title: "Contact Us",
-    description: `Learn more about the Zoos Victoria community.`,
-  },
-  {
-    sourceTitle: "/images/zoo_2.jpg",
-    title: "Contact Us",
-    description: `Learn more about the Zoos Victoria community.`,
-  },
-  {
-    sourceTitle: "/images/zoo_1.jpg",
-    title: "Contact Us",
-    description: `Learn more about the Zoos Victoria community.`,
-  },
-  {
-    sourceTitle: "/images/z00_3.jpg",
-    title: "Contact Us",
-    description: `Learn more about the Zoos Victoria community.`,
-  },
-  {
-    sourceTitle: "/images/unsplash_1z913JEirLU.jpg",
-    title: "Contact Us",
-    description: `Learn more about the Zoos Victoria community.`,
+    sourceTitle: "/images/education_10.webp",
+    title: "",
+    description: ``,
   },
 ];
-const education = [
+
+const educationText = [
   {
     sourceTitle: "",
     title: "",
@@ -158,115 +153,129 @@ const communityLinks = [
     description: `Learn more about the Zoos Victoria community.`,
   },
 ];
+console.log(props.programs);
 </script>
 
 <template>
   <section class="extinction">
     <article class="carousel">
-      <CardItem
+      <CardColumn
         class="title"
-        text-align="text-center"
+        class-title="text-amber-darken-2 text center"
         title-card="Explore education at Zoos Victoria"
-        font-title-size="2rem" />
+        font-title-size="2.5rem"
+        :enable-button="false" />
       <v-carousel hide-delimiters class="card_main" cycle height="800" :show-arrows="false">
         <v-carousel-item v-for="(slide, i) in carousel" :key="i">
-          <v-img :src="slide.sourceTitle" cover class="align-end text-white"> </v-img>
+          <v-img
+            :src="slide.sourceTitle"
+            gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
+            cover
+            class="align-end text-white">
+          </v-img>
         </v-carousel-item>
       </v-carousel>
     </article>
     <article class="description">
       <v-container>
-        <CardItem
-          color-title="white"
-          :text-card="education[0].description"
-          text-align="text-center text-subtitle-1 "
-          :shadow-card="2" />
+        <CardColumn
+          v-if="education"
+          :text-html-card="education.description"
+          :enable-button="false" />
       </v-container>
     </article>
-    <article class="conservation">
-      <v-container>
-        <div class="conservation_list">
-          <CardItem
-            class="conservation_list_title"
-            colorbg="#07060b"
-            color-title="#fbb03b"
-            title-align="text-center"
-            text-align="text-center"
-            :title-card="education[1].title"
-            :text-card="education[1].description"
-            font-title-size="2rem" />
-
-          <CardItem class="main" :image-source="communityLinks[0].sourceTitle" />
-          <div class="second_group">
-            <CardItem
-              v-for="(el, i) in communityLinks.slice(1, 4)"
-              :key="i"
-              :image-source="el.sourceTitle" />
-          </div>
-          <div class="third_group">
-            <CardItem
-              v-for="(el, i) in communityLinks.slice(4, 6)"
-              :key="i"
-              :image-source="el.sourceTitle" />
-          </div>
-        </div>
+    <article class="conservation" v-if="programs.length">
+      <v-container flued>
+        <CardColumn
+          title-card="Fighting Extinction Schools Program"
+          class-title="text-amber-darken-2 text center"
+          text-card="Start here to create your own Fighting Extinction Schools journey."
+          class-text="text-center"
+          font-title-size="2rem"
+          :enable-button="false" />
+        <v-row align="start">
+          <v-col cols="8">
+            <CardColumn heigth-card="475" :enable-card-slot="true">
+              <v-img
+                :src="programs[0].imagePreviewLink!"
+                class="align-end"
+                gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
+                :aspect-ratio="4 / 3"
+                cover>
+                <template #sources>
+                  <source :srcset="programs[0].imagePreviewLink!" />
+                </template>
+                <h4 class="text-amber mb-10 ml-10" v-text="programs[0].title"></h4>
+              </v-img>
+            </CardColumn>
+          </v-col>
+          <v-col cols="4">
+            <v-row>
+              <v-col cols="12" v-for="el in programs.slice(1, 3)" :key="el.id">
+                <CardColumn v-if="programs.length" heigth-card="225" :enable-card-slot="true">
+                  <v-img
+                    :src="el.imagePreviewLink!"
+                    class="align-end"
+                    gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
+                    :aspect-ratio="4 / 3"
+                    cover>
+                    <template #sources>
+                      <source :srcset="el.imagePreviewLink!" />
+                    </template>
+                    <h4 class="text-amber mb-10 ml-10" v-text="el.title"></h4>
+                  </v-img>
+                </CardColumn>
+              </v-col>
+            </v-row>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="4" v-for="el in programs.slice(3, 6)" :key="el.id">
+            <CardColumn v-if="programs.length" heigth-card="450" :enable-card-slot="true">
+              <v-img
+                :src="el.imagePreviewLink!"
+                class="align-end"
+                gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
+                :aspect-ratio="4 / 3"
+                cover>
+                <template #sources>
+                  <source :srcset="el.imagePreviewLink!" />
+                </template>
+                <h4 class="text-amber mb-10 ml-10" v-text="el.title"></h4>
+              </v-img>
+            </CardColumn>
+          </v-col>
+        </v-row>
       </v-container>
     </article>
 
-    <article class="who_we_are">
-      <v-container>
-        <div class="who_we_are_list">
-          <CardItem
-            colorbg="#f2f2f2"
-            color-title="#395A03"
-            title-align="text-center"
-            text-align="text-center"
-            :title-card="education[2].title"
-            :text-card="education[2].description"
-            font-title-size="2rem" />
-          <div class="first_list">
-            <CardItem
-              class="item"
-              v-for="(el, i) in communityLinks.slice(9, 11)"
-              :key="i"
-              :image-source="el.sourceTitle"
-              :image-title="el.title"
-              image-heigth="100%" />
-          </div>
-          <div class="second_list">
-            <CardItem
-              class="item"
-              v-for="(el, i) in communityLinks.slice(9, 12)"
-              :key="i"
-              :image-source="el.sourceTitle"
-              :image-title="el.title" />
-          </div>
-        </div>
-      </v-container>
+    <article class="who_we_are" v-if="programs.length">
+      <ProgramsBlock
+        :programs-list="programs.slice(4, 9)"
+        title="Fighting Extinction Schools Community"
+        title-class="text-amber-darken-2 text center"
+        text="Get support and grow your network."
+        text-class="text-center text-black" />
     </article>
     <article class="plan">
       <v-container>
-        <CardItem
-          colorbg="#f4f1e7"
-          :inline="true"
-          color-title="#395A03"
+        <CardInline
+          max-width-card="1200px"
+          class-card="bg-yellow-lighten-3 pa-3"
+          :title-card="educationText[3].title"
+          class-title="text-green-darken-4 text-center"
+          :text-card="educationText[3].description"
+          class-text="text-center"
           :image-source="communityLinks[3].sourceTitle"
-          :title-card="education[3].title"
-          :subtitle-card="education[3].description"
-          class-content="d-flex flex-column align-self-center "
-          image-heigth="100%"
-          image-width="50%">
-          <v-btn
-            class="px-10 mx-auto text-subtitle-1 font-weight-bold"
-            color="#395A03"
-            router
-            to="/info/plain"
-            variant="flat"
-            size="x-large">
-            <span>Find out</span>
-            <v-icon :size="25" color="#ffc107" class="ml-3 mb-1">mdi-paw</v-icon>
-          </v-btn>
-        </CardItem>
+          image-width="650px"
+          image-heigth="350px"
+          image-cols-size="6"
+          button-class="mb-10 px-10 text-subtitle-1 text-white text-grey-lighten-5 bg-light-blue-darken-4"
+          button-position="justify-center"
+          button-size="large"
+          button-title="Find out"
+          button-params="/info/plain"
+          icon="mdi-paw" />
       </v-container>
     </article>
     <article class="book">
@@ -308,6 +317,16 @@ const communityLinks = [
 </template>
 
 <style scoped lang="scss">
+.v-card {
+  &-title {
+    font-family: gothic;
+    font-size: 2.5rem;
+  }
+  & h4 {
+    font-family: gothic;
+    font-size: 1.3rem;
+  }
+}
 .extinction {
   height: 100%;
   background-color: var(--color-grey);
@@ -318,74 +337,20 @@ const communityLinks = [
     & .title {
       justify-self: center;
       position: absolute;
-      bottom: 40px;
+      bottom: 100px;
       z-index: 15;
     }
   }
   & .description {
-    background-color: #004c67;
+    /*    background-color: #004c67; */
     padding: 50px 0;
   }
   & .conservation {
-    padding: 50px 0;
     background-color: #07060b;
-
-    &_list {
-      display: grid;
-      justify-content: center;
-      grid-template-columns: repeat(3, minmax(auto, 300px));
-      grid-template-rows: repeat(4, minmax(auto, 200px));
-      gap: 15px;
-
-      &_title {
-        grid-column: span 3;
-        align-self: center;
-      }
-
-      & .main {
-        grid-column: span 2;
-        grid-row: span 2;
-      }
-      & .second_group {
-        grid-column: 3;
-        grid-row: span 3;
-        display: grid;
-        gap: 15px;
-      }
-      & .third_group {
-        grid-column: span 2;
-
-        display: grid;
-        grid-template-columns: repeat(2, auto);
-
-        gap: 15px;
-      }
-    }
   }
   & .who_we_are {
-    padding: 50px 0px;
-
-    &_list {
-      display: grid;
-      /*  grid-template-columns: repeat(auto-fit, minmax(auto, 500px)); */
-      grid-template-columns: repeat(1, minmax(auto, 1000px));
-      gap: 20px;
-      justify-content: center;
-      & .first_list {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(auto, 500px));
-        gap: 20px;
-      }
-      & .second_list {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(auto, 300px));
-        justify-content: space-between;
-      }
-    }
   }
   & .plan {
-    padding: 50px 0px;
-
     justify-self: center;
   }
   & .book {

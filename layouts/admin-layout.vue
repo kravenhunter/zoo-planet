@@ -1,56 +1,51 @@
 <script setup lang="ts">
-import { onMounted } from "#imports";
 import { useAlertDialog } from "@/composables/states";
-import { useBookingStore } from "@/stores/bookingStore";
-import { useContactsStore } from "@/stores/contactsStore";
-import { useMainContentStore } from "@/stores/mainContentStore";
-import { usePostStore } from "@/stores/postStore";
-import { useSpeciesStore } from "@/stores/speciesStore";
+import { useUnionStore } from "@/stores/storeGenerics";
 import { storeToRefs } from "pinia";
 
-//Species Data
-const { specieList } = storeToRefs(useSpeciesStore());
-const { loadSpeciesList } = useSpeciesStore();
+// import { useBookingStore } from "@/stores/bookingStore";
+// import { useContactsStore } from "@/stores/contactsStore";
+// import { useMainContentStore } from "@/stores/mainContentStore";
+// import { usePostStore } from "@/stores/postStore";
+// import { useSpeciesStore } from "@/stores/speciesStore";
+// import { storeToRefs } from "pinia";
 
-//Contacts Data
-const { contactPage } = storeToRefs(useContactsStore());
-const { loadContacts } = useContactsStore();
-
-const { mainPages } = storeToRefs(useMainContentStore());
-const { loadPagesContent } = useMainContentStore();
-
-//  Articles
-const { postlist } = storeToRefs(usePostStore());
-const { loadPostList } = usePostStore();
-
-// Membership Prices & Table
-const { membershipTable, ticketTable } = storeToRefs(useBookingStore());
-const { loadTables } = useBookingStore();
-
+const { postlist, specieList, mainPages, contactPage, membershipTable, ticketTable, planTable } =
+  storeToRefs(useUnionStore());
+const { loadDataList } = useUnionStore();
+//Alert Instance
 const alertDialog = useAlertDialog();
-if (!mainPages.value) {
-  await loadPagesContent();
-}
-if (!postlist.value) {
-  await loadPostList();
-}
 
-if (!membershipTable.value && !ticketTable.value) {
-  await loadTables();
-}
-if (!contactPage.value) {
-  await loadContacts();
-}
-if (!specieList.value) {
-  await loadSpeciesList();
-}
+// //Species Data
+// const { specieList } = storeToRefs(useSpeciesStore());
+// const { loadSpeciesList } = useSpeciesStore();
 
-/* const { $supabaseStore } = useNuxtApp(); */
+// //Contacts Data
+// const { contactPage } = storeToRefs(useContactsStore());
+// const { loadContacts } = useContactsStore();
 
-/* const check = () => {
-  console.log($supabaseStore);
-}; */
-onMounted(() => {});
+// const { mainPages } = storeToRefs(useMainContentStore());
+// const { loadPagesContent } = useMainContentStore();
+
+// //  Articles
+// const { postlist } = storeToRefs(usePostStore());
+// const { loadPostList } = usePostStore();
+
+// // Membership Prices & Table
+// const { membershipTable, ticketTable } = storeToRefs(useBookingStore());
+// const { loadTables } = useBookingStore();
+
+if (
+  !mainPages.value &&
+  !specieList.value &&
+  !postlist.value &&
+  !membershipTable.value &&
+  !ticketTable.value &&
+  !contactPage.value &&
+  !planTable.value
+) {
+  await loadDataList();
+}
 </script>
 
 <template>
@@ -58,16 +53,11 @@ onMounted(() => {});
     <UiGuardSideBar />
     <UiGuardTopBar />
 
-    <!-- <v-main class="d-flex align-center justify-center"> -->
-    <!--     <v-main class="d-flex align-center justify-center">
-      <slot />
-    </v-main> -->
-
     <div class="d-flex flex-column position-relative w-100">
       <div
         class="position-absolute d-flex justify-end"
         style="width: 95%; z-index: 100; top: 4.5rem">
-        <div class="alert">
+        <div class="alert" v-if="alertDialog.dialogModal">
           <v-fade-transition hide-on-leave>
             <v-alert v-if="alertDialog.dialogModal" :color="alertDialog.colorIcon" variant="flat">
               <div class="d-flex align-center justify-center">
@@ -75,11 +65,11 @@ onMounted(() => {});
                 <v-card-title class="font-weight-bold">{{ alertDialog.titleResult }}</v-card-title>
               </div>
 
-              <template #append>
+              <!-- <template #append>
                 <v-btn size="20" variant="text" @click="alertDialog.dialogModal = false">
                   <v-icon color="white" icon="$close" size="20"></v-icon>
                 </v-btn>
-              </template>
+              </template> -->
             </v-alert>
           </v-fade-transition>
         </div>

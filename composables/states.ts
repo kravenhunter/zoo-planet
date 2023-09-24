@@ -6,7 +6,7 @@ import type { IAlert } from "types/IAlert";
 // Глобальные переменные состояние
 
 export const useCounter = () => useState<number>("counter", () => 0);
-
+export const usePrevieLink = () => useState<string>("preview", () => "");
 export const useColor = () => useState<string>("color", () => "pink");
 export const useStoreState = () =>
   useState("supabase", () => {
@@ -27,6 +27,7 @@ export const useAlertDialog = () =>
   useState<IAlert>("alert-dialog", () => {
     return {
       dialogModal: false,
+
       titleResult: "Success",
       iconResult: "mdi-check-circle-outline",
       colorIcon: "success",
@@ -43,10 +44,21 @@ export function delayLoading(result: string | null) {
         titleResult: result,
         colorIcon: result.toLocaleLowerCase(),
         iconResult: result === "Success" ? "mdi-check-circle-outline" : "mdi-close-thick",
+
         dialogModal: true,
       });
 
     isLoading.value = false;
+
+    setTimeout(() => {
+      alertDialog.value = {
+        dialogModal: false,
+
+        titleResult: "",
+        colorIcon: "",
+        iconResult: "",
+      };
+    }, 2000);
   }, 2000);
 }
 

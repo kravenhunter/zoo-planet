@@ -1,39 +1,56 @@
 <script setup lang="ts">
 import { ref, useRoute } from "#imports";
-import { useBookingStore } from "@/stores/bookingStore";
-import { useContactsStore } from "@/stores/contactsStore";
-import { useMainContentStore } from "@/stores/mainContentStore";
-import { usePostStore } from "@/stores/postStore";
-import { useSpeciesStore } from "@/stores/speciesStore";
-import type { ContactUs, ContentPages, MembershipPrice, Post, TicketPrice } from "@prisma/client";
+import { useUnionStore } from "@/stores/storeGenerics";
+
 import { storeToRefs } from "pinia";
+
+// import { useBookingStore } from "@/stores/bookingStore";
+// import { useContactsStore } from "@/stores/contactsStore";
+// import { useMainContentStore } from "@/stores/mainContentStore";
+// import { usePostStore } from "@/stores/postStore";
+// import { useSpeciesStore } from "@/stores/speciesStore";
+import type { ContactUs, ContentPages, MembershipPrice, Post, TicketPrice } from "@prisma/client";
 
 const router = useRoute();
 
-const { specieList } = storeToRefs(useSpeciesStore());
-//Contacts Data
-const { contactPage } = storeToRefs(useContactsStore());
-const contacts = ref<ContactUs>();
+const { postlist, mainPages, contactPage, membershipTable, ticketTable, specieList, planTable } =
+  storeToRefs(useUnionStore());
 
-// Main Content Data
-const { mainPages } = storeToRefs(useMainContentStore());
-
-//  Articles
-const { postlist } = storeToRefs(usePostStore());
 const newsMainPageContent = ref<ContentPages>();
 const latestNewsList = ref<Post[]>();
-
-// Membership Prices & Table
-const { membershipTable, ticketTable } = storeToRefs(useBookingStore());
-
+// // Membership Prices
 const stateMonth = ref<MembershipPrice>();
 const stateYaer = ref<MembershipPrice>();
-
-// Ticket Prices & Table
+// // Ticket Prices & Table
 const singleState = ref<TicketPrice>();
 const unlimitedSTate = ref<TicketPrice>();
+// //Contacts Data
+const contacts = ref<ContactUs>();
+
+// //Contacts Data
+// const { contactPage } = storeToRefs(useContactsStore());
+// const contacts = ref<ContactUs>();
+
+// // Main Content Data
+// const { mainPages } = storeToRefs(useMainContentStore());
+
+// //  Articles
+// const { postlist } = storeToRefs(usePostStore());
+// const newsMainPageContent = ref<ContentPages>();
+// const latestNewsList = ref<Post[]>();
+
+// // Membership Prices & Table
+// const { membershipTable, ticketTable } = storeToRefs(useBookingStore());
+
+// const stateMonth = ref<MembershipPrice>();
+// const stateYaer = ref<MembershipPrice>();
+
+// // Ticket Prices & Table
+// const singleState = ref<TicketPrice>();
+// const unlimitedSTate = ref<TicketPrice>();
 
 //Checking ROutes
+
 if (router.params.id === "news") {
   newsMainPageContent.value = mainPages.value?.find((el) => el.subTitle === "News");
   latestNewsList.value = postlist.value?.filter((el) => el.category === "News");
@@ -73,43 +90,34 @@ if (router.params.id === "donate") {
 if (router.params.id === "contactus") {
   contactPage.value?.length && (contacts.value = contactPage.value[0]);
 }
+if (router.params.id === "plan") {
+  newsMainPageContent.value = mainPages.value?.find((el) => el.subTitle === "Plan");
+}
 </script>
 
 <template>
   <section class="main_content">
     <v-container class="py-8 px-6" fluid>
-      <v-row v-if="newsMainPageContent">
+      <GuardMainPages v-if="router.params.id === 'main' && mainPages" :pages="mainPages" />
+      <v-row v-if="newsMainPageContent?.imagePreviewLink">
         <v-col cols="12">
-          <v-list lines="two" class="bg-grey-darken-4">
-            <v-list-subheader class="text-h6 text-white" title="Content Page"></v-list-subheader>
-            <v-list-item>
-              <CardItem
-                image-heigth="200"
-                image-width="200"
-                :inline="true"
-                class="card_main"
-                class-card="justify-start"
-                class-content="d-flex flex-column align-self-center "
-                colorbg="grey-darken-4"
-                :image-source="newsMainPageContent?.imageBgLink"
-                font-title-size="2rem"
-                :title-card="newsMainPageContent?.title"
-                :subtitle-card="newsMainPageContent?.shortDescription"
-                button-title="Edit"
-                button-align="align-center"
-                :button-slot="true">
-                <v-btn
-                  class="px-10 text-subtitle-1 mx-auto text-white text-grey-lighten-5"
-                  color="light-blue-darken-4"
-                  variant="flat"
-                  size="large"
-                  :to="{ path: `/guard/main/${router.params.id}` }"
-                  append-icon="mdi-paw">
-                  Edit
-                </v-btn>
-              </CardItem>
-            </v-list-item>
-          </v-list>
+          <CardInline
+            max-width-card="1200px"
+            class-card="bg-grey-darken-4 mx-auto"
+            :title-card="newsMainPageContent.title"
+            class-title="text-amber text-center"
+            :text-card="newsMainPageContent.shortDescription"
+            :image-source="newsMainPageContent.imagePreviewLink"
+            image-width="400px"
+            image-heigth="300px"
+            image-cols-size="4"
+            content-cols-sieze="8"
+            button-class="px-10 mb-5 mr-5  text-subtitle-1 text-white text-grey-lighten-5 bg-light-blue-darken-4"
+            button-position="justify-end"
+            button-size="large"
+            button-title="Edit"
+            :button-params="`/guard/main/${router.params.id}`"
+            icon="mdi-paw" />
         </v-col>
       </v-row>
       <!--       <v-row v-if="latestNewsList?.length">
@@ -368,11 +376,16 @@ if (router.params.id === "contactus") {
       </v-row> -->
       <LazyGuardContactBlock v-if="contacts" :contact-data="contacts" />
 
-      <LazyGuardSpeciesList v-if="router.params.id === 'species'" />
+      <LazyGuardSpeciesList
+        v-if="router.params.id === 'species' && specieList"
+        :speciest="specieList" />
       <LazyGuardTablesTickets
         v-if="router.params.id === 'tickets'"
         :singl-entry="singleState"
         :unlimited="unlimitedSTate" />
+      <LazyGuardTablesPlan
+        v-if="router.params.id === 'plan' && planTable"
+        :plan-prices="planTable" />
     </v-container>
   </section>
 </template>

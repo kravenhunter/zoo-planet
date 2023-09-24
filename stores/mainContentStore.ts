@@ -1,13 +1,11 @@
 import { ref } from "#imports";
-
-import type { ContentPages } from "@prisma/client";
-
 import {
   createData,
   deleteDataById,
   loadData,
   updateData,
 } from "@/composables/genericCrudFunctions";
+import type { ContentPages } from "@prisma/client";
 
 import { defineStore } from "pinia";
 import type { IContentPage } from "types/IContentPage";

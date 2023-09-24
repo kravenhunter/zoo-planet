@@ -11,6 +11,7 @@ export default defineEventHandler(async (event) => {
       data: {
         title: body.title,
         imageBgLink: body.imageBgLink,
+        imagePreviewLink: body.imagePreviewLink,
         subTitle: body.subTitle,
         shortDescription: body.shortDescription,
         description: body.description,

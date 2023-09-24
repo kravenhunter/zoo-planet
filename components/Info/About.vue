@@ -1,4 +1,26 @@
 <script setup lang="ts">
+import { ref, useRoute } from "#imports";
+import type { ContentPages } from "@prisma/client";
+
+const props = defineProps<{
+  aboutUs: ContentPages[];
+}>();
+const route = useRoute();
+
+const about = ref<ContentPages>();
+const sponsor = ref<ContentPages>();
+const career = ref<ContentPages>();
+const education = ref<ContentPages>();
+const volunteer = ref<ContentPages>();
+
+about.value = props.aboutUs?.find((el) => el.subTitle === "AboutUs");
+sponsor.value = props.aboutUs?.find((el) => el.subTitle === "Sponsors");
+career.value = props.aboutUs?.find((el) => el.subTitle === "Careers");
+education.value = props.aboutUs?.find((el) => el.subTitle === "Education");
+volunteer.value = props.aboutUs?.find((el) => el.subTitle === "Volunteer");
+if (route.params.id === "about") {
+  console.log(props.aboutUs);
+}
 const aboutList = [
   {
     sourceTitle: "/images/about_us.jpg",
@@ -81,87 +103,39 @@ const communityLinks = [
 </script>
 
 <template>
-  <section class="about">
+  <section class="about" v-if="aboutUs">
     <article class="card">
-      <CardItem
-        class="card_main"
-        :image-source="aboutList[0].sourceTitle"
-        :image-title="aboutList[0].title"
-        title-align="text-center pb-10"
-        font-title-size="2rem" />
+      <CardColumn heigth-card="450" :enable-card-slot="true">
+        <v-img
+          :src="aboutUs[0].imageBgLink"
+          class="align-end"
+          gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
+          width="100%"
+          cover>
+          <template #sources>
+            <source :srcset="aboutUs[0].imageBgLink" />
+          </template>
+          <v-card-title
+            class="text-amber text-center mb-10"
+            v-text="aboutUs[0].title"></v-card-title>
+        </v-img>
+      </CardColumn>
+
       <article class="card_list">
         <div class="saving_wildlife">
-          <CardItem
-            colorbg="#f2f2f2"
-            color-title="#395A03"
-            :title-card="aboutList[1].title"
-            :text-card="aboutList[1].description"
-            title-align="text-center"
-            font-title-size="2rem" />
-          <CardItem
-            colorbg="#f2f2f2"
-            class="thank_you"
-            color-title="#395A03"
-            :title-card="aboutList[2].title"
-            :text-card="aboutList[2].description"
-            title-align="text-center"
-            font-title-size="2rem" />
+          <CardColumn :text-html-card="aboutUs[0].description" />
         </div>
 
         <div class="who_we_are">
-          <CardItem
-            colorbg="#07060b"
-            color-title="#fbb03b"
-            title-align="text-center"
-            text-align="text-center"
-            :title-card="aboutList[3].title"
-            :text-card="aboutList[3].description"
-            font-title-size="2rem" />
-
-          <div class="who_we_are_list">
-            <div class="first_list">
-              <CardItem
-                class="item"
-                v-for="(el, i) in communityLinks.slice(0, 2)"
-                :key="i"
-                :image-source="el.sourceTitle"
-                :image-title="el.title" />
-            </div>
-            <div class="second_list">
-              <CardItem
-                class="item"
-                v-for="(el, i) in communityLinks.slice(2, 5)"
-                :key="i"
-                :image-source="el.sourceTitle"
-                :image-title="el.title" />
-            </div>
-          </div>
+          <ProgramsBlock
+            :programs-list="aboutUs.slice(1, 6)"
+            title="Who we are"
+            title-class="text-amber-darken-2 text center"
+            text="Learn more about the Zoos Victoria community."
+            text-class="text-center" />
         </div>
         <div class="our_vision">
-          <CardItem
-            colorbg="#f2f2f2"
-            color-title="#395A03"
-            :title-card="aboutList[4].title"
-            :text-card="aboutList[4].description"
-            title-align="text-center"
-            font-title-size="1.8rem" />
-          <CardItem
-            class="our_mission"
-            colorbg="#f2f2f2"
-            color-title="#395A03"
-            :title-card="aboutList[5].title"
-            :text-card="aboutList[5].description"
-            title-align="text-center"
-            font-title-size="2rem" />
-
-          <CardItem
-            class="our_publications"
-            colorbg="#f2f2f2"
-            color-title="#395A03"
-            :title-card="aboutList[6].title"
-            :text-card="aboutList[6].description"
-            title-align="text-center"
-            font-title-size="2rem" />
+          <CardColumn v-if="about?.extraeDscription" :text-html-card="about.extraeDscription" />
         </div>
       </article>
     </article>
@@ -169,6 +143,16 @@ const communityLinks = [
 </template>
 
 <style scoped lang="scss">
+.v-card {
+  &-title {
+    font-family: gothic;
+    font-size: 2.5rem;
+  }
+  & h4 {
+    font-family: gothic;
+    font-size: 1.5rem;
+  }
+}
 .about_wrapper {
   height: 100%;
   background-color: var(--color-grey);
@@ -177,48 +161,22 @@ const communityLinks = [
   display: grid;
   background-color: var(--color-grey);
 
-  /*   display: grid;
-  grid-template-columns: repeat(2, auto);
-  justify-content: center;
-  font-size: 1rem;
-  gap: 15px; */
-  &_main {
-    max-height: 50vh;
-  }
   &_list {
     display: grid;
     justify-content: center;
     grid-template-columns: 0.5fr 2fr 0.5fr;
-    row-gap: 50px;
+
     & .saving_wildlife {
       max-width: 1500px;
       grid-column: 2;
-      padding: 50px 0;
     }
-    /*     & .thank_you {
-      max-width: 1500px;
-      grid-column: 2;
-    } */
+    & .whoes {
+      background-color: #07060b;
+    }
     & .who_we_are {
       background-color: #07060b;
-      padding: 50px 0px;
+
       grid-column: span 3;
-      &_list {
-        display: grid;
-        /*  grid-template-columns: repeat(auto-fit, minmax(auto, 500px)); */
-        gap: 20px;
-        justify-items: center;
-        & .first_list {
-          display: grid;
-          grid-template-columns: repeat(2, minmax(auto, 500px));
-          gap: 20px;
-        }
-        & .second_list {
-          display: grid;
-          grid-template-columns: repeat(3, minmax(auto, 300px));
-          gap: 20px;
-        }
-      }
     }
     & .our_vision {
       max-width: 1500px;

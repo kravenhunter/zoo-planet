@@ -1,11 +1,18 @@
 <script setup lang="ts">
 import { onMounted, reactive, ref, useFetch } from "#imports";
+import { compressToBestSize } from "@/composables/compressFile";
 import { useImageStorage } from "@/composables/states";
 import type { Session } from "@supabase/supabase-js";
+import Compressor from "compressorjs";
 
 /* const client = useSupabaseAuthClient() */
 // const client = useSupabaseClient()
+
 const supabaseStorage = useImageStorage();
+const { data } = supabaseStorage.storage
+  .from("image_test")
+  .getPublicUrl("testfolder/Humboldt_unsplash_5VfZXgBTTlw.jpg");
+
 const state = reactive({
   title: "",
   imageBgLink: "image",
@@ -17,7 +24,7 @@ const email = ref("");
 const password = ref("");
 const login = ref("mailtest9999@yandex.ru");
 const passwordLogin = ref("sup@b@se2023");
-const firstName = ref("");
+
 const titleResult = ref("");
 const iconResult = ref("");
 const colorIcon = ref("");
@@ -28,6 +35,8 @@ const dialogLogIn = ref(false);
 const selected = ref("Education");
 const currentId = "8feccc19-4820-460a-a29e-e5e469d7bc1cc";
 const category = ["Education", "FightingExtinction", "News"];
+const previewImage = ref<string>("");
+const compressionResult = ref<number>();
 const rules = [
   (value: string) => {
     if (value) {
@@ -38,6 +47,7 @@ const rules = [
   },
 ];
 const fileData = ref<0 | FileList | undefined>();
+const selectedFile = ref<File>();
 const loadImage = async () => {
   let urls = "https://epjfkkmrnhyxzevpvbjf.supabase.co/storage/v1/object/public/images/";
   if (fileData.value) {
@@ -59,10 +69,157 @@ const loadImage = async () => {
     }
   }
 };
+
+const WIDTH = ref<number>(0);
+const compressToBest = async () => {
+  if (fileData.value && fileData.value.length) {
+    //Create Blob Link
+    selectedFile.value = fileData.value[0];
+    console.log(selectedFile.value);
+
+    const newImage = new Image();
+
+    if (selectedFile.value) {
+      newImage.src = URL.createObjectURL(selectedFile.value);
+      newImage.alt = "Compressed image";
+      newImage.onload = function () {
+        console.log(`${newImage.width} x ${newImage.height}`);
+      };
+    }
+
+    const newFile = await compressToBestSize(WIDTH.value, selectedFile.value);
+    if (newFile) {
+      previewImage.value = newFile.preview;
+      console.log(newFile.compressedFILE);
+    }
+  }
+};
+
+const convertFile = async () => {
+  if (fileData.value) {
+    selectedFile.value = fileData.value[0];
+    if (selectedFile.value) {
+      const urtls = URL.createObjectURL(selectedFile.value);
+      console.log(urtls);
+      const newImage = new Image();
+      newImage.src = URL.createObjectURL(selectedFile.value);
+      newImage.alt = "Compressed image";
+      const ration = WIDTH.value / newImage.width;
+      const currentHeight = newImage.height * ration;
+
+      await new Promise((resolve, reject) => {
+        const compress = new Compressor(selectedFile.value!, {
+          quality: 0.1,
+          // quality: 0.6,
+          width: WIDTH.value,
+          height: currentHeight,
+          mimeType: "image/webp",
+          success: resolve,
+          error: reject,
+        });
+      })
+        .then((result) => {
+          const resultBlob = result as Blob;
+          const newFile = new File([resultBlob], resultBlob.name, { type: resultBlob.type });
+          console.log(newFile);
+          compressionResult.value = Math.floor(newFile.size / 1024);
+
+          const reader = new FileReader();
+          reader.readAsDataURL(newFile);
+          reader.onload = (ev: ProgressEvent<FileReader>) => {
+            console.log(ev);
+
+            previewImage.value = ev.target!.result as string;
+          };
+        })
+        .catch((error) => {
+          console.log(error);
+          return null;
+        })
+        .finally(() => {
+          console.log("Compress complete");
+        });
+    }
+  }
+};
+
+const customCompressor = () => {
+  if (fileData.value && fileData.value.length) {
+    selectedFile.value = fileData.value[0];
+
+    const reader = new FileReader();
+
+    if (selectedFile.value && selectedFile.value.type.includes("image")) {
+      console.log("file correct", selectedFile.value);
+      reader.readAsDataURL(selectedFile.value);
+      reader.onload = (ev: ProgressEvent<FileReader>) => {
+        const currentImage = new Image();
+        currentImage.src = ev.target!.result as string;
+        selectedFile.value?.name && (currentImage.title = selectedFile.value?.name);
+        currentImage.onload = (e) => {
+          console.log("current image", e);
+          console.log(currentImage.width);
+
+          // const currentWidth = (e?.target as HTMLImageElement).width;
+          // const currentHeight = (e?.target as HTMLImageElement).height;
+          const currentWidth = currentImage.width;
+          const currentHeight = currentImage.height;
+
+          const canvas = document.createElement("canvas");
+          const ration = WIDTH.value / currentWidth;
+
+          canvas.width = WIDTH.value;
+          canvas.height = currentHeight * ration;
+          const canvasContext = canvas.getContext("2d");
+          canvasContext!.drawImage(currentImage, 0, 0, canvas.width, canvas.height);
+
+          selectedFile.value &&
+            (previewImage.value = canvasContext!.canvas.toDataURL(selectedFile.value.type, 0.5));
+
+          urlToFile();
+        };
+      };
+    } else {
+      console.log("wrong type file");
+    }
+  }
+};
+function urlToFile() {
+  const arr = previewImage.value.split(",");
+  console.log(arr);
+
+  // data:/image/jpeg;base64 use RegexArray to get   image/jpeg
+  const regArr = arr[0].match(/:(.*?);/);
+  console.log("regex Arr", regArr);
+
+  if (arr.length) {
+    let mime: string;
+    regArr?.length && (mime = regArr[1]);
+    const dataImage = arr[1];
+
+    const decryptedData: string = atob(dataImage);
+    let n = decryptedData.length;
+    const dataUintArr = new Uint8Array(n);
+    while (n--) {
+      dataUintArr[n] = decryptedData.charCodeAt(n);
+    }
+    if (selectedFile.value) {
+      const newFile = new File([dataUintArr], selectedFile.value.name, { type: mime! });
+
+      console.log("newFile", newFile);
+    }
+  }
+}
 const uploadImage = async (event: Event) => {
+  previewImage.value = "";
   const fileEvent = event.target as HTMLInputElement;
   fileData.value = fileEvent.files?.length && fileEvent.files;
-  console.log(event);
+
+  const input = document.querySelector(".fileinput .mdi-close-circle");
+  input?.addEventListener("click", (eventClick: Event) => {
+    fileData.value = 0;
+    previewImage.value = "";
+  });
 
   console.log(fileData.value);
 };
@@ -202,6 +359,8 @@ const getPostById = async (id: string) => {
 const clean = (event: Event) => {
   console.log(event);
 };
+const link = "https://ik.imagekit.io/aap8orwyc";
+const img = "Humboldt_unsplash_5VfZXgBTTlw.jpg";
 onMounted(() => {
   getAuth();
 });
@@ -262,6 +421,44 @@ onMounted(() => {
       </div>
     </div> -->
     <v-container>
+      <!-- <NuxtPicture
+        format="webp"
+        sizes="xs:300px md:500px lg:100vw"
+        src="https://epjfkkmrnhyxzevpvbjf.supabase.co/storage/v1/object/public/images/c5901592-8efa-414b-ada1-2e18fe664dd4zoo_4.jpg"
+        alt="imageTitle"
+        title="imageTitle"
+        class="align-end text-white image_content">
+      </NuxtPicture> -->
+      <!-- <img
+        :src="`${link}/${img}`"
+        sizes="{max-width:480px} 100vw, {max-width:1900px} 49vw"
+        :srcset="`
+            ${link}/${img} 100w,
+            ${link}/${img} 400w,
+            ${link}/${img} 1600w,
+            `"
+        alt="sddf" /> -->
+      <v-sheet>
+        <NuxtImg
+          format="webp"
+          width="600px"
+          height="600px"
+          :src="`${link}/tr:w-600/${img}`"
+          alt="imageTitle"
+          title="imageTitle"
+          class="align-end text-white image_content">
+        </NuxtImg>
+      </v-sheet>
+
+      <!-- <nuxt-img
+        format="webp"
+        width="300px"
+        height="200px"
+        src="https://epjfkkmrnhyxzevpvbjf.supabase.co/storage/v1/object/public/images/c5901592-8efa-414b-ada1-2e18fe664dd4zoo_4.jpg"
+        alt="imageTitle"
+        title="imageTitle"
+        class="align-end text-white image_content">
+      </nuxt-img> -->
       <v-sheet min-height="450" width="400" class="mx-auto position-relative d-flex">
         <v-form @submit.prevent="register" class="position-absolute w-100 align-self-center">
           <v-card-title>Register</v-card-title>
@@ -358,10 +555,20 @@ onMounted(() => {
     </v-container>
 
     <v-container>
+      <v-img v-if="previewImage" :src="previewImage" max-height="300px"> </v-img>
       <v-sheet width="400" class="mx-auto">
-        <v-form @submit.prevent="loadImage">
-          <v-text-field v-model="firstName" :rules="rules" label="First name"></v-text-field>
-          <v-file-input clearable label="File input" @change="uploadImage"></v-file-input>
+        <v-form @submit.prevent="compressToBest">
+          <v-text-field v-model="WIDTH" :rules="rules" label="Enter image size"></v-text-field>
+          <v-card-text v-if="compressionResult">{{ compressionResult }} KB</v-card-text>
+          <v-file-input
+            class="fileinput"
+            clearable
+            accept="image/png, image/jpeg, image/jpg"
+            show-size
+            counter
+            label="File input"
+            @click:clear="clean"
+            @change="uploadImage"></v-file-input>
           <v-btn type="submit" block class="mt-2">Submit</v-btn>
         </v-form>
       </v-sheet>

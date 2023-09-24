@@ -1,4 +1,7 @@
 <script setup lang="ts">
+import type { ContentPages } from "@prisma/client";
+
+defineProps<{ species: ContentPages }>();
 const speciesTitle = {
   title: "Local threatened species",
   sourceTitle: "/images/35f9ab0c1f1433fd3c531fc261b36ae2e0075dd0.webp",

@@ -1,7 +1,40 @@
 <script setup lang="ts">
 import { ref } from "#imports";
+import { useUnionStore } from "@/stores/storeGenerics";
+import type { ContactUs } from "@prisma/client";
+import { storeToRefs } from "pinia";
 
 const showSearch = ref(false);
+
+const { postlist, specieList, mainPages, contactPage, membershipTable, ticketTable } = storeToRefs(
+  useUnionStore(),
+);
+const { loadDataList } = useUnionStore();
+if (
+  !mainPages.value &&
+  !specieList.value &&
+  !postlist.value &&
+  !membershipTable.value &&
+  !ticketTable.value &&
+  !contactPage.value
+) {
+  await loadDataList();
+}
+// Contacts Data
+const contacts = ref<ContactUs>();
+const socialsLink = ref<string[]>();
+
+contactPage.value?.length && (contacts.value = contactPage.value[0]);
+if (contactPage.value?.length) {
+  contacts.value = contactPage.value[0];
+  socialsLink.value = [
+    contacts.value.socialLink_1!,
+    contacts.value.socialLink_2!,
+    contacts.value.socialLink_3!,
+    contacts.value.socialLink_4!,
+    contacts.value.socialLink_5!,
+  ];
+}
 
 const navTop = [
   {
@@ -67,12 +100,25 @@ const socials = [
     icon: "mdi:instagram",
   },
 ];
+const bgImages = [
+  {
+    title: "header top",
+    imageBgLink:
+      "https://epjfkkmrnhyxzevpvbjf.supabase.co/storage/v1/object/public/images/cover/header_bg.webp",
+  },
+  {
+    title: "panda",
+
+    imageBgLink:
+      "https://epjfkkmrnhyxzevpvbjf.supabase.co/storage/v1/object/public/images/cover/panda1.webp",
+  },
+];
 </script>
 
 <template>
   <v-layout class="d-flex flex-column pa-0" style="min-height: 100vh">
     <v-app-bar :height="160" class="py-0">
-      <Image source="/images/header_bg.jpg" class="pa-10" alte="header_bg">
+      <Image :source="bgImages[0].imageBgLink" class="pa-10" :alt="bgImages[0].title">
         <v-row no-gutters>
           <v-col :cols="1" class="logo">
             <v-img src="/images/logos.svg" height="99px" width="126px" />
@@ -242,15 +288,14 @@ const socials = [
 
           <div class="footer_copyright_title">
             <p class="text-subtitle-2">
-              © 2023 Vimeo.com, Inc. All rights reserved. Terms | Privacy | CA Privacy | Copyright |
-              Cookies
+              {{ contacts?.copyright }}
             </p>
           </div>
           <div class="footer_copyright_socials">
             <h4 class="text-center">FOLOW US</h4>
-            <ul>
+            <ul v-if="socialsLink?.length">
               <li v-for="(icon, i) in socials" :key="i">
-                <NuxtLink :to="icon.link">
+                <NuxtLink :to="socialsLink[i]">
                   <v-avatar color="#395A03" class="ma-3" size="47" rounded="50">
                     <UiElementsIcons
                       :icon-name="icon.icon"
