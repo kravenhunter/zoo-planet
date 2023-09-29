@@ -73,3 +73,23 @@ export interface IPlan {
   faunaPark?: string;
   adultRatio?: string;
 }
+
+export interface ISelectedPrices {
+  adult: number;
+  child: number;
+  zooCrew: number;
+  concession: number;
+  senior: number;
+  teacher: number;
+  supporter: number;
+}
+export interface IPerson {
+  firstName?: string;
+  lastName?: string;
+  phone?: string;
+  personGender?: string;
+  dateOfBirth?: string;
+  adress?: string;
+  email?: string;
+  isEmpty: boolean;
+}

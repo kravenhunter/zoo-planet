@@ -7,11 +7,13 @@ import { storeToRefs } from "pinia";
 const route = useRoute();
 const { postlist } = storeToRefs(useUnionStore());
 
-const currentArticle = ref<Post>();
-currentArticle.value = postlist.value?.find((el) => el.id === route.params.id);
+const currentArticles = ref<Post[]>();
+currentArticles.value = postlist.value?.filter((el) => el.title.includes(String(route.params.id)));
 </script>
 
 <template>
-  <NewsBlock v-if="route.params.id && currentArticle" :article="currentArticle" />
+  <SearchList v-if="currentArticles" :search-list="currentArticles" />
   <ErrorResult v-else />
 </template>
+
+<style scoped></style>

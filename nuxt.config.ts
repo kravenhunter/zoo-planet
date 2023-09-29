@@ -6,9 +6,14 @@ export default defineNuxtConfig({
   modules: ["@pinia/nuxt", "@vueuse/nuxt", "@nuxt/image"],
 
   runtimeConfig: {
+    private: {
+      stripeSK: process.env.STRIPE_SK_KEY,
+      endpoinSK: process.env.ENDPOINT_SECRET,
+    },
     public: {
       supabaseUrl: process.env.SUPABASE_URL,
       supabaseKey: process.env.SUPABASE_KEY,
+      stripePK: process.env.STRIPE_PK_KEY,
     },
   },
   // image: {

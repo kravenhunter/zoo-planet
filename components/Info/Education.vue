@@ -260,8 +260,9 @@ console.log(props.programs);
     <article class="plan">
       <v-container>
         <CardInline
+          :shadow-card="3"
           max-width-card="1200px"
-          class-card="bg-yellow-lighten-3 pa-3"
+          class-card="bg-orange-lighten-5 pa-3"
           :title-card="educationText[3].title"
           class-title="text-green-darken-4 text-center"
           :text-card="educationText[3].description"

@@ -1,329 +1,221 @@
 <script setup lang="ts">
-import { ref } from "#imports";
+import { reactive, ref } from "#imports";
+import { useSelectedPrecesState } from "@/composables/states";
 import type { ContentPages, MembershipPrice } from "@prisma/client";
 
 interface Props {
-  membership: ContentPages;
+  memberMain: ContentPages;
   stateMonth: MembershipPrice;
   stateYaer: MembershipPrice;
 }
 
+interface Person {
+  firstName?: string;
+  lastName?: string;
+  phone?: string;
+  personGender?: string;
+  dateOfBirth?: string;
+  adress?: string;
+  email?: string;
+  isEmpty: boolean;
+}
+
 defineProps<Props>();
 
-const book = {
-  source: "/images/unsplash_8uJ0Am-ZdTA.jpg",
-  title: "Membership",
-  subtitle1:
-    "Join today for only $11.50 a month over 12 months and receive unlimited entry to four unique zoos all year round. Each membership includes:",
-  text1:
-    "Memberships will auto-rollover in 12 months. A reminder email will be sent 28 days before you are due to roll over to update your details or opt out.",
+const state = {
+  firstName: "",
+  lastName: "",
+  phone: "",
+  dateOfBirth: "",
+  adress: "",
+  personGender: "Male",
+  email: "",
+  isEmpty: true,
 };
-const tableHeaders = [
-  {
-    title: "Unlimited zoo entry",
-  },
-  {
-    title: "Exclusive Benefits",
-  },
-  {
-    title: "Membership Prices",
-  },
-  {
-    title: "Exclusive discounts",
-  },
-  {
-    title: "Support our zoos to love and care for our animals",
-  },
-];
-const unlimitedList = [
-  {
-    title:
-      "Entry to Melbourne Zoo, Healesville Sanctuary, Werribee Open Range Zoo and Kyabram Fauna Park every day of the year",
-  },
-  {
-    title: "Express entry at each zoo to skip the queues",
-  },
-  {
-    title:
-      "Free reciprocal entry to Taronga Zoo, Western Plains Zoo, Adelaide Zoo, Monarto Zoo and Perth Zoo",
-  },
-];
 
-const exclusive = [
-  {
-    title: "Kids under 16 join free with an adult membership",
-  },
-  {
-    title: "Member-only events and previews",
-  },
-  {
-    title: "Free subscription to the Zoo News member magazine",
-  },
-  {
-    title: "Access to the Member VIP Zone – online zoo content and activities",
-  },
-];
-const discount = [
-  {
-    title: "10% off zoo animal experiences",
-  },
-  {
-    title: "15% off at zoo and online shops",
-  },
-  {
-    title: "20% off Vjunior family tickets at Village Cinemas",
-  },
-  {
-    title: "20% off The Amazing Baby Company brands",
-  },
-  {
-    title: "20% off Europcar’s Electric, Hybrid and Plug-in Models",
-  },
-];
-const support = [
-  {
-    title: "Get involved with Zoos Victoria's Community Conservation programs",
-  },
-  {
-    title:
-      "Be part of the commitment of fighting wildlife extinction, including the recovery of 27 threatened native species",
-  },
-  {
-    title: "20% off Vjunior family tickets at Village Cinemas",
-  },
-  {
-    title: "20% off The Amazing Baby Company brands",
-  },
-  {
-    title: "20% off Europcar’s Electric, Hybrid and Plug-in Models",
-  },
-];
+const statePersons = reactive({
+  //   adults: ref<Person[]>([{ ...state }, { ...state }, { ...state }, { ...state }, { ...state }]),
+  adults: [{ ...state }, { ...state }, { ...state }, { ...state }, { ...state }],
+  concessions: [{ ...state }, { ...state }, { ...state }, { ...state }, { ...state }],
+  child: [{ ...state }, { ...state }, { ...state }, { ...state }, { ...state }],
+  zooCrew: [{ ...state }, { ...state }, { ...state }, { ...state }, { ...state }],
+  senior: [{ ...state }, { ...state }, { ...state }, { ...state }, { ...state }],
+  supporter: [{ ...state }, { ...state }, { ...state }, { ...state }, { ...state }],
+});
 
-const prices = [
-  {
-    person: "adult",
-    single: "$46.00",
-    unlimited: "$11.50 per month",
-  },
-  {
-    person: "Child (4-15 years)",
-    single: "FREE weekends and holidays*",
-    unlimited: `Children
-FREE everyday`,
-  },
-  {
-    person: "Child (0-3 years)",
-    single: "FREE",
-    unlimited: "FREE",
-  },
-  {
-    person: "Concession** ",
-    single: "$34.50",
-    unlimited: "$8.50 per month",
-  },
-  {
-    person: "Seniors**",
-    single: "$34.50",
-    unlimited: "$8.50 per month",
-  },
-];
+console.log(statePersons.adults[0].firstName);
+const selectedPerson = ref("Male");
+const personList = ["Male", "Female", "Self-described"];
+const selectedPrecesState = useSelectedPrecesState();
 
-const tableRow = [{ title: "Monthly" }, { title: "Yearly" }];
-const tableColumn = [
-  { title: "Adult" },
-  { title: "Child (under 16)" },
-  { title: "Zoo Crew (under 16)" },
-  { title: "Concession" },
-  { title: "Senior" },
-  { title: "Teacher (professional membership)" },
-  { title: "Supporter (Zoo entry not included)" },
-];
+// statePersons.adults.length = selectedPrecesState.value.adult;
+// statePersons.concessions.length = selectedPrecesState.value.concession;
+// statePersons.child.length = selectedPrecesState.value.child;
+// statePersons.zooCrew.length = selectedPrecesState.value.zooCrew;
+// statePersons.senior.length = selectedPrecesState.value.senior;
+// statePersons.supporter.length = selectedPrecesState.value.supporter;
 
-const monthly = [
-  {
-    price: "$11.50",
-  },
-  {
-    price: "Free",
-  },
-  {
-    price: "$4.50",
-  },
-  {
-    price: "$8.50",
-  },
-  {
-    price: "$10.50",
-  },
-  {
-    price: "$8.25",
-  },
-  {
-    price: "$5.00",
-  },
-];
+const tab = ref("Member");
+const items = ["Member", "Details", "Payment", "Confirmation"];
+const text =
+  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
+const count = ref(0);
+const nextTab = () => {
+  count.value = (count.value + 1) % items.length;
+  tab.value = items[count.value];
+  console.log(statePersons.adults);
+};
+const activateormTag = (index: number) => {
+  statePersons.adults[index - 1].isEmpty = !index;
 
-const yarly = [
-  {
-    price: "$11.50",
-  },
-  {
-    price: "Free",
-  },
-  {
-    price: "$4.50",
-  },
-  {
-    price: "$8.50",
-  },
-  {
-    price: "$10.50",
-  },
-  {
-    price: "$8.25",
-  },
-  {
-    price: "$5.00",
-  },
-];
-
-const selected = ref(0);
-
-const person = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  return statePersons.adults[index - 1].isEmpty;
+};
 </script>
 
 <template>
-  <section class="membership">
+  <section class="membership" v-if="memberMain && stateMonth && stateYaer">
     <article class="main_cover">
-      <CardColumn heigth-card="450" :enable-card-slot="true">
+      <CardColumn heigth-card="600" :enable-card-slot="true">
         <v-img
-          :src="membership.imageBgLink"
+          :src="memberMain.imageBgLink"
           class="align-end"
           gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
-          width="100%"
+          :max-height="600"
+          :aspect-ratio="16 / 9"
           cover>
           <template #sources>
-            <source :srcset="membership.imageBgLink" />
+            <source :srcset="memberMain.imageBgLink" />
           </template>
           <v-card-title
             class="text-amber text-center mb-10"
-            v-text="membership.title"></v-card-title>
+            v-text="memberMain.title"></v-card-title>
         </v-img>
       </CardColumn>
     </article>
-    <v-container>
-      <article class="description">
-        <CardColumn
-          v-if="membership"
-          :text-html-card="membership.description"
-          :enable-button="false" />
-      </article>
-      <v-row>
-        <v-col>
-          <article class="table pb-16">
-            <v-table theme="light">
-              <thead class="bg-orange-lighten-5 text-subtitle-2">
-                <tr>
-                  <th></th>
-                  <th></th>
-                  <th class="py-5 text-left font-weight-bold" v-for="(el, i) in tableRow" :key="i">
-                    {{ el.title }}
-                  </th>
-                </tr>
-              </thead>
-              <tbody class="text-subtitle-2">
-                <tr>
-                  <td class="pl-7 py-5">
-                    <v-select v-model="selected" :items="person"></v-select>
-                  </td>
-                  <td class="py-5">Adult</td>
-                  <td class="py-5">{{ stateMonth.adult }}</td>
-                  <td class="py-5">{{ stateYaer.adult }}</td>
-                </tr>
-                <tr>
-                  <td class="pl-7 py-5">
-                    <v-select v-model="selected" :items="person"></v-select>
-                  </td>
-                  <td class="py-5">Child (under 16)</td>
-                  <td class="py-5">{{ stateMonth.childCategoryFirst }}</td>
-                  <td class="py-5">{{ stateYaer.childCategoryFirst }}</td>
-                </tr>
-                <tr>
-                  <td class="pl-7 py-5">
-                    <v-select v-model="selected" :items="person"></v-select>
-                  </td>
-                  <td class="py-5">Zoo Crew (under 16)</td>
-                  <td class="py-5">{{ stateMonth.childCategorySecond }}</td>
-                  <td class="py-5">{{ stateYaer.childCategorySecond }}</td>
-                </tr>
-                <tr>
-                  <td class="pl-7 py-5">
-                    <v-select v-model="selected" :items="person"></v-select>
-                  </td>
-                  <td class="py-5">Concession</td>
-                  <td class="py-5">{{ stateMonth.concession }}</td>
-                  <td class="py-5">{{ stateYaer.concession }}</td>
-                </tr>
-                <tr>
-                  <td class="pl-7 py-5">
-                    <v-select v-model="selected" :items="person"></v-select>
-                  </td>
-                  <td class="py-5">Senior</td>
-                  <td class="py-5">{{ stateMonth.seniors }}</td>
-                  <td class="py-5">{{ stateYaer.seniors }}</td>
-                </tr>
-                <tr>
-                  <td class="pl-7 py-5">
-                    <v-select v-model="selected" :items="person"></v-select>
-                  </td>
-                  <td class="py-5">Teacher (professional membership)</td>
-                  <td class="py-5">{{ stateMonth.teacher }}</td>
-                  <td class="py-5">{{ stateYaer.teacher }}</td>
-                </tr>
-                <tr>
-                  <td class="pl-7 py-5">
-                    <v-select v-model="selected" :items="person"></v-select>
-                  </td>
-                  <td class="py-5">Supporter (Zoo entry not included)</td>
-                  <td class="py-5">{{ stateMonth.supporter }}</td>
-                  <td class="py-5">{{ stateYaer.supporter }}</td>
-                </tr>
-              </tbody>
-            </v-table>
-          </article>
-        </v-col>
-        <v-col class="px-5" cols="4">
-          <article class="order bg-brown-lighten-5">
-            <CardItem
-              class="card_main"
-              image-heigth="100"
-              :image-source="membership.imageBgLink"
-              image-title="Summory" />
-            <h6 class="text-subtitle-1 text-center my-3">Zoos Planet Membership</h6>
-            <v-table>
-              <tbody class="text-subtitle-2">
-                <tr>
-                  <td class="ml-5">1 X Adult</td>
-                  <td class="text-end">$11.50</td>
-                  <td class="d-flex align-center">
-                    <v-icon color="error" icon="mdi-close-thick" size="17px"></v-icon>
-                  </td>
-                </tr>
-              </tbody>
-            </v-table>
-          </article>
-        </v-col>
-      </v-row>
+    <article class="tabs">
+      <v-card color="basil" max-width="700" class="mx-auto">
+        <v-tabs v-model="tab" bg-color="transparent" color="basil" grow>
+          <v-tab v-for="item in items" :key="item" :value="item" :disabled="item !== tab">
+            {{ item }}
+          </v-tab>
+        </v-tabs>
 
-      <v-btn class="px-10 text-subtitle-1 text-white" color="#395A03" variant="flat" size="x-large">
-        Continue with purchase
-        <v-icon :size="30" color="#ffc107" class="ml-3 mb-1">mdi-paw</v-icon>
-      </v-btn>
-    </v-container>
+        <v-window v-model="tab">
+          <v-window-item v-for="item in items" :key="item" :value="item">
+            <v-card color="basil" flat>
+              <v-card-text>{{ text }}</v-card-text>
+            </v-card>
+          </v-window-item>
+        </v-window>
+        <v-card-actions>
+          <v-btn class="mx-auto" color="black" variant="flat" @click="nextTab">Next Step</v-btn>
+        </v-card-actions>
+      </v-card>
+    </article>
+    <article class="by-membership">
+      <v-container>
+        <div class="adults_form" v-if="selectedPrecesState.adult && statePersons.adults">
+          <v-sheet
+            class="bg-orange-lighten-5 pa-5 mb-5"
+            v-for="index in selectedPrecesState.adult"
+            :key="index">
+            <v-list-item prepend-icon="mdi-account" class="text-green-darken-4 pb-0">
+              <template #prepend>
+                <v-icon size="25" class="text-h6 font-weight-bold">mdi-account</v-icon>
+                <v-list-item-title class="px-2 text-subtitle-2 font-weight-bold"
+                  >Adult {{ index }}</v-list-item-title
+                >
+              </template>
+            </v-list-item>
+            <v-card-text
+              >Used for all communication with Zoos Victoria. This is your main contact for your
+              household. You may change the primary member by clicking the icon next to another
+              members' info.</v-card-text
+            >
+            <v-divider class="my-5" :thickness="2"></v-divider>
+            <v-row>
+              <v-col cols="3" class="pl-6">
+                <v-radio-group v-model="statePersons.adults[index - 1].personGender" column>
+                  <v-radio
+                    class="text-subtitle-2 pb-3"
+                    v-for="person in personList"
+                    :key="person"
+                    :label="person"
+                    color="red"
+                    :value="person"></v-radio>
+                </v-radio-group>
+              </v-col>
+              <v-col cols="8">
+                <form class="form_data">
+                  <input hidden name="isEmptiieldtag" :value="activateormTag(index)" />
+                  <v-col>
+                    <v-text-field
+                      v-model="statePersons.adults[index - 1].firstName"
+                      label="First name"></v-text-field>
+                  </v-col>
+                  <v-col>
+                    <v-text-field
+                      v-model="statePersons.adults[index - 1].lastName"
+                      label="Last name"
+                      required></v-text-field>
+                  </v-col>
+
+                  <v-row>
+                    <v-col>
+                      <v-text-field
+                        v-model="statePersons.adults[index - 1].phone"
+                        label="Phone"></v-text-field>
+                    </v-col>
+                    <v-col>
+                      <v-text-field
+                        v-model="statePersons.adults[index - 1].dateOfBirth"
+                        label="Date of birth"
+                        required></v-text-field>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col>
+                      <v-text-field
+                        v-model="statePersons.adults[index - 1].adress"
+                        label="Adress"></v-text-field>
+                    </v-col>
+                  </v-row>
+                  <v-row>
+                    <v-col>
+                      <v-text-field
+                        v-model="statePersons.adults[index - 1].email"
+                        label="Email"></v-text-field>
+                    </v-col>
+                    <v-col>
+                      <v-text-field :counter="10" label="Confirm email" required></v-text-field>
+                    </v-col>
+                  </v-row>
+                </form>
+              </v-col>
+            </v-row>
+          </v-sheet>
+        </div>
+      </v-container>
+      <InfoMembershipTables
+        v-if="memberMain && stateMonth && stateYaer"
+        :membership="memberMain"
+        :state-month="stateMonth"
+        :state-yaer="stateYaer" />
+    </article>
   </section>
 </template>
 
 <style scoped lang="scss">
+.v-card {
+  &-title {
+    font-family: gothic;
+    font-size: 2.5rem;
+  }
+  & h4 {
+    font-family: gothic;
+    font-size: 1.5rem;
+  }
+}
 .membership {
   background-color: #f2f2f2;
   & .main_cover {

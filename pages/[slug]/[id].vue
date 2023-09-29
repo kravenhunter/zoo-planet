@@ -101,41 +101,53 @@ if (route.params.id === "contact") {
 
 <template>
   <div class="wrapper">
+    <InfoDonate
+      v-if="route.params.id === 'donate' && newsMainPageContent"
+      :donate="newsMainPageContent" />
     <InfoAbout
-      v-if="route.params.id === 'about' && eboutData?.length && contacts"
+      v-else-if="route.params.id === 'about' && eboutData?.length && contacts"
       :about-us="eboutData"
       :contacts="contacts" />
     <InfoExtinction
-      v-if="route.params.id === 'extinction' && newsMainPageContent && latestNewsList"
+      v-else-if="route.params.id === 'extinction' && newsMainPageContent && latestNewsList"
       :fighting-main="newsMainPageContent"
       :programs="latestNewsList" />
     <InfoEducation
-      v-if="route.params.id === 'education' && newsMainPageContent && latestNewsList"
+      v-else-if="route.params.id === 'education' && newsMainPageContent && latestNewsList"
       :education="newsMainPageContent"
       :programs="latestNewsList" />
     <InfoPlain
-      v-if="route.params.id === 'plain' && planTable && newsMainPageContent"
+      v-else-if="route.params.id === 'plain' && planTable && newsMainPageContent"
       :plain="newsMainPageContent"
       :tables="planTable" />
     <InfoNews
-      v-if="route.params.id === 'news' && newsMainPageContent && latestNewsList"
+      v-else-if="route.params.id === 'news' && newsMainPageContent && latestNewsList"
       :main-content="newsMainPageContent"
       :news="latestNewsList" />
     <InfoSpecies
-      v-if="route.params.id === 'species' && newsMainPageContent"
-      :species="newsMainPageContent" />
-    <InfoContactUs v-if="route.params.id === 'contact'" />
+      v-else-if="route.params.id === 'species' && newsMainPageContent && specieList"
+      :species="newsMainPageContent"
+      :specie-list="specieList" />
+    <InfoContactUs v-else-if="route.params.id === 'contact' && contacts" :contact-main="contacts" />
     <InfoTiket
-      v-if="route.params.id === 'ticket' && newsMainPageContent && singleState && unlimitedSTate"
+      v-else-if="
+        route.params.id === 'ticket' && newsMainPageContent && singleState && unlimitedSTate
+      "
       :ticket-main="newsMainPageContent"
       :single-state="singleState"
       :unlimited-s-tate="unlimitedSTate" />
-    <InfoMembership
-      v-if="route.params.id === 'membership' && newsMainPageContent && stateMonth && stateYaer"
-      :membership="newsMainPageContent"
+    <InfoMember
+      v-else-if="route.params.id === 'membership' && newsMainPageContent && stateMonth && stateYaer"
+      :member-main="newsMainPageContent"
       :state-month="stateMonth"
       :state-yaer="stateYaer" />
-    <TestComponent v-if="route.params.id === 'test'" />
+    <!-- <InfoMembership
+      v-else-if="route.params.id === 'membership' && newsMainPageContent && stateMonth && stateYaer"
+      :member-main="newsMainPageContent"
+      :state-month="stateMonth"
+      :state-yaer="stateYaer" /> -->
+    <TestComponent v-else-if="route.params.id === 'test'" />
+    <ErrorResult v-else />
   </div>
 </template>
 

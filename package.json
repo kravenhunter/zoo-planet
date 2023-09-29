@@ -17,6 +17,7 @@
     "@nuxtjs/supabase": "^1.1.0",
     "@pinia/nuxt": "^0.4.11",
     "@prisma/client": "^5.2.0",
+    "@stripe/stripe-js": "^2.1.6",
     "@tiptap/extension-bullet-list": "^2.1.8",
     "@tiptap/extension-image": "^2.1.8",
     "@tiptap/extension-list-item": "^2.1.8",
@@ -32,6 +33,7 @@
     "pinia": "^2.1.4",
     "prisma": "^5.2.0",
     "sass": "^1.64.1",
+    "stripe": "^13.7.0",
     "vue-uuid": "^3.0.0",
     "vuetify": "^3.3.15"
   },

@@ -2,12 +2,101 @@ import { useRuntimeConfig, useState } from "#imports";
 
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import type { IAlert } from "types/IAlert";
+import type { IPerson, ISelectedPrices } from "types/ITypes";
+
+interface IFormState {
+  adults: IPerson[];
+  concessions: IPerson[];
+  child: IPerson[];
+  zooCrew: IPerson[];
+  teacher: IPerson[];
+  senior: IPerson[];
+  supporter: IPerson[];
+}
 
 // Глобальные переменные состояние
+const stateDataForm = {
+  firstName: "",
+  lastName: "",
+  phone: "",
+  dateOfBirth: "",
+  adress: "",
+  personGender: "Male",
+  email: "",
+  isEmpty: true,
+};
 
+export const useCurrentMemberTab = () => useState<string>("currentTab", () => "Member");
+export const useTotalPrice = () => useState<number>("totalPrice", () => 0);
+export const useMemberShipDataFormState = () =>
+  useState<IFormState>("formstate", () => {
+    return {
+      adults: [
+        { ...stateDataForm },
+        { ...stateDataForm },
+        { ...stateDataForm },
+        { ...stateDataForm },
+        { ...stateDataForm },
+      ],
+      concessions: [
+        { ...stateDataForm },
+        { ...stateDataForm },
+        { ...stateDataForm },
+        { ...stateDataForm },
+        { ...stateDataForm },
+      ],
+      child: [
+        { ...stateDataForm },
+        { ...stateDataForm },
+        { ...stateDataForm },
+        { ...stateDataForm },
+        { ...stateDataForm },
+      ],
+      zooCrew: [
+        { ...stateDataForm },
+        { ...stateDataForm },
+        { ...stateDataForm },
+        { ...stateDataForm },
+        { ...stateDataForm },
+      ],
+      senior: [
+        { ...stateDataForm },
+        { ...stateDataForm },
+        { ...stateDataForm },
+        { ...stateDataForm },
+        { ...stateDataForm },
+      ],
+      teacher: [
+        { ...stateDataForm },
+        { ...stateDataForm },
+        { ...stateDataForm },
+        { ...stateDataForm },
+        { ...stateDataForm },
+      ],
+      supporter: [
+        { ...stateDataForm },
+        { ...stateDataForm },
+        { ...stateDataForm },
+        { ...stateDataForm },
+        { ...stateDataForm },
+      ],
+    };
+  });
+export const useSelectedPrecesState = () =>
+  useState<ISelectedPrices>("prices", () => {
+    return {
+      adult: 0,
+      child: 0,
+      zooCrew: 0,
+      concession: 0,
+      senior: 0,
+      teacher: 0,
+      supporter: 0,
+    };
+  });
 export const useCounter = () => useState<number>("counter", () => 0);
 export const usePrevieLink = () => useState<string>("preview", () => "");
-export const useColor = () => useState<string>("color", () => "pink");
+
 export const useStoreState = () =>
   useState("supabase", () => {
     const config = useRuntimeConfig();
@@ -83,3 +172,7 @@ export function useImageStorage() {
 
   return instance;
 }
+export const useIsAuth = () =>
+  useState<string | null>("isAuth", () => {
+    return localStorage.getItem("sb-epjfkkmrnhyxzevpvbjf-auth-token");
+  });

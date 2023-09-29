@@ -1,7 +1,13 @@
 <script setup lang="ts">
-import type { ContentPages } from "@prisma/client";
+import type { ContentPages, Specie } from "@prisma/client";
 
-defineProps<{ species: ContentPages }>();
+interface Props {
+  species: ContentPages;
+  specieList: Specie[];
+}
+
+defineProps<Props>();
+
 const speciesTitle = {
   title: "Local threatened species",
   sourceTitle: "/images/35f9ab0c1f1433fd3c531fc261b36ae2e0075dd0.webp",
@@ -44,24 +50,25 @@ const speciesList = [
 <template>
   <section class="species">
     <article class="main_cover">
-      <CardItem
-        image-heigth="600"
-        class="card_main"
-        colorbg="#f2f2f2"
-        :image-source="speciesTitle.sourceTitle"
-        :image-title="speciesTitle.title"
-        title-align="text-center pb-10"
-        font-title-size="2rem" />
+      <CardColumn heigth-card="600" :enable-card-slot="true">
+        <v-img
+          :src="species.imageBgLink"
+          class="align-end"
+          gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
+          :max-height="600"
+          :aspect-ratio="16 / 9"
+          cover>
+          <template #sources>
+            <source :srcset="species.imageBgLink!" />
+          </template>
+          <v-card-title class="text-amber text-center mb-10" v-text="species.title"></v-card-title>
+        </v-img>
+      </CardColumn>
     </article>
 
     <article class="block_info">
       <v-container>
-        <CardItem colorbg="#f2f2f2" :text-card="speciesTitle.description" :text-slot="true">
-          <v-card-text>
-            <h1 class="text-h5 pb-5 text-center">{{ speciesTitle.title }}</h1>
-            {{ speciesTitle.description }}
-          </v-card-text>
-        </CardItem>
+        <CardColumn :text-html-card="species.description" />
       </v-container>
     </article>
     <article class="galary_list">
@@ -70,9 +77,19 @@ const speciesList = [
           <v-icon icon="mdi-menu-down" size="large"></v-icon> SCROLL DOWN TO EXPLORE
         </h4>
         <v-row>
-          <v-col cols="6" v-for="(el, i) in speciesList" :key="i">
+          <v-col cols="6" v-for="(el, i) in specieList" :key="i">
             <NuxtLink :to="{ path: `/article/${el.id}` }">
-              <CardItem image-heigth="300" :image-source="el.sourceTitle" :image-title="el.title" />
+              <v-img
+                class="align-end"
+                :src="el.imagePreviewLink!"
+                max-height="338px"
+                max-width="500px"
+                gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)">
+                <template #sources>
+                  <source :srcset="el.imagePreviewLink!" />
+                </template>
+                <h4 class="text-amber text-center mb-1 ml-10" v-text="el.title"></h4>
+              </v-img>
             </NuxtLink>
           </v-col>
         </v-row>
@@ -96,8 +113,18 @@ const speciesList = [
 </template>
 
 <style scoped lang="scss">
+.v-card {
+  &-title {
+    font-family: gothic;
+    font-size: 2.5rem;
+  }
+}
 .species {
   background-color: #f2f2f2;
+  & h4 {
+    font-family: gothic;
+    font-size: 1.5rem;
+  }
   & .main_cover {
     max-height: 800px;
   }

@@ -65,12 +65,13 @@ FREE everyday`,
 <template>
   <section class="tikets">
     <article class="main_cover">
-      <CardColumn heigth-card="450" :enable-card-slot="true">
+      <CardColumn heigth-card="600" :enable-card-slot="true">
         <v-img
           :src="ticketMain.imageBgLink"
           class="align-end"
           gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
-          width="100%"
+          :max-height="600"
+          :aspect-ratio="16 / 9"
           cover>
           <template #sources>
             <source :srcset="ticketMain.imageBgLink" />
@@ -87,12 +88,6 @@ FREE everyday`,
           v-if="ticketMain"
           :text-html-card="ticketMain.description"
           :enable-button="false" />
-        <!-- <CardItem colorbg="#f2f2f2" :text-card="book.text1" title-align="pb-10" :text-slot="true">
-          <v-card-text>
-            <h1 class="text-subtitle-1 font-weight-bold">{{ book.subtitle1 }}</h1>
-            <p class="text-subtitle-2">{{ book.text1 }}</p>
-          </v-card-text>
-        </CardItem> -->
       </article>
       <article class="table pb-16">
         <v-table theme="light">
@@ -117,7 +112,6 @@ FREE everyday`,
                   variant="flat"
                   size="x-large"
                   append-icon="mdi-paw"
-                  router
                   to="/info/help">
                   Buy ticket
                 </v-btn>
@@ -129,7 +123,6 @@ FREE everyday`,
                   variant="flat"
                   size="x-large"
                   append-icon="mdi-paw"
-                  router
                   to="/info/help">
                   Become a Zoo Member
                 </v-btn>
@@ -173,6 +166,16 @@ FREE everyday`,
 </template>
 
 <style scoped lang="scss">
+.v-card {
+  &-title {
+    font-family: gothic;
+    font-size: 2.5rem;
+  }
+  & h4 {
+    font-family: gothic;
+    font-size: 1.5rem;
+  }
+}
 .tikets {
   background-color: #f2f2f2;
   & .main_cover {

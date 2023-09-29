@@ -20,80 +20,6 @@ const lastNews = ref<Post[]>();
 newsMain.value = mainPages.value?.find((el) => el.subTitle === "News");
 lastNews.value = postlist.value?.filter((el) => el.category === "News");
 
-const data = [
-  {
-    title: "Our animals",
-    subtitle: "",
-    text: "All of our animals are gently handled from the moment they arrive at the shop and are even put on a “probationary” period of 2-4 weeks prior to customer availability.",
-  },
-  {
-    title: "latest news",
-    subtitle: "",
-    text: "All of our animals are gently handled from the moment they arrive at the shop and are even put on a “probationary” period of 2-4 weeks prior to customer availability.",
-  },
-];
-const education = [
-  {
-    source: "",
-    title: "education",
-    subtitle: "",
-    text: `The Fighting Extinction Schools Program engages students and teachers in real-world learning for wildlife. Become a Fighting Extinction School by completing a curriculum-linked sequence of learning with your students and sharing with Zoos Victoria online. Create your own Fighting Extinction Schools journey by choosing one, or all the opportunities below including; school excursions, digital programs, education resources, teacher professional development, and more.`,
-  },
-  {
-    source: "/images/our_programs.jpg",
-    title: "educaour programstion",
-    subtitle: "",
-    text: "Get the most up-to-date information and strategies for teaching real-world content that you can use straight away. Available exclusively for Zoos Victoria Teacher Members.",
-  },
-  {
-    source: "/images/tranings.jpg",
-    title: "tranings & courses",
-    subtitle: "",
-    text: "Get the most up-to-date information and strategies for teaching real-world content that you can use straight away. Available exclusively for Zoos Victoria Teacher Members.",
-  },
-  {
-    source: "/images/comunity.jpg",
-    title: "comunity education",
-    subtitle: "",
-    text: "Get the most up-to-date information and strategies for teaching real-world content that you can use straight away. Available exclusively for Zoos Victoria Teacher Members.",
-  },
-  {
-    source: "/images/development.jpg",
-    title: "profeccional development",
-    subtitle: "",
-    text: "Get the most up-to-date information and strategies for teaching real-world content that you can use straight away. Available exclusively for Zoos Victoria Teacher Members.",
-  },
-  {
-    source: "/images/learning.jpg",
-    title: "digital learning",
-    subtitle: "",
-    text: "Get the most up-to-date information and strategies for teaching real-world content that you can use straight away. Available exclusively for Zoos Victoria Teacher Members.",
-  },
-  {
-    source: "/images/science.jpg",
-    title: "institute of science",
-    subtitle: "",
-    text: "Get the most up-to-date information and strategies for teaching real-world content that you can use straight away. Available exclusively for Zoos Victoria Teacher Members.",
-  },
-  {
-    source: "/images/rino.jpg",
-    title: "A baby rino arrived an our  Zoo",
-    subtitle: "",
-    text: "Get the most up-to-date information and strategies for teaching real-world content that you can use straight away. Available exclusively for Zoos Victoria Teacher Members.",
-  },
-  {
-    source: "/images/monkey.jpg",
-    title: "insight into the wild day-today life of the zoo planet in the ... ",
-    subtitle: "",
-    text: "Get the most up-to-date information and strategies for teaching real-world content that you can use straight away. Available exclusively for Zoos Victoria Teacher Members.",
-  },
-  {
-    source: "/images/dolphins.jpg",
-    title: "swim with our friends dolphins",
-    subtitle: "",
-    text: "Get the most up-to-date information and strategies for teaching real-world content that you can use straight away. Available exclusively for Zoos Victoria Teacher Members.",
-  },
-];
 const conversationIcons = [
   {
     iconName: "majesticons:earth-sphere",
@@ -180,75 +106,96 @@ const bgImages = [
 <template>
   <div class="body">
     <section class="offer">
-      <Image :source="bgImages[0].imageBgLink" :alt="bgImages[0].title" class="image_offer">
-        <article class="offer_block">
-          <Card class="align-self-center" :enable-slot="true">
-            <h1 class="text-center text-white">
-              JORNEY THOUGH A <br />
-              WORLD OF WILDLIFE
-            </h1>
-            <v-row no-gutters class="justify-space-between">
-              <!--               <v-btn class="px-10 text-h5" :height="74" color="#FFC107" variant="outlined">
-                <span> Plan your visit </span>
-                <v-icon :size="30" class="ml-2">mdi-paw</v-icon>
-              </v-btn> -->
-              <v-btn
-                class="px-10 text-h5"
-                color="#ffc107"
-                variant="outlined"
-                :height="74"
-                append-icon="mdi-paw">
-                Plan your visit
-              </v-btn>
-              <v-item-group class="align-self-end">
-                <v-item v-for="n in 4" :key="n">
-                  <v-btn color="#395A03" height="40" variant="flat" width="40">0{{ n }}</v-btn>
-                </v-item>
-              </v-item-group>
-            </v-row>
-          </Card>
+      <CardColumn :enable-card-slot="true">
+        <v-img
+          :src="bgImages[0].imageBgLink"
+          max-height="100vh"
+          :aspect-ratio="16 / 9"
+          gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.7)"
+          cover>
+          <template #sources>
+            <source :srcset="bgImages[0].imageBgLink" />
+          </template>
+          <article class="offer_block">
+            <Card class="align-self-center" :enable-slot="true">
+              <h1 class="text-center text-white">
+                JORNEY THOUGH A <br />
+                WORLD OF WILDLIFE
+              </h1>
 
-          <article class="offer_discover">
-            <v-card color="transparent">
-              <div class="panda_card">
-                <v-avatar class="ma-3 panda_img" size="181" rounded="50">
-                  <v-img :src="bgImages[5].imageBgLink" :alt="bgImages[5].title" cover></v-img>
-                </v-avatar>
-                <div class="panda_hourse">
-                  <div class="clock">
-                    <UiElementsIcons
-                      icon-name="svg-spinners:clock"
-                      color-icon="white"
-                      size-width="50"
-                      size-heigth="50" />
-                  </div>
-
-                  <div class="hourse_deescription">
-                    <h6>TODAY’S ZOO HOURS</h6>
-
-                    <p class="font-weight-medium">9:30am - 5:30pm</p>
-                  </div>
-                </div>
+              <div class="pain_your_visit">
+                <v-btn
+                  class="px-10 text-h5"
+                  color="#ffc107"
+                  variant="outlined"
+                  :height="74"
+                  append-icon="mdi-paw">
+                  Plan your visit
+                </v-btn>
+                <v-item-group class="pagination align-self-end">
+                  <v-item v-for="n in 4" :key="n">
+                    <v-btn color="#395A03" height="40" variant="flat" width="40">0{{ n }}</v-btn>
+                  </v-item>
+                </v-item-group>
               </div>
-            </v-card>
+            </Card>
+            <article class="offer_test d-flex">
+              <v-row class="justify-center">
+                <v-col cols="12" lg="5" md="12" class="d-flex justify-center">
+                  <v-card color="transparent" max-width="533">
+                    <div class="panda_card">
+                      <v-avatar class="ma-3 panda_img" size="181" rounded="50">
+                        <v-img
+                          :src="bgImages[5].imageBgLink"
+                          :alt="bgImages[5].title"
+                          cover></v-img>
+                      </v-avatar>
+                      <div class="panda_hourse">
+                        <div class="clock">
+                          <UiElementsIcons
+                            icon-name="svg-spinners:clock"
+                            color-icon="white"
+                            size-width="50"
+                            size-heigth="50" />
+                        </div>
 
-            <v-row class="ml-5 whats_on">
-              <div class="rabbit_block" v-for="n in 2" :key="n">
-                <div class="rabbit">
-                  <v-avatar class="mx-3 mb-4" size="50" rounded="0">
-                    <v-img src="/images/rabbit_in_hat.svg"></v-img>
-                  </v-avatar>
-                </div>
+                        <div class="hourse_deescription">
+                          <h6>TODAY’S ZOO HOURS</h6>
 
-                <div class="description">
-                  <h6>What’s On</h6>
-                  <p class="font-weight-medium">Decover the animals of Zoo Planet</p>
-                </div>
-              </div>
-            </v-row>
+                          <p class="text-subtitle-1 font-weight-medium">9:30am - 5:30pm</p>
+                        </div>
+                      </div>
+                    </div>
+                  </v-card>
+                </v-col>
+
+                <v-col
+                  cols="12"
+                  lg="3"
+                  md="12"
+                  v-for="n in 2"
+                  :key="n"
+                  class="d-flex align-center justify-center">
+                  <div class="rabbit_block">
+                    <div class="rabbit">
+                      <v-avatar class="mx-3 mb-4" size="50" rounded="0">
+                        <v-img src="/images/rabbit_in_hat.svg"></v-img>
+                      </v-avatar>
+                    </div>
+
+                    <div class="description">
+                      <h6>What’s On</h6>
+                      <p class="text-subtitle-1 font-weight-medium">
+                        Decover the animals of Zoo Planet
+                      </p>
+                    </div>
+                  </div>
+                </v-col>
+              </v-row>
+            </article>
           </article>
-        </article>
-      </Image>
+        </v-img>
+      </CardColumn>
     </section>
 
     <section class="galary_wrapper">
@@ -266,6 +213,7 @@ const bgImages = [
                 color="#ffc107"
                 variant="outlined"
                 size="large"
+                to="/info/species"
                 append-icon="mdi-paw">
                 <span>See all animals</span>
               </v-btn>
@@ -371,6 +319,13 @@ const bgImages = [
 </template>
 
 <style scoped lang="scss">
+.pain_your_visit {
+  display: flex;
+  justify-content: space-between;
+  @media (max-width: 1280px) {
+    display: none;
+  }
+}
 .conversation {
   height: 100%;
   display: grid;
@@ -460,12 +415,12 @@ const bgImages = [
 .galary_wrapper {
   background-color: #07060b;
   & .galary {
-    padding-top: 50px;
+    padding: 50px 20px;
     display: grid;
     grid-template-columns: repeat(2, minmax(auto, 600px));
     justify-content: center;
     column-gap: 20px;
-    & .galary_first {
+    &_first {
       display: grid;
       grid-template-columns: 1fr 1fr;
       justify-content: center;
@@ -478,30 +433,71 @@ const bgImages = [
         grid-column: 1;
         grid-row: 2 / 4;
       }
-      /*   & .lynx {
-    grid-column: 2;
-    grid-row: 2;
-  }
-  & .opossums {
-    grid-column: 2;
-    grid-row: 3;
-  } */
     }
-    & .galary_second {
+    &_second {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 15px;
       & .red_bear {
         grid-column: span 2;
       }
-      /*   & .coala {
-          grid-column: 1;
-          grid-row: 3;
-        }
-        & .bober {
-          grid-column: 2;
-          grid-row: 3;
-        } */
+    }
+    @media (max-width: 1280px) {
+      display: grid;
+      justify-content: center;
+      grid-template-columns: repeat(1, minmax(auto, 600px));
+    }
+    @media (max-width: 600px) {
+      display: grid;
+      justify-content: center;
+      grid-template-columns: repeat(1, minmax(auto, 600px));
+    }
+  }
+}
+
+.offer_test {
+  & .panda_card {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 2fr;
+    align-content: start;
+    align-items: center;
+    & .panda_img {
+      grid-column: 1 /3;
+      grid-row: 1;
+      z-index: 15;
+    }
+
+    & .panda_hourse {
+      grid-column: 2 / -1;
+      grid-row: 1;
+
+      padding: 20px 10px 40px 100px;
+      z-index: 1;
+      background-color: #395a03;
+      display: flex;
+
+      & p {
+        margin-left: 15px;
+      }
+      & .clock {
+        align-self: flex-end;
+      }
+    }
+  }
+  & .rabbit_block {
+    display: flex;
+    padding: 10px 40px 10px 10px;
+    background-color: #ffffff;
+
+    & p {
+      color: black;
+    }
+    & .description {
+      align-self: center;
+    }
+    & .rabbit {
+      align-self: flex-end;
     }
   }
 }

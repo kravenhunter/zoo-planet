@@ -3,6 +3,7 @@ import { definePageMeta } from "#imports";
 
 definePageMeta({
   layout: "admin-layout",
+  middleware: ["auth"],
 });
 </script>
 

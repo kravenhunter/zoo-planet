@@ -17,12 +17,13 @@ const extinction = {
 <template>
   <section class="extinction">
     <article class="card">
-      <CardColumn heigth-card="450" :enable-card-slot="true">
+      <CardColumn :enable-card-slot="true">
         <v-img
           :src="fightingMain.imageBgLink"
           class="align-end"
           gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
-          width="100%"
+          :max-height="600"
+          :aspect-ratio="16 / 9"
           cover>
           <template #sources>
             <source :srcset="fightingMain.imageBgLink" />
@@ -41,6 +42,7 @@ const extinction = {
       </v-container>
       <v-container v-if="programs">
         <CardInline
+          class="getting_lead_inline"
           max-width-card="1200px"
           class-card="pa-3 mb-16"
           :title-card="programs[0].title"
@@ -52,6 +54,16 @@ const extinction = {
           image-heigth="350px"
           image-cols-size="6"
           :enable-button="false" />
+        <v-sheet max-width="700px" class="getting_lead_colemn mx-auto mb-5">
+          <CardColumn
+            :title-card="programs[0].title"
+            :image-source="programs[0].imagePreviewLink!"
+            class-title="text-green-darken-4 text center"
+            :text-card="programs[0].description"
+            class-text="text-center text-black"
+            font-title-size="2rem"
+            :enable-button="false" />
+        </v-sheet>
       </v-container>
       <article class="bg-black pa-16">
         <v-row class="bg-black">
@@ -90,38 +102,50 @@ const extinction = {
             class-text="text-center text-black"
             font-title-size="2rem"
             :enable-button="false" />
+
           <v-row align="start">
-            <v-col cols="8">
-              <CardColumn heigth-card="475" :enable-card-slot="true">
-                <v-img
-                  :src="programs[1].imagePreviewLink!"
-                  class="align-end"
-                  gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
-                  :aspect-ratio="4 / 3"
-                  cover>
-                  <template #sources>
-                    <source :srcset="programs[1].imageBgLink" />
-                  </template>
-                  <h4 class="text-amber mb-10 ml-10" v-text="programs[1].title"></h4>
-                </v-img>
-              </CardColumn>
+            <v-col cols="12" lg="8">
+              <NuxtLink :to="{ path: `/news/${programs[1].id}` }">
+                <!-- <CardInline
+            max-width-card="475"
+            :image-source="programs[1].imagePreviewLink!"
+            image-width="100%"
+            image-heigth="350px"
+            image-cols-size="12"
+            :enable-button="false" /> -->
+                <CardColumn heigth-card="475" :enable-card-slot="true">
+                  <v-img
+                    :src="programs[1].imagePreviewLink!"
+                    class="align-end"
+                    gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
+                    :aspect-ratio="4 / 3"
+                    cover>
+                    <template #sources>
+                      <source :srcset="programs[1].imageBgLink" />
+                    </template>
+                    <h4 class="text-amber mb-10 ml-10" v-text="programs[1].title"></h4>
+                  </v-img>
+                </CardColumn>
+              </NuxtLink>
             </v-col>
-            <v-col cols="4">
+            <v-col cols="12" lg="4">
               <v-row>
-                <v-col cols="12" v-for="el in programs.slice(2, 4)" :key="el.id">
-                  <CardColumn v-if="programs.length" heigth-card="225" :enable-card-slot="true">
-                    <v-img
-                      :src="el.imagePreviewLink!"
-                      class="align-end"
-                      gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
-                      :aspect-ratio="4 / 3"
-                      cover>
-                      <template #sources>
-                        <source :srcset="el.imageBgLink" />
-                      </template>
-                      <p class="small_title text-amber mb-2 ml-10" v-text="programs[1].title"></p>
-                    </v-img>
-                  </CardColumn>
+                <v-col cols="6" lg="12" sm="12" v-for="el in programs.slice(2, 4)" :key="el.id">
+                  <NuxtLink :to="{ path: `/news/${el.id}` }">
+                    <CardColumn v-if="programs.length" heigth-card="225" :enable-card-slot="true">
+                      <v-img
+                        :src="el.imagePreviewLink!"
+                        class="align-end"
+                        gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
+                        :aspect-ratio="4 / 3"
+                        cover>
+                        <template #sources>
+                          <source :srcset="el.imageBgLink" />
+                        </template>
+                        <p class="small_title text-amber mb-2 ml-10" v-text="programs[1].title"></p>
+                      </v-img>
+                    </CardColumn>
+                  </NuxtLink>
                 </v-col>
               </v-row>
             </v-col>
@@ -142,34 +166,38 @@ const extinction = {
                 :enable-button="false" />
             </v-col>
             <v-col cols="6" v-for="el in programs.slice(2, 4)" :key="el.id">
-              <CardColumn max-width-card="600" class="mx-auto" :enable-card-slot="true">
-                <v-img
-                  :src="el.imagePreviewLink!"
-                  class="align-end"
-                  gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
-                  :aspect-ratio="4 / 3"
-                  cover>
-                  <template #sources>
-                    <source :srcset="el.imagePreviewLink!" />
-                  </template>
-                  <h4 class="text-amber mb-10 ml-10" v-text="el.title"></h4>
-                </v-img>
-              </CardColumn>
+              <NuxtLink :to="{ path: `/news/${el.id}` }">
+                <CardColumn max-width-card="600" class="mx-auto" :enable-card-slot="true">
+                  <v-img
+                    :src="el.imagePreviewLink!"
+                    class="align-end"
+                    gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
+                    :aspect-ratio="4 / 3"
+                    cover>
+                    <template #sources>
+                      <source :srcset="el.imagePreviewLink!" />
+                    </template>
+                    <h4 class="text-amber mb-10 ml-10" v-text="el.title"></h4>
+                  </v-img>
+                </CardColumn>
+              </NuxtLink>
             </v-col>
             <v-col cols="3" v-for="el in programs.slice(2, 6)" :key="el.id">
-              <CardColumn max-width-card="600" class="mx-auto" :enable-card-slot="true">
-                <v-img
-                  :src="el.imagePreviewLink!"
-                  class="align-end"
-                  gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
-                  :aspect-ratio="4 / 3"
-                  cover>
-                  <template #sources>
-                    <source :srcset="el.imagePreviewLink!" />
-                  </template>
-                  <p class="small_title text-amber ml-10" v-text="el.title"></p>
-                </v-img>
-              </CardColumn>
+              <NuxtLink :to="{ path: `/news/${el.id}` }">
+                <CardColumn max-width-card="600" class="mx-auto" :enable-card-slot="true">
+                  <v-img
+                    :src="el.imagePreviewLink!"
+                    class="align-end"
+                    gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
+                    :aspect-ratio="4 / 3"
+                    cover>
+                    <template #sources>
+                      <source :srcset="el.imagePreviewLink!" />
+                    </template>
+                    <p class="small_title text-amber ml-10" v-text="el.title"></p>
+                  </v-img>
+                </CardColumn>
+              </NuxtLink>
             </v-col>
           </v-row>
         </v-container>
@@ -212,12 +240,18 @@ const extinction = {
 .card {
   display: grid;
   background-color: var(--color-grey);
+  & .getting_lead_colemn {
+    display: none;
+  }
+  @media (max-width: 1280px) {
+    & .getting_lead_inline {
+      display: none;
+    }
+    & .getting_lead_colemn {
+      display: block;
+    }
+  }
 
-  /*   display: grid;
-  grid-template-columns: repeat(2, auto);
-  justify-content: center;
-  font-size: 1rem;
-  gap: 15px; */
   &_main {
     max-height: 50vh;
   }

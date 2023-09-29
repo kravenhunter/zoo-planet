@@ -17,25 +17,22 @@ contactPage.value?.length && (contacts.value = contactPage.value[0]);
 
 <template>
   <div v-if="contactData">
-    <v-container>
-      <v-col>
-        <v-list lines="two" class="bg-grey-darken-4">
-          <v-list-subheader class="text-h6 text-white" title="Content Page"></v-list-subheader>
-          <v-list-item>
-            <CardInline
-              max-width-card="1200px"
-              class-card="bg-grey-darken-4"
-              :title-card="contactData.title"
-              class-title="text-amber"
-              :text-card="contactData.description"
-              :image-source="contactData.imageBgLink"
-              image-width="300px"
-              image-heigth="200px"
-              :enable-button="false" />
-          </v-list-item>
-        </v-list>
+    <v-row>
+      <v-col cols="12">
+        <CardInline
+          max-width-card="1200px"
+          class-card="bg-grey-darken-4 mx-auto"
+          :title-card="contactData.title"
+          class-title="text-amber text-center"
+          :text-card="contactData.description"
+          :image-source="contactData.imagePreviewLink!"
+          image-width="400px"
+          image-heigth="300px"
+          image-cols-size="4"
+          content-cols-sieze="8"
+          :enable-button="false" />
       </v-col>
-    </v-container>
+    </v-row>
     <v-row>
       <v-col cols="12">
         <GuardContactEdit v-if="contactData" :contac-table="contactData" />

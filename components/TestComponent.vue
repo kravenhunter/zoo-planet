@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref, useFetch } from "#imports";
+import { onMounted, reactive, ref, useCookie, useFetch } from "#imports";
 import { compressToBestSize } from "@/composables/compressFile";
 import { useImageStorage } from "@/composables/states";
 import type { Session } from "@supabase/supabase-js";
 import Compressor from "compressorjs";
 
-/* const client = useSupabaseAuthClient() */
-// const client = useSupabaseClient()
+// import { type H3Event } from "h3";
 
 const supabaseStorage = useImageStorage();
 const { data } = supabaseStorage.storage
@@ -28,7 +27,7 @@ const passwordLogin = ref("sup@b@se2023");
 const titleResult = ref("");
 const iconResult = ref("");
 const colorIcon = ref("");
-const sessionData = ref<Session | null>(null);
+const sessionData = ref<Session | null>();
 const accessToken = ref();
 const dialogRegister = ref(false);
 const dialogLogIn = ref(false);
@@ -253,6 +252,12 @@ const logIn = async () => {
     if (error) {
       throw error;
     }
+    console.log(data.session);
+    const createSession = useCookie<string | null>("supabase-auth", {
+      default: () => null,
+      watch: "shallow",
+    });
+    createSession.value = JSON.stringify(data.session);
 
     titleResult.value = "Success";
     iconResult.value = "mdi-check-circle-outline";
@@ -265,13 +270,23 @@ const logIn = async () => {
     dialogLogIn.value = !dialogLogIn.value;
   }
 };
-
-const logOut = async () => {
+const text = () => {
+  const delCookie = useCookie("supabase-auth");
+  console.log(delCookie.value);
+  delCookie.value = null;
+  console.log(delCookie.value);
+};
+const logOut = async (event: Event) => {
   try {
     const { error } = await supabaseStorage.auth.signOut();
     if (error) {
       throw error;
     }
+    const delCookie = useCookie("supabase-auth");
+
+    console.log(delCookie.value);
+    delCookie.value = null;
+    console.log(delCookie.value);
     titleResult.value = "Success";
     iconResult.value = "mdi-check-circle-outline";
     colorIcon.value = "success";
@@ -285,17 +300,44 @@ const logOut = async () => {
     dialogRegister.value = !dialogRegister.value;
   }
 };
-const getAuth = async () => {
-  await supabaseStorage?.auth.getSession().then(({ data: { session } }) => {
-    sessionData.value = session;
-  });
+const checkAuth = async () => {
+  try {
+    console.log("Get Auth");
+    const getSession = useCookie("supabase-auth");
+    const getlocalData = localStorage.getItem("sb-epjfkkmrnhyxzevpvbjf-auth-token");
 
-  supabaseStorage.auth.onAuthStateChange(async () => {
-    await supabaseStorage?.auth.getSession().then(({ data: { session } }) => {
-      sessionData.value = session;
+    const getData = getlocalData && JSON.parse(getlocalData);
+    getSession.value = getlocalData;
+    // const result = await supabaseStorage.auth.onAuthStateChange(async (user) => {
+    //   console.log(user);
+    //   await supabaseStorage?.auth.getSession().then(({ data: { session } }) => {
+    //     console.log(session);
+    //     sessionData.value = session;
+    //   });
+    // });
+    const { data, error } = await supabaseStorage.auth.getSession();
+
+    if (error) {
+      throw error;
+    }
+    console.log(getSession.value);
+    console.log(getData);
+    console.log(data);
+  } catch (error) {
+    console.log(error);
+  }
+};
+const getAuth = async () => {
+  console.log("Get Auth");
+  const { data, error } = await supabaseStorage.auth.getSession();
+  console.log(data.session);
+
+  supabaseStorage.auth.onAuthStateChange(async (user) => {
+    console.log(user);
+    await supabaseStorage.auth.getSession().then(({ data: { session } }) => {
+      console.log(session);
     });
   });
-  console.log(sessionData.value);
 };
 
 const addPost = async () => {
@@ -361,13 +403,16 @@ const clean = (event: Event) => {
 };
 const link = "https://ik.imagekit.io/aap8orwyc";
 const img = "Humboldt_unsplash_5VfZXgBTTlw.jpg";
-onMounted(() => {
-  getAuth();
+onMounted(async () => {
+  await getAuth();
 });
 </script>
 
 <template>
   <div class="about_wrapper">
+    <AuthLogin />
+    <v-btn color="primary" @click="checkAuth"> Open Dialog </v-btn>
+    <v-btn color="primary" @click="text"> Delete Cookie </v-btn>
     <!--     <div class="grid">
       <div class="list1 grid">
         <div class="text1">text1 Lorem ipsum dolor sit amet.</div>

@@ -11,6 +11,7 @@ const nav = [
   { title: "Tickets", icon: "mdi-history", to: "/guard/section/tickets" },
   { title: "Donate", icon: "mdi-cloud-upload", to: "/guard/section/donate" },
   { title: "Plain", icon: "mdi-cloud-upload", to: "/guard/section/plan" },
+  { title: "Back", icon: "mdi-cloud-upload", to: "/" },
 ];
 const open = ["Details"];
 </script>

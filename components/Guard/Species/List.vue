@@ -69,7 +69,7 @@ defineProps<{ speciest: Specie[] }>();
         button-position="justify-end"
         button-size="large"
         button-title="Edit"
-        :button-params="`/guard/posts/${el.id}`"
+        :button-params="`/guard/species/${el.id}`"
         icon="mdi-paw" />
     </v-col>
   </v-row>

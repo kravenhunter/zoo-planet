@@ -53,43 +53,18 @@ const tableHeaders = [
     title: "Adult-student ratio (recommended)",
   },
 ];
-const prices = [
-  {
-    level: "Early Childhood Centres and Kindergartens ",
-    admissionCost: "$21",
-    faunaParkCost: "Self-guided $8 Education program $12",
-    adultRatio: "1 for every 3 children",
-  },
-  {
-    level: "Foundation to Year 12",
-    admissionCost: "$21",
-    faunaParkCost: "Self-guided $8 Education program $12",
-    adultRatio: "1 for every 3 children",
-  },
-  {
-    level: "Tertiary",
-    admissionCost: "$21",
-    faunaParkCost: "Self-guided $8 Education program $12",
-    adultRatio: "1 for every 3 children",
-  },
-  {
-    level: "Student from Special Development School (SDS)",
-    admissionCost: "$21",
-    faunaParkCost: "Self-guided $8 Education program $12",
-    adultRatio: "1 for every 3 children",
-  },
-];
 </script>
 
 <template>
   <section class="plain" v-if="plain && tables">
     <article>
-      <CardColumn heigth-card="450" :enable-card-slot="true">
+      <CardColumn heigth-card="600" :enable-card-slot="true">
         <v-img
           :src="plain.imageBgLink"
           class="align-end"
           gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
-          width="100%"
+          :max-height="600"
+          :aspect-ratio="16 / 9"
           cover>
           <template #sources>
             <source :srcset="plain.imageBgLink" />
@@ -143,6 +118,16 @@ const prices = [
 </template>
 
 <style scoped lang="scss">
+.v-card {
+  &-title {
+    font-family: gothic;
+    font-size: 2.5rem;
+  }
+  & h4 {
+    font-family: gothic;
+    font-size: 1.5rem;
+  }
+}
 .plain {
   background-color: #f2f2f2;
   & .main_cover {

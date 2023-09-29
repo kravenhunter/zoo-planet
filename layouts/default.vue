@@ -1,11 +1,14 @@
 <script setup lang="ts">
-import { ref } from "#imports";
+import { computed, navigateTo, onMounted, ref } from "#imports";
+import { useAuthStore } from "@/stores/authStore";
 import { useUnionStore } from "@/stores/storeGenerics";
 import type { ContactUs } from "@prisma/client";
 import { storeToRefs } from "pinia";
 
 const showSearch = ref(false);
-
+const searchRequest = ref<string>("");
+const { logOut, checkAuth } = useAuthStore();
+const { isAuthorized } = storeToRefs(useAuthStore());
 const { postlist, specieList, mainPages, contactPage, membershipTable, ticketTable } = storeToRefs(
   useUnionStore(),
 );
@@ -23,6 +26,7 @@ if (
 // Contacts Data
 const contacts = ref<ContactUs>();
 const socialsLink = ref<string[]>();
+const collapseBurger = ref(true);
 
 contactPage.value?.length && (contacts.value = contactPage.value[0]);
 if (contactPage.value?.length) {
@@ -52,11 +56,16 @@ const navTop = [
   },
   {
     title: "Donate",
-    link: "/info/test",
+    link: "/info/donate",
   },
+
   {
     title: "Membership",
     link: "/info/membership",
+  },
+  {
+    title: "Test",
+    link: "/info/test",
   },
 ];
 const navigationMain = [
@@ -113,20 +122,94 @@ const bgImages = [
       "https://epjfkkmrnhyxzevpvbjf.supabase.co/storage/v1/object/public/images/cover/panda1.webp",
   },
 ];
+
+const getSearchResult = computed(() => {
+  if (searchRequest.value) {
+    return postlist.value?.filter((el) => el.title.includes(searchRequest.value)).slice(0, 3);
+  }
+  return undefined;
+});
+const searchHandler = (search: string) => {
+  search && navigateTo(`/search/${search}`);
+};
+onMounted(() => {
+  isAuthorized.value = checkAuth();
+});
 </script>
 
 <template>
   <v-layout class="d-flex flex-column pa-0" style="min-height: 100vh">
-    <v-app-bar :height="160" class="py-0">
-      <Image :source="bgImages[0].imageBgLink" class="pa-10" :alt="bgImages[0].title">
+    <v-navigation-drawer color="black" v-model="collapseBurger" location="top" temporary>
+      <v-col class="burger_nav pt-10">
+        <v-row justify="center" class="pb-5">
+          <UiElementsSearch
+            v-model:value.trim="searchRequest"
+            @keyup.enter="searchHandler(searchRequest)" />
+        </v-row>
+        <v-row justify="center">
+          <div class="burger_mein_menu">
+            <v-btn
+              v-for="(link, i) in navigationMain"
+              :key="i"
+              color="white"
+              variant="text"
+              class="mx-2"
+              rounded="xl"
+              :to="link.link">
+              {{ link.title }}
+            </v-btn>
+          </div>
+          <div class="burger_menu">
+            <v-btn
+              v-for="(link, i) in navTop"
+              :key="i"
+              class="mx-2 text-subtitle-2"
+              color="#FBB03B"
+              variant="text"
+              :to="link.link"
+              rounded="xl">
+              {{ link.title }}
+            </v-btn>
+            <v-btn
+              v-if="isAuthorized"
+              class="mx-2 text-subtitle-2"
+              color="#FBB03B"
+              variant="text"
+              to="/guard"
+              rounded="xl">
+              Dashboard
+            </v-btn>
+            <v-btn
+              v-if="isAuthorized"
+              class="mx-2 text-subtitle-2"
+              color="#FBB03B"
+              variant="text"
+              @click="logOut"
+              rounded="xl">
+              <v-icon> mdi-logout </v-icon>
+            </v-btn>
+          </div>
+        </v-row>
+      </v-col>
+    </v-navigation-drawer>
+    <v-app-bar class="navigation py-0" height="160">
+      <v-img
+        cover
+        :src="bgImages[0].imageBgLink"
+        :aspect-ratio="16 / 9"
+        class="pa-10"
+        :alt="bgImages[0].title">
         <v-row no-gutters>
           <v-col :cols="1" class="logo">
             <v-img src="/images/logos.svg" height="99px" width="126px" />
           </v-col>
-          <v-col>
-            <v-row justify="end" no-gutters class="mt-4">
+          <v-col class="nav_menu">
+            <v-row justify="end" no-gutters>
               <v-expand-x-transition>
-                <UiElementsSearch v-if="showSearch" />
+                <UiElementsSearch
+                  v-if="showSearch"
+                  v-model:value.trim="searchRequest"
+                  @keyup.enter="searchHandler(searchRequest)" />
               </v-expand-x-transition>
 
               <v-btn
@@ -147,12 +230,111 @@ const bgImages = [
                 class="mx-2 text-subtitle-2"
                 color="#FBB03B"
                 variant="text"
-                router
                 :to="link.link"
                 rounded="xl">
-                <!--    <NuxtLink :to="link.link" class="mx-2 text-subtitle-1"> {{ link.title }}</NuxtLink> -->
                 {{ link.title }}
               </v-btn>
+              <v-btn
+                v-if="isAuthorized"
+                class="mx-2 text-subtitle-2"
+                color="#FBB03B"
+                variant="text"
+                to="/guard"
+                rounded="xl">
+                Dashboard
+              </v-btn>
+              <v-btn
+                v-if="isAuthorized"
+                class="mx-2 text-subtitle-2"
+                color="#FBB03B"
+                variant="text"
+                @click="logOut"
+                rounded="xl">
+                <v-icon> mdi-logout </v-icon>
+              </v-btn>
+              <AuthLogin v-else />
+            </v-row>
+            <v-row justify="end" align="end" no-gutters class="mb-5">
+              <v-btn
+                v-for="(link, i) in navigationMain"
+                :key="i"
+                color="white"
+                variant="text"
+                class="mx-2"
+                rounded="xl"
+                :to="link.link">
+                {{ link.title }}
+              </v-btn>
+            </v-row>
+          </v-col>
+          <div class="burger_btn">
+            <div class="burger_logo">
+              <v-img src="/images/logos.svg" height="99px" width="126px" />
+            </div>
+            <div class="burger_icon">
+              <v-btn icon @click="collapseBurger = !collapseBurger" color="white">
+                <v-icon size="x-large">mdi-menu </v-icon>
+              </v-btn>
+            </div>
+          </div>
+        </v-row>
+      </v-img>
+      <!-- <Image :source="bgImages[0].imageBgLink" class="pa-10" :alt="bgImages[0].title">
+        <v-row no-gutters>
+          <v-col :cols="1" class="logo">
+            <v-img src="/images/logos.svg" height="99px" width="126px" />
+          </v-col>
+          <v-col>
+            <v-row justify="end" no-gutters>
+              <v-expand-x-transition>
+                <UiElementsSearch
+                  v-if="showSearch"
+                  v-model:value.trim="searchRequest"
+                  @keyup.enter="searchHandler(searchRequest)" />
+              </v-expand-x-transition>
+
+              <v-btn
+                @click="showSearch = !showSearch"
+                color="#FBB03B"
+                variant="text"
+                class="mx-2 text-subtitle-1"
+                rounded="xl">
+                <UiElementsIcons
+                  icon-name="material-symbols:search"
+                  color-icon="white"
+                  size-width="30"
+                  size-heigth="30" />
+              </v-btn>
+              <v-btn
+                v-for="(link, i) in navTop"
+                :key="i"
+                class="mx-2 text-subtitle-2"
+                color="#FBB03B"
+                variant="text"
+                :to="link.link"
+                rounded="xl">
+        
+                {{ link.title }}
+              </v-btn>
+              <v-btn
+                v-if="isAuthorized"
+                class="mx-2 text-subtitle-2"
+                color="#FBB03B"
+                variant="text"
+                to="/guard"
+                rounded="xl">
+                Dashboard
+              </v-btn>
+              <v-btn
+                v-if="isAuthorized"
+                class="mx-2 text-subtitle-2"
+                color="#FBB03B"
+                variant="text"
+                @click="logOut"
+                rounded="xl">
+                <v-icon> mdi-logout </v-icon>
+              </v-btn>
+              <AuthLogin v-else />
             </v-row>
             <v-row justify="end" align="end" no-gutters class="mt-4">
               <v-btn
@@ -162,14 +344,13 @@ const bgImages = [
                 variant="text"
                 class="mx-2"
                 rounded="xl"
-                router
                 :to="link.link">
                 {{ link.title }}
               </v-btn>
             </v-row>
           </v-col>
         </v-row>
-      </Image>
+      </Image> -->
     </v-app-bar>
 
     <v-main class="bg-surface-variant main">
@@ -261,7 +442,7 @@ const bgImages = [
           </div>
           <div class="footer_list">
             <ul>
-              <li class="title">get involved</li>
+              <li class="title">Get involved</li>
               <li class="text-subtitle-2">Hours & Rates</li>
               <li class="text-subtitle-2">Plan Your Visit</li>
               <li class="text-subtitle-2">Zoo Map</li>
@@ -314,6 +495,42 @@ const bgImages = [
 </template>
 
 <style scope lang="scss">
+.buerger_menu_block {
+  display: grid;
+
+  grid-template-columns: repeat(2, 200px);
+}
+.burger_menu {
+  display: grid;
+  justify-content: end;
+  grid-template-columns: repeat(2, auto);
+}
+.burger_mein_menu {
+  display: grid;
+}
+
+.navigation {
+  & .nav_menu,
+  .logo {
+    @media (max-width: 1280px) {
+      display: none;
+    }
+    // @media (max-width: 600px) {
+    //   height: 300px;
+    // }
+  }
+
+  & .burger_btn {
+    display: none;
+    @media (max-width: 1280px) {
+      display: grid;
+      grid-template-columns: repeat(2, auto);
+      justify-items: end;
+      width: 100%;
+    }
+  }
+}
+
 .footer {
   color: white;
   &_block {
@@ -321,15 +538,28 @@ const bgImages = [
     display: grid;
     grid-template-columns: repeat(6, auto);
     justify-content: center;
-    gap: 100px;
+    column-gap: 100px;
+    row-gap: 50px;
     padding: 75px 0;
+    @media (max-width: 1280px) {
+      display: grid;
+      grid-template-columns: repeat(5, auto);
+    }
+    @media (max-width: 890px) {
+      display: grid;
+      grid-template-columns: repeat(3, auto);
+    }
+    @media (max-width: 600px) {
+      display: none;
+    }
   }
   &_copyright {
     padding: 57px 0;
     background-color: #284002;
     display: flex;
     justify-content: center;
-    gap: 100px;
+    column-gap: 100px;
+    row-gap: 50px;
     &_logo {
       align-self: flex-end;
       justify-self: start;
@@ -346,6 +576,14 @@ const bgImages = [
       & ul {
         display: flex;
         column-gap: 15px;
+      }
+    }
+    @media (max-width: 1280px) {
+      display: grid;
+      justify-items: center;
+      align-items: center;
+      &_logo {
+        justify-self: center;
       }
     }
   }
@@ -372,6 +610,10 @@ const bgImages = [
     width: 100%;
     display: flex;
     column-gap: 50px;
+    @media (max-width: 1280px) {
+      display: grid;
+      margin-bottom: 20px;
+    }
   }
 }
 </style>

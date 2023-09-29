@@ -86,9 +86,15 @@ Editor styles
 }
 .headers_class {
   margin: 20px 0;
+  line-height: 1;
+  font-size: 2rem;
+  @media (max-width: 1000px) {
+    font-size: 2.5rem;
+  }
 }
 .paragraph_class {
   font-size: 18px;
+  line-height: 2;
   margin-bottom: 20px;
 }
 .italic_rule {

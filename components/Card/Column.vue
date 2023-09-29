@@ -135,6 +135,10 @@ defineProps({
     font-family: gothic;
     font-size: v-bind(fontTitleSize);
   }
+  &-text {
+    line-height: 2;
+    font-size: 16px;
+  }
 }
 .text_block {
   height: v-bind(textBlockSize);

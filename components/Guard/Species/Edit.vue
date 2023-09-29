@@ -32,6 +32,9 @@ const selectedPopulation = ref("Stable");
 const popelationStatus = ["Decreasing", "Increasing", "Stable"];
 
 const getRecord = specieList.value?.find((el) => el.id === route.params.id);
+console.log(getRecord);
+console.log(specieList.value);
+
 selected.value = getRecord ? getRecord.conservationStatus : "LC";
 selectedPopulation.value = getRecord ? getRecord.populationTrend : "Stable";
 currentSpecie.value = {
@@ -119,60 +122,65 @@ const addPost = async () => {
 </script>
 
 <template>
-  <v-container class="d-flex" fluid>
-    <v-row>
-      <v-col cols="12">
-        <v-sheet class="pa-2 mx-auto bg-black w-50">
-          <v-btn
-            :disabled="isEmpty"
-            :loading="pendingData"
-            type="button"
-            block
-            class="my-5"
-            color="success"
-            @click="addPost"
-            >Create</v-btn
-          >
-          <v-form class="bg-grey-darken-4">
-            <v-text-field
-              v-model="currentSpecie!.title"
-              :rules="rules"
-              label="Title"></v-text-field>
-            <v-file-input clearable label="Image cover" @change="selectCoverImage"></v-file-input>
-            <v-file-input
-              clearable
-              label="Image preview"
-              @change="selectPreviewImage"></v-file-input>
-            <v-text-field
-              v-model="currentSpecie!.habitain"
-              :rules="rules"
-              label="Habitain"></v-text-field>
-            <v-text-field
-              v-model="currentSpecie!.countLeft"
-              :rules="rules"
-              label="CountLeft"></v-text-field>
-            <v-select v-model="selectedPopulation" :items="popelationStatus"></v-select>
-            <v-select v-model="selected" :items="conservationStatus"></v-select>
+  <section class="edit">
+    <v-overlay tabindex="0" :model-value="pendingData" class="align-center justify-center">
+      <v-progress-circular color="primary" indeterminate size="64"></v-progress-circular>
+    </v-overlay>
+    <v-container class="d-flex" fluid>
+      <v-row>
+        <v-col cols="12">
+          <v-sheet class="pa-2 mx-auto bg-black w-50">
+            <v-btn
+              :disabled="isEmpty"
+              :loading="pendingData"
+              type="button"
+              block
+              class="my-5"
+              color="success"
+              @click="addPost"
+              >Create</v-btn
+            >
+            <v-form class="bg-grey-darken-4">
+              <v-text-field
+                v-model="currentSpecie!.title"
+                :rules="rules"
+                label="Title"></v-text-field>
+              <v-file-input clearable label="Image cover" @change="selectCoverImage"></v-file-input>
+              <v-file-input
+                clearable
+                label="Image preview"
+                @change="selectPreviewImage"></v-file-input>
+              <v-text-field
+                v-model="currentSpecie!.habitain"
+                :rules="rules"
+                label="Habitain"></v-text-field>
+              <v-text-field
+                v-model="currentSpecie!.countLeft"
+                :rules="rules"
+                label="CountLeft"></v-text-field>
+              <v-select v-model="selectedPopulation" :items="popelationStatus"></v-select>
+              <v-select v-model="selected" :items="conservationStatus"></v-select>
 
-            <v-text-field
-              v-model="currentSpecie!.shordDescription"
-              :rules="rules"
-              label="Shord Description"></v-text-field>
-          </v-form>
-        </v-sheet>
-      </v-col>
+              <v-text-field
+                v-model="currentSpecie!.shordDescription"
+                :rules="rules"
+                label="Shord Description"></v-text-field>
+            </v-form>
+          </v-sheet>
+        </v-col>
 
-      <v-col cols="6">
-        <v-sheet>
-          <v-card-title class="text-center">Description</v-card-title>
-          <UiElementsAddEditor v-if="currentSpecie!" v-model:value="currentSpecie!.description" />
-        </v-sheet>
-      </v-col>
-      <v-col cols="6" class="content_news">
-        <div class="editor_content bg-white" v-html="currentSpecie!.description"></div>
-      </v-col>
-    </v-row>
-  </v-container>
+        <v-col cols="6">
+          <v-sheet>
+            <v-card-title class="text-center">Description</v-card-title>
+            <UiElementsAddEditor v-if="currentSpecie!" v-model:value="currentSpecie!.description" />
+          </v-sheet>
+        </v-col>
+        <v-col cols="6" class="content_news">
+          <div class="editor_content bg-white" v-html="currentSpecie!.description"></div>
+        </v-col>
+      </v-row>
+    </v-container>
+  </section>
 </template>
 
 <style scoped lang="scss"></style>

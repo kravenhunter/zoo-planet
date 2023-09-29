@@ -1,6 +1,8 @@
 <script setup lang="ts">
 defineProps({
   maxWidthCard: String,
+  widthCard: String,
+  heightCard: String,
   classCard: String,
   classTitle: String,
   classText: String,
@@ -54,7 +56,7 @@ defineProps({
 </script>
 
 <template>
-  <v-card :class="classCard" :elevation="shadowCard" :max-width="maxWidthCard">
+  <v-card :class="classCard" :height="heightCard" :elevation="shadowCard" :max-width="maxWidthCard">
     <v-row>
       <v-col :cols="imageColsSize">
         <nuxt-img
@@ -69,7 +71,7 @@ defineProps({
           class="nuxt_img">
         </nuxt-img>
       </v-col>
-      <v-col class="d-flex flex-column" :cols="contentColsSieze">
+      <v-col class="d-flex flex-column" v-if="titleCard || textCard" :cols="contentColsSieze">
         <v-card-title :class="classTitle">{{ titleCard }}</v-card-title>
         <v-card-text :class="classText">{{ textCard }}</v-card-text>
         <div v-if="enableButton">
@@ -97,6 +99,10 @@ defineProps({
   &-title {
     font-family: v-bind(fontamaly);
     font-size: v-bind(fontTitleSize);
+  }
+  &-text {
+    font-size: 18px;
+    line-height: 2;
   }
 }
 </style>
