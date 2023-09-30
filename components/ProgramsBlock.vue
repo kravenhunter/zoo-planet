@@ -24,37 +24,41 @@ defineProps<Props>();
     <div class="program_retrospective_one">
       <v-row align="start">
         <v-col cols="6" v-for="el in programsList.slice(0, 2)" :key="el.id">
-          <CardColumn heigth-card="450" :enable-card-slot="true">
-            <v-img
-              :src="el.imagePreviewLink!"
-              class="align-end"
-              gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
-              :aspect-ratio="4 / 3"
-              cover>
-              <template #sources>
-                <source :srcset="el.imageBgLink" />
-              </template>
-              <h4 class="text-amber mb-10 ml-10" v-text="el.title"></h4>
-            </v-img>
-          </CardColumn>
+          <NuxtLink :to="{ path: `/news/${el.id}` }">
+            <CardColumn heigth-card="450" :enable-card-slot="true">
+              <v-img
+                :src="el.imagePreviewLink!"
+                class="align-end"
+                gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
+                :aspect-ratio="4 / 3"
+                cover>
+                <template #sources>
+                  <source :srcset="el.imageBgLink" />
+                </template>
+                <h4 class="text-amber mb-10 ml-10" v-text="el.title"></h4>
+              </v-img>
+            </CardColumn>
+          </NuxtLink>
         </v-col>
 
         <v-col cols="4" v-for="el in programsList.slice(2, 5)" :key="el.id">
-          <CardColumn heigth-card="450" :enable-card-slot="true">
-            <v-img
-              :src="el.imagePreviewLink!"
-              class="align-end"
-              gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
-              :aspect-ratio="4 / 3"
-              cover
-              >>
-              <template #sources>
-                <source :srcset="el.imageBgLink" />
-              </template>
+          <NuxtLink :to="{ path: `/news/${el.id}` }">
+            <CardColumn heigth-card="450" :enable-card-slot="true">
+              <v-img
+                :src="el.imagePreviewLink!"
+                class="align-end"
+                gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
+                :aspect-ratio="4 / 3"
+                cover
+                >>
+                <template #sources>
+                  <source :srcset="el.imageBgLink" />
+                </template>
 
-              <p class="small_title text-amber mb-2 ml-10" v-text="el.title"></p>
-            </v-img>
-          </CardColumn>
+                <p class="small_title text-amber mb-2 ml-10" v-text="el.title"></p>
+              </v-img>
+            </CardColumn>
+          </NuxtLink>
         </v-col>
       </v-row>
     </div>

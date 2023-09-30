@@ -573,5 +573,3 @@ const activateormTag = (index: number) => {
     </v-card-actions>
   </article>
 </template>
-
-<style scoped></style>

@@ -7,14 +7,20 @@ defineProps<{ article: Post }>();
 <template>
   <section class="article" v-if="article">
     <article class="main_cover">
-      <CardItem
-        image-heigth="600"
-        class="card_main"
-        colorbg="#f2f2f2"
-        :image-source="article?.imageBgLink"
-        :image-title="article.title"
-        title-align="text-center pb-10"
-        font-title-size="2rem" />
+      <CardColumn :enable-card-slot="true">
+        <v-img
+          :src="article.imageBgLink"
+          class="align-end"
+          gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
+          :max-height="600"
+          :aspect-ratio="16 / 9"
+          cover>
+          <template #sources>
+            <source :srcset="article.imageBgLink" />
+          </template>
+          <v-card-title class="text-amber text-center mb-10" v-text="article.title"></v-card-title>
+        </v-img>
+      </CardColumn>
     </article>
     <article class="description">
       <v-container>
@@ -28,6 +34,16 @@ defineProps<{ article: Post }>();
 </template>
 
 <style scoped lang="scss">
+.v-card {
+  &-title {
+    font-family: gothic;
+    font-size: 2.5rem;
+  }
+  & h4 {
+    font-family: gothic;
+    font-size: 1.5rem;
+  }
+}
 .article {
   background-color: #f2f2f2;
   & .main_cover {
