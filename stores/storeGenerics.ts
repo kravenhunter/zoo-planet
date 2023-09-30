@@ -103,6 +103,36 @@ export const useUnionStore = defineStore("union-store", () => {
         error: errorPlanPrice,
         refresh: refreshPlanPrice,
       } = promiseAll[6];
+      if (
+        errorPost.value ||
+        errorSpecie.value ||
+        errorMainPages.value ||
+        errorContactUs.value ||
+        errorMembershipPrice.value ||
+        errorTicketPrice.value ||
+        errorPlanPrice.value
+      ) {
+        throw errorPost.value;
+      }
+      if (errorSpecie.value) {
+        throw errorSpecie.value;
+      }
+      if (errorMainPages.value) {
+        throw errorMainPages.value;
+      }
+      if (errorContactUs.value) {
+        throw errorContactUs.value;
+      }
+      if (errorMembershipPrice.value) {
+        throw errorMembershipPrice.value;
+      }
+      if (errorTicketPrice.value) {
+        throw errorTicketPrice.value;
+      }
+      if (errorPlanPrice.value) {
+        throw errorPlanPrice.value;
+      }
+
       console.log("Posts", postResult.value);
       postlist.value = postResult.value;
       specieList.value = specieResult.value;
@@ -111,7 +141,9 @@ export const useUnionStore = defineStore("union-store", () => {
       membershipTable.value = membershipTableResult.value;
       ticketTable.value = ticketTableResult.value;
       planTable.value = planTableResult.value;
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const getSizeImage = async (fileImage: File): Promise<number> => {

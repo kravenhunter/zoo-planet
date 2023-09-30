@@ -1,5 +1,6 @@
 import { defineEventHandler } from "#imports";
 import { PrismaClient } from "@prisma/client";
+import type { NuxtError } from "nuxt/app";
 
 const prismaCLient = new PrismaClient();
 
@@ -18,8 +19,11 @@ export default defineEventHandler(async () => {
 
     return posts;
   } catch (error) {
-    console.log(error);
-    return error;
+    const newError = error as NuxtError;
+    throw createError({
+      statusCode: newError.statusCode,
+      statusMessage: newError.statusMessage,
+    });
   }
 
   // const orders = await prismaCLient.orders.findMany({
