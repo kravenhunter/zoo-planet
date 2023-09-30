@@ -205,7 +205,7 @@ useSeoMeta({
             <v-img src="/images/logos.svg" height="99px" width="126px" alt="logos" />
           </v-col>
           <v-col class="nav_menu">
-            <v-row justify="end" no-gutters>
+            <v-row justify="end" class="mb-5">
               <v-expand-x-transition>
                 <UiElementsSearch
                   v-if="showSearch"
