@@ -19,13 +19,10 @@ const links: ILinks[] = [
 ];
 
 const activeLink = useState<string | null>("activeLink", () => "Home");
-// const activeLink = (name: string) => useState<string | null>(name);
 
 onMounted(() => {
   document.querySelectorAll(".link").forEach((el) => {
     el.addEventListener("click", (event) => {
-      // activeLink.value = event?.target?.inerText;
-      // activeLink.value = el?.text;
       activeLink.value = el?.textContent;
       console.log("activeLink", activeLink);
 

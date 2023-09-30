@@ -8,9 +8,6 @@ import type { IContentPage } from "types/IContentPage";
 
 const route = useRoute();
 
-// Main Content Data
-//pendingData - returns undefined by default or object
-
 const { mainPages } = storeToRefs(useUnionStore());
 
 const { updateData, createData } = useUnionStore();
@@ -160,12 +157,3 @@ const addPost = async () => {
     </article>
   </section>
 </template>
-
-<style scoped lang="scss">
-/* .v-overlay {
-  pointer-events: all;
-  &--active {
-    pointer-events: all;
-  }
-} */
-</style>

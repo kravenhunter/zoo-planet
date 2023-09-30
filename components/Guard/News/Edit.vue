@@ -7,14 +7,7 @@ import { storeToRefs } from "pinia";
 
 const route = useRoute();
 
-//Modal data
-// const dialogModal = ref(false);
-// const titleResult = ref("");
-// const iconResult = ref("");
-// const colorIcon = ref("");
 const pendingData = useIsLoading();
-
-//pendingData - returns undefined by default or object
 
 const { postlist } = storeToRefs(useUnionStore());
 
@@ -53,21 +46,8 @@ const selectPreviewImage = async (event: Event) => {
   fileEvent.files?.length && (filePreview.value = fileEvent.files[0]);
   console.log(filePreview.value);
 };
-// const loadingDelay = (result: string | null) => {
-//   setTimeout(() => {
-//     pendingData.value = false;
-//     if (result) {
-//       titleResult.value = result;
-//       colorIcon.value = result.toLocaleLowerCase();
-//       result === "Success" && (iconResult.value = "mdi-check-circle-outline");
-//       result === "Error" && (iconResult.value = "mdi-close-thick");
-//       dialogModal.value = !dialogModal.value;
-//     }
-//   }, 3000);
-// };
 
 const addPost = async () => {
-  // pendingData.value = !pendingData.value;
   pendingData.value = true;
   if (currentPost.value) {
     const result = await updateData(
@@ -86,7 +66,6 @@ const addPost = async () => {
       "update",
     );
 
-    // loadingDelay(result);
     delayLoading(result);
   }
 };

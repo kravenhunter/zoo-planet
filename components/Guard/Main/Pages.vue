@@ -3,7 +3,7 @@ import { useUnionStore } from "@/stores/storeGenerics";
 import type { ContentPages } from "@prisma/client";
 import { storeToRefs } from "pinia";
 
-const props = defineProps<{
+defineProps<{
   pages: ContentPages[];
 }>();
 const { mainPages } = storeToRefs(useUnionStore());
@@ -32,5 +32,3 @@ const { mainPages } = storeToRefs(useUnionStore());
     </v-col>
   </v-row>
 </template>
-
-<style scoped></style>

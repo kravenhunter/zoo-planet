@@ -2,8 +2,6 @@
 import { computed, ref } from "#imports";
 import { useCurrentMemberTab, useSelectedPrecesState, useTotalPrice } from "@/composables/states";
 
-// import type { ISelectedPrices } from "types/ITypes";
-
 import type { ContentPages, MembershipPrice } from "@prisma/client";
 
 interface Props {
@@ -413,5 +411,3 @@ function parseData(price: string) {
     </v-row>
   </v-container>
 </template>
-
-<style scoped></style>

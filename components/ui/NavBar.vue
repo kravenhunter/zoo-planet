@@ -9,7 +9,6 @@ defineProps({
     default: 0,
   },
 });
-const links = ["Home", "About Us", "Team", "Services", "Blog", "Contact Us"];
 </script>
 
 <template>

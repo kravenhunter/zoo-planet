@@ -7,10 +7,6 @@ import Youtube from "@tiptap/extension-youtube";
 import StarterKit from "@tiptap/starter-kit";
 import { EditorContent, useEditor } from "@tiptap/vue-3";
 
-/* 
-import BulletList from "@tiptap/extension-bullet-list";
-import ListItem from "@tiptap/extension-list-item";
-import OrderedList from "@tiptap/extension-ordered-list"; */
 const props = defineProps({
   modelValue: {
     type: String,
@@ -23,11 +19,10 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["update:value"]);
-const limit = ref(5000);
+
 const width = ref("640");
 const height = ref("480");
-const widthImage = ref("640");
-const heightImage = ref("480");
+
 const editor = ref(
   useEditor({
     content: props.value,
@@ -102,21 +97,7 @@ const editor = ref(
           },
         },
       }),
-      // BulletList.configure({
-      //   HTMLAttributes: {
-      //     class: "bullet_class",
-      //   },
-      // }),
-      // OrderedList.configure({
-      //   HTMLAttributes: {
-      //     class: "order_class",
-      //   },
-      // }),
-      // ListItem.configure({
-      //   HTMLAttributes: {
-      //     class: "list_class",
-      //   },
-      // }),
+
       Youtube.configure({
         HTMLAttributes: {
           class: "video_rule",

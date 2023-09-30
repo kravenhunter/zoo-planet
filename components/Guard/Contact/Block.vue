@@ -2,15 +2,13 @@
 import { ref } from "#imports";
 import type { ContactUs } from "@prisma/client";
 
-// import { useContactsStore } from "@/stores/contactsStore";
 import { useUnionStore } from "@/stores/storeGenerics";
 import { storeToRefs } from "pinia";
 
 defineProps<{ contactData: ContactUs }>();
 
 const { contactPage } = storeToRefs(useUnionStore());
-// //Contacts Data
-// const { contactPage } = storeToRefs(useContactsStore());
+
 const contacts = ref<ContactUs>();
 contactPage.value?.length && (contacts.value = contactPage.value[0]);
 </script>
@@ -40,5 +38,3 @@ contactPage.value?.length && (contacts.value = contactPage.value[0]);
     </v-row>
   </div>
 </template>
-
-<style scoped></style>

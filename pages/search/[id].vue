@@ -15,5 +15,3 @@ currentArticles.value = postlist.value?.filter((el) => el.title.includes(String(
   <SearchList v-if="currentArticles" :search-list="currentArticles" />
   <ErrorResult v-else />
 </template>
-
-<style scoped></style>

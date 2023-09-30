@@ -8,7 +8,7 @@ interface Props {
   text: string;
   textClass: string;
 }
-const props = defineProps<Props>();
+defineProps<Props>();
 </script>
 
 <template>

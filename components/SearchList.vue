@@ -5,11 +5,6 @@ interface Props {
   searchList: Post[];
 }
 defineProps<Props>();
-
-const searchContent = {
-  sourceTitle: "/images/species_preview.webp",
-  title: "Search",
-};
 </script>
 
 <template>

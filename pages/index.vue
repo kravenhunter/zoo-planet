@@ -4,9 +4,7 @@ import { useUnionStore } from "@/stores/storeGenerics";
 import type { ContentPages, Post } from "@prisma/client";
 import { storeToRefs } from "pinia";
 
-const { postlist, specieList, mainPages, contactPage, membershipTable, ticketTable } = storeToRefs(
-  useUnionStore(),
-);
+const { postlist, mainPages } = storeToRefs(useUnionStore());
 
 // Education Data
 const educationMain = ref<ContentPages>();
@@ -284,29 +282,6 @@ const bgImages = [
             </v-container>
           </v-row>
         </div>
-
-        <!-- <article class="conversation">
-          <div class="conversation_title">
-            <CardItem
-              class="description"
-              :title-card="education[0].title"
-              :text-card="education[0].text"
-              title-align="text-center"
-              text-align="text-center" />
-          </div>
-          <div class="conversation_icons">
-            <div class="conversation_icon" v-for="(icon, i) in conversationIcons" :key="i">
-              <v-avatar class="ma-3" size="104" rounded="50">
-                <UiElementsIcons
-                  :icon-name="icon.iconName"
-                  color-icon="#FBB03B"
-                  size-width="50"
-                  size-heigth="50" />
-              </v-avatar>
-              <span>{{ icon.title }}</span>
-            </div>
-          </div>
-        </article> -->
       </v-img>
     </section>
     <section class="last_news education_wrapper">

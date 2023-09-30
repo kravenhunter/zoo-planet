@@ -31,35 +31,6 @@ const tableHeaders = [
     title: "Unlimited Entry",
   },
 ];
-
-const prices = [
-  {
-    person: "adult",
-    single: "$46.00",
-    unlimited: "$11.50 per month",
-  },
-  {
-    person: "Child (4-15 years)",
-    single: "FREE weekends and holidays*",
-    unlimited: `Children
-FREE everyday`,
-  },
-  {
-    person: "Child (0-3 years)",
-    single: "FREE",
-    unlimited: "FREE",
-  },
-  {
-    person: "Concession** ",
-    single: "$34.50",
-    unlimited: "$8.50 per month",
-  },
-  {
-    person: "Seniors**",
-    single: "$34.50",
-    unlimited: "$8.50 per month",
-  },
-];
 </script>
 
 <template>

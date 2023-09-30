@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { reactive } from "#imports";
 import { delayLoading, useIsLoading } from "@/composables/states";
-import { useBookingStore } from "@/stores/bookingStore";
+import { useUnionStore } from "@/stores/storeGenerics";
 
 import type { MembershipPrice } from "@prisma/client";
 
@@ -30,7 +30,7 @@ const stateYaer = reactive({
   supporter: props.yarly?.supporter ?? "",
 });
 
-const { addMembershipPreces, updateMemberShipPrices } = useBookingStore();
+const { createTablesData, updateDataPrices } = useUnionStore();
 const loadingMemberPrices = useIsLoading();
 
 const tableRow = [{ title: "Monthly" }, { title: "Yearly" }];
@@ -38,15 +38,22 @@ const tableRow = [{ title: "Monthly" }, { title: "Yearly" }];
 const addPrices = async () => {
   loadingMemberPrices.value = true;
   if (props.monthly?.id && props.yarly?.id) {
-    const result = await updateMemberShipPrices(
+    const result = await updateDataPrices(
       props.monthly!.id,
       props.yarly!.id,
+      "membership",
+      "update-member-prices",
       stateMonth,
       stateYaer,
     );
     delayLoading(result);
   } else {
-    const result = await addMembershipPreces(stateMonth, stateYaer);
+    const result = await createTablesData(
+      "membership",
+      "create-member-prices",
+      stateMonth,
+      stateYaer,
+    );
     delayLoading(result);
   }
 };
@@ -163,5 +170,3 @@ const addPrices = async () => {
     </v-container>
   </article>
 </template>
-
-<style scoped lang="scss"></style>

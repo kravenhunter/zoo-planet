@@ -4,9 +4,6 @@ import { computed, reactive, ref } from "#imports";
 import { delayLoading, useIsLoading } from "@/composables/states";
 import { useUnionStore } from "@/stores/storeGenerics";
 
-//pendingData - returns false or true
-
-// const { createPost } = usePostStore();
 const { createData } = useUnionStore();
 const state = reactive({
   title: "",
@@ -16,10 +13,7 @@ const state = reactive({
   description: "",
   extraeDscription: "",
 });
-// const dialogModal = ref(false);
-// const titleResult = ref("");
-// const iconResult = ref("");
-// const colorIcon = ref("");
+
 const pendingData = useIsLoading();
 
 const selected = ref("Education");
@@ -40,7 +34,6 @@ const rules = [
     return "Field is empty";
   },
 ];
-const fileData = ref<0 | FileList | undefined>();
 
 const filCover = ref<File>();
 const filePreview = ref<File>();
@@ -59,8 +52,6 @@ const addPost = async () => {
   if (filCover.value && filePreview.value) {
     state.category = selected.value;
     const result = await createData(filCover.value, filePreview.value, state, "post", "create");
-
-    // loadingDelay(result);
 
     delayLoading(result);
   }

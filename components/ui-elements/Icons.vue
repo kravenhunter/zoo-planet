@@ -42,5 +42,3 @@ defineProps({
     :horizontal-flip="turnX"
     :vertical-flip="turnY" />
 </template>
-
-<style scoped></style>

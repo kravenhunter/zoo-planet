@@ -6,25 +6,13 @@ import { useUnionStore } from "@/stores/storeGenerics";
 import { storeToRefs } from "pinia";
 import type { ISpecie } from "types/ISpecie";
 
-// import type { Specie } from "@prisma/client";
 const route = useRoute();
-//isLoadingContacts - returns false or true
 
 const { specieList } = storeToRefs(useUnionStore());
 
 const { updateData, createData } = useUnionStore();
 const pendingData = useIsLoading();
 
-// const currentSpecie = ref<ISpecie>({
-//         title: "",
-//         imageBgLink: "",
-//         habitain:  "",
-//         countLeft: "",
-//         conservationStatus: 'EN',
-//         shordDescription:  "",
-//         description:  "",
-//         extraeDscription:  "",
-// });
 const currentSpecie = ref<ISpecie>();
 const selected = ref("LC");
 const conservationStatus = ["LC", "NT", "VU", "EN", "CR", "EW", "EX"];
@@ -83,17 +71,7 @@ const addPost = async () => {
   if (getRecord?.id) {
     currentSpecie.value!.conservationStatus = selected.value;
     currentSpecie.value!.populationTrend = selectedPopulation.value;
-    // const result = await updateSpecieContent(getRecord?.id, fileData.value, {
-    //   title: currentSpecie.value!.title,
-    //   imageBgLink: currentSpecie.value!.imageBgLink,
-    //   populationTrend: selectedPopulation.value,
-    //   habitain: currentSpecie.value!.habitain,
-    //   countLeft: currentSpecie.value!.countLeft,
-    //   conservationStatus: selected.value,
-    //   shordDescription: currentSpecie.value!.shordDescription,
-    //   description: currentSpecie.value!.description,
-    //   extraeDscription: currentSpecie.value!.extraeDscription ?? undefined,
-    // });
+
     const result = await updateData(
       getRecord.id,
       filCover.value,
@@ -182,5 +160,3 @@ const addPost = async () => {
     </v-container>
   </section>
 </template>
-
-<style scoped lang="scss"></style>

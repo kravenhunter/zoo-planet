@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { ContactUs } from "@prisma/client";
 
-const props = defineProps<{
+defineProps<{
   contactMain: ContactUs;
 }>();
 const contactData = {
@@ -22,28 +22,6 @@ Australia`,
   phone: "1300 966 784",
   email: "contact@zoo.org.au",
 };
-const socials = [
-  {
-    title: "facebook",
-
-    icon: "ri:facebook-fill",
-  },
-  {
-    title: "twitter",
-
-    icon: "mdi:twitter",
-  },
-  {
-    title: "twitter",
-
-    icon: "mdi:youtube",
-  },
-  {
-    title: "instagram",
-
-    icon: "mdi:instagram",
-  },
-];
 </script>
 
 <template>

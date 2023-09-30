@@ -200,29 +200,6 @@ watchEffect(async () => {
     await stripeInit();
   }
 });
-// watch(
-//   () => totalPrice.value,
-//   async () => {
-//     if (totalPrice.value > 0) {
-//       await stripeInit();
-//     }
-//   },
-// );
-// onMounted(async () => {
-//   await stripeInit();
-// });
-
-// onMounted(async () => {
-//   stripe = await loadStripe(runtimeCOnfig.public.stripePK);
-//   elements = stripe!.elements({
-//     mode: "payment",
-//     amount: 1999,
-//     currency: "usd",
-//   });
-//   const paymentElement = elements.create("payment");
-//   paymentElement.mount("#payment-element");
-//   loading.value = false;
-// });
 </script>
 
 <template>

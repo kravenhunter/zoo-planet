@@ -19,5 +19,3 @@ definePageMeta({
     </v-container>
   </section>
 </template>
-
-<style scoped></style>

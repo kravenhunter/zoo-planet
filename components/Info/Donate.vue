@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { ContentPages } from "@prisma/client";
 
-const props = defineProps<{
+defineProps<{
   donate: ContentPages;
 }>();
 </script>

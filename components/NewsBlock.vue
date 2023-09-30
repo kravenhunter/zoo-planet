@@ -2,11 +2,6 @@
 import type { Post } from "@prisma/client";
 
 defineProps<{ article: Post }>();
-// const route = useRoute();
-// const { postlist } = storeToRefs(useUnionStore());
-
-// const currentArticle = ref<Post>();
-// currentArticle.value = postlist.value?.find((el) => el.id === route.params.id);
 </script>
 
 <template>

@@ -2,7 +2,7 @@
 import { onMounted, reactive, ref, useCookie, useFetch } from "#imports";
 import { compressToBestSize } from "@/composables/compressFile";
 import { useImageStorage } from "@/composables/states";
-import type { Session } from "@supabase/supabase-js";
+
 import Compressor from "compressorjs";
 
 // import { type H3Event } from "h3";
@@ -27,8 +27,7 @@ const passwordLogin = ref("");
 const titleResult = ref("");
 const iconResult = ref("");
 const colorIcon = ref("");
-const sessionData = ref<Session | null>();
-const accessToken = ref();
+
 const dialogRegister = ref(false);
 const dialogLogIn = ref(false);
 const selected = ref("Education");
@@ -409,23 +408,6 @@ onMounted(async () => {
     <v-btn color="primary" @click="text"> Delete Cookie </v-btn>
 
     <v-container>
-      <!-- <NuxtPicture
-        format="webp"
-        sizes="xs:300px md:500px lg:100vw"
-        src="https://epjfkkmrnhyxzevpvbjf.supabase.co/storage/v1/object/public/images/c5901592-8efa-414b-ada1-2e18fe664dd4zoo_4.jpg"
-        alt="imageTitle"
-        title="imageTitle"
-        class="align-end text-white image_content">
-      </NuxtPicture> -->
-      <!-- <img
-        :src="`${link}/${img}`"
-        sizes="{max-width:480px} 100vw, {max-width:1900px} 49vw"
-        :srcset="`
-            ${link}/${img} 100w,
-            ${link}/${img} 400w,
-            ${link}/${img} 1600w,
-            `"
-        alt="sddf" /> -->
       <v-sheet>
         <NuxtImg
           format="webp"
@@ -438,15 +420,6 @@ onMounted(async () => {
         </NuxtImg>
       </v-sheet>
 
-      <!-- <nuxt-img
-        format="webp"
-        width="300px"
-        height="200px"
-        src="https://epjfkkmrnhyxzevpvbjf.supabase.co/storage/v1/object/public/images/c5901592-8efa-414b-ada1-2e18fe664dd4zoo_4.jpg"
-        alt="imageTitle"
-        title="imageTitle"
-        class="align-end text-white image_content">
-      </nuxt-img> -->
       <v-sheet min-height="450" width="400" class="mx-auto position-relative d-flex">
         <v-form @submit.prevent="register" class="position-absolute w-100 align-self-center">
           <v-card-title>Register</v-card-title>

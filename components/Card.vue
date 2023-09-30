@@ -56,12 +56,6 @@ defineProps({
     <slot />
   </v-card>
 
-  <!--   <v-card v-else :title="titleCard" :color="colorbg" :subtitle="subtitleCard" :text="textCard">
-    <v-card-actions v-if="enablseButtonSlot">
-      <slot />
-    </v-card-actions>
-  </v-card> -->
-
   <v-card v-else :color="colorbg" :elevation="shadowCard">
     <v-img v-if="imageSource" :src="imageSource" cover />
     <div :class="justifyContent">

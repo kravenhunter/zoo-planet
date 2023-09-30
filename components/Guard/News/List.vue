@@ -47,5 +47,3 @@ defineProps<{ latestNewsList: Post[] }>();
     </v-col>
   </v-row>
 </template>
-
-<style scoped></style>

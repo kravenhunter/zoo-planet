@@ -2,8 +2,6 @@
 import { navigateTo } from "#imports";
 import { useAuthStore } from "@/stores/authStore";
 
-// import { navigateTo } from "nuxt/app";
-
 const { logOut } = useAuthStore();
 const nav = [
   { title: "Main Pages", icon: "mdi-folder", to: "/guard/section/main" },
@@ -56,5 +54,3 @@ const signOut = async () => {
     </template>
   </v-navigation-drawer>
 </template>
-
-<style scoped></style>

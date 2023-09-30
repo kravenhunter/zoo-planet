@@ -9,7 +9,7 @@ const props = defineProps<{
 }>();
 const loadingMemberPrices = useIsLoading();
 
-const { createPlanData, updatePlanPrices } = useUnionStore();
+const { updatePlanPrices } = useUnionStore();
 const firstTable = ref<PlanPrice>();
 const secondTable = ref<PlanPrice>();
 const thirdTable = ref<PlanPrice>();
@@ -33,19 +33,6 @@ const addPrices = async () => {
     );
     delayLoading(result);
   }
-
-  // if (props.singlEntry?.id && props.unlimited?.id) {
-  //   const result = await updateTicketPrices(
-  //     props.singlEntry!.id,
-  //     props.unlimited!.id,
-  //     stateSingle,
-  //     stateUnlimited,
-  //   );
-  //   delayLoading(result);
-  // } else {
-  //   const result = await createPlanData(firstState, secondState, thirdState);
-  //   delayLoading(result);
-  // }
 };
 
 const ticketTableHeaders = [
@@ -77,9 +64,6 @@ const ticketTableHeaders = [
                 </tr>
               </thead>
               <tbody class="text-subtitle-2">
-                <!-- <tr>
-                  <td class="pl-7 py-5" v-for="el in statePlan.secodn" :key="el">{{ el }}</td>
-                </tr> -->
                 <tr>
                   <td class="pl-7 py-5" style="width: 400px">
                     <v-text-field v-model="firstTable.title" label="Level"></v-text-field>
@@ -145,5 +129,3 @@ const ticketTableHeaders = [
     </v-container>
   </article>
 </template>
-
-<style scoped lang="scss"></style>

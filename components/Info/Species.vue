@@ -7,44 +7,6 @@ interface Props {
 }
 
 defineProps<Props>();
-
-const speciesTitle = {
-  title: "Local threatened species",
-  sourceTitle: "/images/35f9ab0c1f1433fd3c531fc261b36ae2e0075dd0.webp",
-  subtitle: "",
-  description:
-    "Meet the 27 Australian animals we're fighting to protect. These species are on the brink of extinction due to a range of threats. A lesser recognised but very real threat to these species, is that many Victorians do not know they exist, or how they can help. We think the only thing more unjust than wildlife extinction, is the loss of a species that no one knew was in trouble.",
-};
-const speciesList = [
-  {
-    id: 1,
-    sourceTitle: "/images/545d4194e945d01edc0787c04d14f961da4d8202.webp",
-    title: "Alpine She-oak Skink",
-    description:
-      "Found in only a few locations in Victoria and NSW, the Alpine She-oak Skink is listed as endangered.",
-  },
-  {
-    id: 2,
-    sourceTitle: "/images/91353b20af15b191b6a2fdcae964cc049fa2e259.webp",
-    title: "Baw Baw Frog",
-    description:
-      "All estimates point to extinction in the wild for the Baw Baw Frog in just five to 10 years.",
-  },
-  {
-    id: 3,
-    sourceTitle: "/images/35f9ab0c1f1433fd3c531fc261b36ae2e0075dd0.webp",
-    title: "Brush-tailed Rock-wallaby (southern population)",
-    description:
-      "In Victoria, the Brush-tailed Rock-wallaby now exists in only two small and isolated locations.",
-  },
-
-  {
-    id: 4,
-    sourceTitle: "/images/3abb64ec3774954dbcc7f2cce8ad0ad8a0912df8.webp",
-    title: "Golden-rayed Blue Butterfly",
-    description: "This Victorian butterfly is Endangered.",
-  },
-];
 </script>
 
 <template>

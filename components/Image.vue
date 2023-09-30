@@ -56,5 +56,3 @@ defineProps({
     <slot />
   </v-img>
 </template>
-
-<style scoped></style>

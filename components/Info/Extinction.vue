@@ -144,13 +144,6 @@ const extinction = {
             <v-row align="start">
               <v-col cols="12" lg="8">
                 <NuxtLink :to="{ path: `/news/${programs[1].id}` }">
-                  <!-- <CardInline
-            max-width-card="475"
-            :image-source="programs[1].imagePreviewLink!"
-            image-width="100%"
-            image-heigth="350px"
-            image-cols-size="12"
-            :enable-button="false" /> -->
                   <CardColumn heigth-card="475px" :enable-card-slot="true">
                     <v-img
                       :src="programs[1].imagePreviewLink!"
@@ -437,7 +430,7 @@ const extinction = {
       justify-content: center;
       &_list {
         display: grid;
-        /*  grid-template-columns: repeat(auto-fit, minmax(auto, 500px)); */
+
         grid-template-columns: repeat(1, minmax(auto, 1000px));
         gap: 20px;
         justify-content: center;

@@ -5,7 +5,7 @@ interface Props {
   mainContent: ContentPages;
   news: Post[];
 }
-const props = defineProps<Props>();
+defineProps<Props>();
 </script>
 
 <template>

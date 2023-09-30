@@ -20,5 +20,3 @@ const links = ["Home", "About Us", "Team", "Services", "Blog", "Contact Us"];
     </v-row>
   </v-footer>
 </template>
-
-<style scoped></style>

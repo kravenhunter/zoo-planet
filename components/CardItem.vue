@@ -59,18 +59,6 @@ defineProps({
 </script>
 
 <template>
-  <!--   <v-card
-    v-if="enableSlot"
-    :title="titleCard"
-    :color="colorbg"
-    :subtitle="subtitleCard"
-    :text="textCard"
-    :class="classCard"
-    :elevation="0">
-    <slot />
-  </v-card>
- -->
-
   <v-card
     v-if="!inline"
     :color="colorbg"

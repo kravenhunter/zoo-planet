@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { reactive } from "#imports";
 import { delayLoading, useIsLoading } from "@/composables/states";
-import { useBookingStore } from "@/stores/bookingStore";
+import { useUnionStore } from "@/stores/storeGenerics";
 import type { TicketPrice } from "@prisma/client";
 
 const props = defineProps<{
@@ -10,7 +10,7 @@ const props = defineProps<{
 }>();
 const loadingMemberPrices = useIsLoading();
 
-const { addTicketPrices, updateTicketPrices } = useBookingStore();
+const { createTablesData, updateDataPrices } = useUnionStore();
 
 const stateSingle = reactive({
   adult: props.singlEntry?.adult ?? "",
@@ -28,34 +28,25 @@ const stateUnlimited = reactive({
   seniors: props.unlimited?.seniors ?? "",
 });
 
-// stateMonth.value = {
-//   adult: ticketTable.value?.length ? ticketTable.value[0].adult : "",
-//   childCategoryFirst: ticketTable.value?.length ? ticketTable.value[0].childCategoryFirst : "",
-//   childCategorySecond: ticketTable.value?.length ? ticketTable.value[0].childCategorySecond : "",
-//   concession: ticketTable.value?.length ? ticketTable.value[0].concession : "",
-//   seniors: ticketTable.value?.length ? ticketTable.value[0].seniors : "",
-// };
-
-// stateYaer.value = {
-//   adult: ticketTable.value?.length ? ticketTable.value[1].adult : "",
-//   childCategoryFirst: ticketTable.value?.length ? ticketTable.value[1].childCategoryFirst : "",
-//   childCategorySecond: ticketTable.value?.length ? ticketTable.value[1].childCategorySecond : "",
-//   concession: ticketTable.value?.length ? ticketTable.value[1].concession : "",
-//   seniors: ticketTable.value?.length ? ticketTable.value[1].seniors : "",
-// };
-
 const addPrices = async () => {
   loadingMemberPrices.value = true;
   if (props.singlEntry?.id && props.unlimited?.id) {
-    const result = await updateTicketPrices(
+    const result = await updateDataPrices(
       props.singlEntry!.id,
       props.unlimited!.id,
+      "ticket",
+      "update-ticket-prices",
       stateSingle,
       stateUnlimited,
     );
     delayLoading(result);
   } else {
-    const result = await addTicketPrices(stateSingle, stateUnlimited);
+    const result = await createTablesData(
+      "ticket",
+      "create-ticket-prices",
+      stateSingle,
+      stateUnlimited,
+    );
     delayLoading(result);
   }
 };
@@ -164,5 +155,3 @@ const ticketTableHeaders = [
     </v-container>
   </article>
 </template>
-
-<style scoped lang="scss"></style>

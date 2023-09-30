@@ -1,10 +1,6 @@
 <script setup lang="ts">
 import { ref } from "#imports";
-import {
-  useCurrentMemberTab,
-  useMemberShipDataFormState,
-  useSelectedPrecesState,
-} from "@/composables/states";
+import { useCurrentMemberTab, useSelectedPrecesState } from "@/composables/states";
 import type { ContentPages, MembershipPrice } from "@prisma/client";
 
 interface Props {
@@ -13,24 +9,11 @@ interface Props {
   stateYaer: MembershipPrice;
 }
 
-interface Person {
-  firstName?: string;
-  lastName?: string;
-  phone?: string;
-  personGender?: string;
-  dateOfBirth?: string;
-  adress?: string;
-  email?: string;
-  isEmpty: boolean;
-}
-
 defineProps<Props>();
 
-const statePersons = useMemberShipDataFormState();
 const selectedPrecesState = useSelectedPrecesState();
 const currentTab = useCurrentMemberTab();
 
-const tab = ref("Member");
 const items = ["Member", "Details", "Payment", "Confirmation"];
 
 const count = ref(0);
@@ -46,11 +29,6 @@ const goBack = () => {
   };
 
   currentTab.value = "Member";
-};
-const nextTab = () => {
-  count.value = (count.value + 1) % items.length;
-  currentTab.value = items[count.value];
-  console.log(statePersons.value);
 };
 </script>
 
@@ -167,17 +145,6 @@ const nextTab = () => {
               </CardColumn>
             </v-window-item>
           </v-window>
-          <!-- <v-card-actions>
-            <v-btn
-              class="mx-auto px-10 text-subtitle-1 text-white"
-              color="#395A03"
-              variant="flat"
-              size="x-large"
-              @click="nextTab">
-              Next Step
-              <v-icon :size="30" color="#ffc107" class="ml-3 mb-1">mdi-paw</v-icon>
-            </v-btn>
-          </v-card-actions> -->
         </v-card>
       </v-container>
     </article>

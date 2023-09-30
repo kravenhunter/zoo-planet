@@ -4,11 +4,6 @@ import { useUnionStore } from "@/stores/storeGenerics";
 
 import { storeToRefs } from "pinia";
 
-// import { useBookingStore } from "@/stores/bookingStore";
-// import { useContactsStore } from "@/stores/contactsStore";
-// import { useMainContentStore } from "@/stores/mainContentStore";
-// import { usePostStore } from "@/stores/postStore";
-// import { useSpeciesStore } from "@/stores/speciesStore";
 import type { ContactUs, ContentPages, MembershipPrice, Post, TicketPrice } from "@prisma/client";
 
 const router = useRoute();
@@ -26,28 +21,6 @@ const singleState = ref<TicketPrice>();
 const unlimitedSTate = ref<TicketPrice>();
 // //Contacts Data
 const contacts = ref<ContactUs>();
-
-// //Contacts Data
-// const { contactPage } = storeToRefs(useContactsStore());
-// const contacts = ref<ContactUs>();
-
-// // Main Content Data
-// const { mainPages } = storeToRefs(useMainContentStore());
-
-// //  Articles
-// const { postlist } = storeToRefs(usePostStore());
-// const newsMainPageContent = ref<ContentPages>();
-// const latestNewsList = ref<Post[]>();
-
-// // Membership Prices & Table
-// const { membershipTable, ticketTable } = storeToRefs(useBookingStore());
-
-// const stateMonth = ref<MembershipPrice>();
-// const stateYaer = ref<MembershipPrice>();
-
-// // Ticket Prices & Table
-// const singleState = ref<TicketPrice>();
-// const unlimitedSTate = ref<TicketPrice>();
 
 //Checking ROutes
 

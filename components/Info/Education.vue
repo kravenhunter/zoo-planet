@@ -420,7 +420,6 @@ console.log(props.programs);
     }
   }
   & .description {
-    /*    background-color: #004c67; */
     padding: 50px 0;
   }
   & .conservation {
@@ -463,11 +462,9 @@ console.log(props.programs);
     }
   }
   &_description {
-    /*   background: #f4f1e7; */
     background: #395a03;
     grid-column: span 3;
     grid-row: 2;
-    /*     justify-content: center; */
   }
   & .conservation {
     grid-column: span 3;
@@ -520,7 +517,6 @@ console.log(props.programs);
     justify-content: center;
     &_list {
       display: grid;
-      /*  grid-template-columns: repeat(auto-fit, minmax(auto, 500px)); */
       grid-template-columns: repeat(1, minmax(auto, 1000px));
       gap: 20px;
       justify-content: center;

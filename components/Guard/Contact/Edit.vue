@@ -2,24 +2,16 @@
 import { computed, ref, toRefs } from "#imports";
 
 import { delayLoading, useIsLoading } from "@/composables/states";
-import { useContactsStore } from "@/stores/contactsStore";
+
 import { useUnionStore } from "@/stores/storeGenerics";
 import type { ContactUs } from "@prisma/client";
-import { storeToRefs } from "pinia";
 
 const props = defineProps<{ contacTable: ContactUs }>();
 
-//isLoadingContacts - returns false or true
-// const { contactPage } = storeToRefs(useContactsStore());
-
-const { updateContactContent } = useContactsStore();
 const { updateData } = useUnionStore();
 const { contacTable } = toRefs(props);
-const { contactPage } = storeToRefs(useContactsStore());
 
 const isLoadingContacts = useIsLoading();
-
-// contacTable.value = contactPage.value?.[0];
 
 const isEmpty = computed(() => {
   if (contacTable.value?.title && contacTable.value.extraeDscription) {
@@ -151,5 +143,3 @@ const addPost = async () => {
     </v-row>
   </v-container>
 </template>
-
-<style scoped lang="scss"></style>

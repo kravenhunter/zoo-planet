@@ -141,11 +141,7 @@ if (route.params.id === "contact") {
       :member-main="newsMainPageContent"
       :state-month="stateMonth"
       :state-yaer="stateYaer" />
-    <!-- <InfoMembership
-      v-else-if="route.params.id === 'membership' && newsMainPageContent && stateMonth && stateYaer"
-      :member-main="newsMainPageContent"
-      :state-month="stateMonth"
-      :state-yaer="stateYaer" /> -->
+
     <TestComponent v-else-if="route.params.id === 'test'" />
     <ErrorResult v-else />
   </div>

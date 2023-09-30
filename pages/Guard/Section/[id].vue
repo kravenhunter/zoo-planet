@@ -10,5 +10,3 @@ definePageMeta({
 <template>
   <GuardMainBlock />
 </template>
-
-<style scoped></style>

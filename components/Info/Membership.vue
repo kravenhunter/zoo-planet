@@ -44,16 +44,9 @@ const statePersons = reactive({
 });
 
 console.log(statePersons.adults[0].firstName);
-const selectedPerson = ref("Male");
+
 const personList = ["Male", "Female", "Self-described"];
 const selectedPrecesState = useSelectedPrecesState();
-
-// statePersons.adults.length = selectedPrecesState.value.adult;
-// statePersons.concessions.length = selectedPrecesState.value.concession;
-// statePersons.child.length = selectedPrecesState.value.child;
-// statePersons.zooCrew.length = selectedPrecesState.value.zooCrew;
-// statePersons.senior.length = selectedPrecesState.value.senior;
-// statePersons.supporter.length = selectedPrecesState.value.supporter;
 
 const tab = ref("Member");
 const items = ["Member", "Details", "Payment", "Confirmation"];

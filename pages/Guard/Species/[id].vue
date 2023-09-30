@@ -10,5 +10,3 @@ definePageMeta({
 <template>
   <GuardSpeciesEdit />
 </template>
-
-<style scoped></style>

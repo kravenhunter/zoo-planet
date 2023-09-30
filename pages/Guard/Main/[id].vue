@@ -10,12 +10,3 @@ definePageMeta({
 <template>
   <LazyGuardMainEdit />
 </template>
-
-<style scoped lang="scss">
-/* .v-overlay {
-  pointer-events: all;
-  &--active {
-    pointer-events: all;
-  }
-} */
-</style>

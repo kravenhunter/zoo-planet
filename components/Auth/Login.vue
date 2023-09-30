@@ -84,5 +84,3 @@ const load = async () => {
     </v-card>
   </v-dialog>
 </template>
-
-<style scoped></style>
