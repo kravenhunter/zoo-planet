@@ -162,6 +162,7 @@ export function useImageStorage() {
     instance = createClient(supabaseUrl, supabaseKey, { auth: { persistSession: false } });
     counter.value += 1;
   }
+  console.log("supabase instance", instance);
 
   return instance;
 }

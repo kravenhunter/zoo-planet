@@ -24,20 +24,6 @@ import type {
 } from "types/ITypes";
 import { uuid } from "vue-uuid";
 
-// import { getCurrentTime } from "@/composables/getTime";
-
-// import supabaseStete from "@/composables/supabaseStete";
-
-interface Foo {
-  kind: "foo";
-  fooProperty: string;
-}
-
-interface IUrls {
-  coverLink: string;
-  previewLink: string;
-}
-
 type ReqiestMethod =
   | "list"
   | "update"
@@ -63,8 +49,6 @@ type TypeTables =
 type TypeImage = "cover" | "preview";
 const apiUrl = "/api/prisma";
 export const useUnionStore = defineStore("union-store", () => {
-  //const refreshPost: (opts?: AsyncDataExecuteOptions | undefined) => Promise<void>
-  //errorPost: Ref<FetchError<any> | null>
   const postlist = ref<Post[] | null>();
   const specieList = ref<Specie[] | null>();
   const mainPages = ref<ContentPages[] | null>();
@@ -76,37 +60,6 @@ export const useUnionStore = defineStore("union-store", () => {
   const pendingData = ref<boolean>(false);
   const loadDataList = async () => {
     try {
-      // const {
-      //   data: postlist,
-      //   error: errorPost,
-      //   refresh: refreshPost,
-      // } =  await useFetch<Post[]>(`${apiUrl}/post/list`);
-      // const {
-      //   data: specieList,
-      //   error: errorSpecie,
-      //   refresh: refreshSpecie,
-      // } = await useFetch<Specie[]>(`${apiUrl}/specie/list`);
-      // const {
-      //   data: mainPages,
-      //   error: errorMainPages,
-      //   refresh: refreshMainPages,
-      // } = await useFetch<ContentPages[]>(`${apiUrl}/main-content-pages/list`);
-      // const {
-      //   data: contactPage,
-      //   error: errorContactUs,
-      //   refresh: refreshContactUs,
-      // } = await useFetch<ContactUs[]>(`${apiUrl}/contacts/list`);
-      // const {
-      //   data: membershipTable,
-      //   error: errorMembershipPrice,
-      //   refresh: refreshMembershipPrice,
-      // } = awaituseFetch<MembershipPrice[]>(`${apiUrl}/membership/list`);
-      // const {
-      //   data: ticketTable,
-      //   error: errorTicketPrice,
-      //   refresh: refreshTicketPrice,
-      // } = await useFetch<TicketPrice[]>(`${apiUrl}/ticket/list`);
-
       const postPromise = useFetch<Post[]>(`${apiUrl}/post/list`);
       const speciePromise = useFetch<Specie[]>(`${apiUrl}/specie/list`);
       const mainPagesPromise = useFetch<ContentPages[]>(`${apiUrl}/main-content-pages/list`);
@@ -123,7 +76,6 @@ export const useUnionStore = defineStore("union-store", () => {
         ticketPromise,
         planPromise,
       ]);
-      // console.log("promiseAll", promiseAll);
 
       const { data: postResult, error: errorPost, refresh: refreshPost } = promiseAll[0];
       const { data: specieResult, error: errorSpecie, refresh: refreshSpecie } = promiseAll[1];
@@ -152,7 +104,7 @@ export const useUnionStore = defineStore("union-store", () => {
         error: errorPlanPrice,
         refresh: refreshPlanPrice,
       } = promiseAll[6];
-
+      console.log("Posts", postResult.value);
       postlist.value = postResult.value;
       specieList.value = specieResult.value;
       mainPages.value = mainPagesResult.value;
@@ -162,40 +114,7 @@ export const useUnionStore = defineStore("union-store", () => {
       planTable.value = planTableResult.value;
     } catch (error) {}
   };
-  // const loadPostList = async () => {
 
-  //   try {
-  //     const { data: response, error, refresh } = await useFetch<Post[]>("/api/prisma/post/list");
-
-  //   refrashData.value = refresh;
-
-  //     if (error.value) {
-  //       throw error.value;
-  //     }
-
-  //     postlist.value = response.value;
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  //  const refrashData = async () => {
-  //   try {
-  //     const {
-  //       data: response,
-  //       error,
-  //       refresh,
-  //     } = await useFetch(`/api/prisma/main-content-pages/list`);
-  //     if (error) {
-  //       throw error;
-  //     }
-
-  //     console.log(response);
-  //     mainPages.value = response.value as ContentPages[];
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
   const getSizeImage = async (fileImage: File): Promise<number> => {
     return await new Promise((resolve) => {
       const newImage = new Image();
@@ -213,20 +132,12 @@ export const useUnionStore = defineStore("union-store", () => {
     imageWidth: number,
   ): Promise<string> {
     const supabaseStore = useImageStorage();
-    // const urlsCover =
-    //   "https://epjfkkmrnhyxzevpvbjf.supabase.co/storage/v1/object/public/images/cover/";
-    // const urlsPrevie =
-    //   "https://epjfkkmrnhyxzevpvbjf.supabase.co/storage/v1/object/public/images/preview/";
 
     const urlImage = `https://epjfkkmrnhyxzevpvbjf.supabase.co/storage/v1/object/public/images/${typeImage}/`;
 
     const linkDefault = "image";
     try {
       const compressedFile = await compressToBestSize(imageWidth, fileCover);
-      //const newFilePreview = compressToBestSizeImage(filePreview);
-      // const promiseAll = await Promise.all([newFileCover, newFilePreview]);
-      //  const responseFirst = promiseAll[0];
-      //  const responseSecond = promiseAll[1];
 
       if (compressedFile?.compressedFILE) {
         console.log(compressedFile.compressedFILE);
@@ -261,7 +172,6 @@ export const useUnionStore = defineStore("union-store", () => {
     const getUrls = `${apiUrl}/${table}/${methodRequest}`;
 
     try {
-      // const fileObject = await loadImageToStore(fileDataCover, fileDataPreview);
       const getCoverWidth = await getSizeImage(fileDataCover);
       const coverPromise = loadImageToStore(fileDataCover, "cover", getCoverWidth);
       const previewPromise = loadImageToStore(fileDataPreview, "preview", 600);
@@ -312,49 +222,6 @@ export const useUnionStore = defineStore("union-store", () => {
     return "Error";
   };
 
-  // const createPost = async (fileData: 0 | FileList | undefined, content: IPost) => {
-  //   try {
-  //     if (fileData) {
-  //       content.imageBgLink = await loadImage(fileData);
-  //     }
-
-  //     const { data: response, error } = await useFetch<string>("/api/prisma/post/create", {
-  //       method: "post",
-  //       body: JSON.stringify(content),
-  //     });
-
-  //     if (error.value) {
-  //       throw error.value;
-  //     }
-  //     return response.value;
-  //   } catch (error) {
-  //     console.log(error);
-  //     return "Error";
-  //   }
-  // };
-
-  // const updatePost = async (idPost: string, fileData: 0 | FileList | undefined, content: IPost) =>{
-  //   try {
-  //     fileData && (content.imageBgLink = await loadImage(fileData));
-
-  //     const { data: response, error } = await useFetch<string>(
-  //       `/api/prisma/post/update/${idPost}`,
-  //       {
-  //         method: "post",
-  //         body: JSON.stringify(content),
-  //       },
-  //     );
-
-  //     // throw new Error("");
-  //     if (error.value) {
-  //       throw error.value;
-  //     }
-  //     return response.value;
-  //   } catch (error) {
-  //     console.log(error);
-  //     return "Error";
-  //   }
-  // }
   const updateData = async <T extends TypeInterfaces>(
     idData: string,
     fileDataCover: 0 | File | undefined,

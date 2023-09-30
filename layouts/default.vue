@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, navigateTo, onMounted, ref } from "#imports";
+import { navigateTo, onMounted, ref } from "#imports";
 import { useAuthStore } from "@/stores/authStore";
 import { useUnionStore } from "@/stores/storeGenerics";
 import type { ContactUs } from "@prisma/client";
@@ -119,12 +119,6 @@ const bgImages = [
   },
 ];
 
-const getSearchResult = computed(() => {
-  if (searchRequest.value) {
-    return postlist.value?.filter((el) => el.title.includes(searchRequest.value)).slice(0, 3);
-  }
-  return undefined;
-});
 const searchHandler = (search: string) => {
   search && navigateTo(`/search/${search}`);
 };
