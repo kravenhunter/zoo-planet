@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { navigateTo, onMounted, ref } from "#imports";
+import { navigateTo, onMounted, ref, useSeoMeta } from "#imports";
 import { useAuthStore } from "@/stores/authStore";
 import { useUnionStore } from "@/stores/storeGenerics";
 import type { ContactUs } from "@prisma/client";
@@ -127,6 +127,11 @@ console.log(contactPage.value);
 onMounted(() => {
   isAuthorized.value = checkAuth();
 });
+
+useSeoMeta({
+  description: "the best zoo park in the world",
+  ogDescription: "the best zoo park in the world",
+});
 </script>
 
 <template>
@@ -147,6 +152,7 @@ onMounted(() => {
               variant="text"
               class="mx-2"
               rounded="xl"
+              :title="link.title"
               :to="link.link">
               {{ link.title }}
             </v-btn>
@@ -159,6 +165,7 @@ onMounted(() => {
               color="#FBB03B"
               variant="text"
               :to="link.link"
+              :title="link.title"
               rounded="xl">
               {{ link.title }}
             </v-btn>
@@ -167,6 +174,7 @@ onMounted(() => {
               class="mx-2 text-subtitle-2"
               color="#FBB03B"
               variant="text"
+              title="Dashboard"
               to="/guard"
               rounded="xl">
               Dashboard
@@ -176,6 +184,7 @@ onMounted(() => {
               class="mx-2 text-subtitle-2"
               color="#FBB03B"
               variant="text"
+              title="Icon-logout"
               @click="logOut"
               rounded="xl">
               <v-icon> mdi-logout </v-icon>
@@ -193,7 +202,7 @@ onMounted(() => {
         :alt="bgImages[0].title">
         <v-row no-gutters>
           <v-col :cols="1" class="logo">
-            <v-img src="/images/logos.svg" height="99px" width="126px" />
+            <v-img src="/images/logos.svg" height="99px" width="126px" alt="logos" />
           </v-col>
           <v-col class="nav_menu">
             <v-row justify="end" no-gutters>
@@ -209,6 +218,7 @@ onMounted(() => {
                 color="#FBB03B"
                 variant="text"
                 class="mx-2 text-subtitle-1"
+                title="btn-search"
                 rounded="xl">
                 <UiElementsIcons
                   icon-name="material-symbols:search"
@@ -223,6 +233,7 @@ onMounted(() => {
                 color="#FBB03B"
                 variant="text"
                 :to="link.link"
+                :title="link.title"
                 rounded="xl">
                 {{ link.title }}
               </v-btn>
@@ -231,6 +242,7 @@ onMounted(() => {
                 class="mx-2 text-subtitle-2"
                 color="#FBB03B"
                 variant="text"
+                title="Dashboard"
                 to="/guard"
                 rounded="xl">
                 Dashboard
@@ -240,6 +252,7 @@ onMounted(() => {
                 class="mx-2 text-subtitle-2"
                 color="#FBB03B"
                 variant="text"
+                title="icon-logout-vurger"
                 @click="logOut"
                 rounded="xl">
                 <v-icon> mdi-logout </v-icon>
@@ -254,6 +267,7 @@ onMounted(() => {
                 variant="text"
                 class="mx-2"
                 rounded="xl"
+                :title="link.title"
                 :to="link.link">
                 {{ link.title }}
               </v-btn>
@@ -261,88 +275,20 @@ onMounted(() => {
           </v-col>
           <div class="burger_btn">
             <div class="burger_logo">
-              <v-img src="/images/logos.svg" height="99px" width="126px" />
+              <v-img src="/images/logos.svg" height="99px" width="126px" alt="logos-burger" />
             </div>
             <div class="burger_icon">
-              <v-btn icon @click="collapseBurger = !collapseBurger" color="white">
-                <v-icon size="x-large">mdi-menu </v-icon>
+              <v-btn
+                title="burger-icon"
+                icon
+                @click="collapseBurger = !collapseBurger"
+                color="white">
+                <v-icon title="burget-menu" size="x-large">mdi-menu </v-icon>
               </v-btn>
             </div>
           </div>
         </v-row>
       </v-img>
-      <!-- <Image :source="bgImages[0].imageBgLink" class="pa-10" :alt="bgImages[0].title">
-        <v-row no-gutters>
-          <v-col :cols="1" class="logo">
-            <v-img src="/images/logos.svg" height="99px" width="126px" />
-          </v-col>
-          <v-col>
-            <v-row justify="end" no-gutters>
-              <v-expand-x-transition>
-                <UiElementsSearch
-                  v-if="showSearch"
-                  v-model:value.trim="searchRequest"
-                  @keyup.enter="searchHandler(searchRequest)" />
-              </v-expand-x-transition>
-
-              <v-btn
-                @click="showSearch = !showSearch"
-                color="#FBB03B"
-                variant="text"
-                class="mx-2 text-subtitle-1"
-                rounded="xl">
-                <UiElementsIcons
-                  icon-name="material-symbols:search"
-                  color-icon="white"
-                  size-width="30"
-                  size-heigth="30" />
-              </v-btn>
-              <v-btn
-                v-for="(link, i) in navTop"
-                :key="i"
-                class="mx-2 text-subtitle-2"
-                color="#FBB03B"
-                variant="text"
-                :to="link.link"
-                rounded="xl">
-        
-                {{ link.title }}
-              </v-btn>
-              <v-btn
-                v-if="isAuthorized"
-                class="mx-2 text-subtitle-2"
-                color="#FBB03B"
-                variant="text"
-                to="/guard"
-                rounded="xl">
-                Dashboard
-              </v-btn>
-              <v-btn
-                v-if="isAuthorized"
-                class="mx-2 text-subtitle-2"
-                color="#FBB03B"
-                variant="text"
-                @click="logOut"
-                rounded="xl">
-                <v-icon> mdi-logout </v-icon>
-              </v-btn>
-              <AuthLogin v-else />
-            </v-row>
-            <v-row justify="end" align="end" no-gutters class="mt-4">
-              <v-btn
-                v-for="(link, i) in navigationMain"
-                :key="i"
-                color="white"
-                variant="text"
-                class="mx-2"
-                rounded="xl"
-                :to="link.link">
-                {{ link.title }}
-              </v-btn>
-            </v-row>
-          </v-col>
-        </v-row>
-      </Image> -->
     </v-app-bar>
 
     <v-main class="bg-surface-variant main">
@@ -375,12 +321,15 @@ onMounted(() => {
                     variant="outlined"></v-text-field>
 
                   <v-btn
+                    title="SUBSCRIBE"
                     class="px-10 text-subtitle-1 text-white"
                     color="#395A03"
                     variant="flat"
                     :height="57">
                     SUBSCRIBE
-                    <v-icon :size="30" color="#ffc107" class="ml-3 mb-1">mdi-paw</v-icon>
+                    <v-icon title="mdi-paw" :size="30" color="#ffc107" class="ml-3 mb-1"
+                      >mdi-paw</v-icon
+                    >
                   </v-btn>
                 </div>
               </Card>
@@ -450,7 +399,11 @@ onMounted(() => {
               <li class="text-subtitle-2">Sit emap</li>
               <li class="text-subtitle-2">News</li>
               <li class="text-subtitle-2">What’s On</li>
-              <li><NuxtLink class="text-subtitle-2" to="/info/contact">Contact Us</NuxtLink></li>
+              <li>
+                <NuxtLink class="text-subtitle-2" to="/info/contact" title="contact-us"
+                  >Contact Us</NuxtLink
+                >
+              </li>
             </ul>
           </div>
         </div>
@@ -468,7 +421,7 @@ onMounted(() => {
             <h4 class="text-center">FOLOW US</h4>
             <ul v-if="socialsLink?.length">
               <li v-for="(icon, i) in socials" :key="i">
-                <NuxtLink :to="socialsLink[i]">
+                <NuxtLink :to="socialsLink[i]" :title="icon.icon">
                   <v-avatar color="#395A03" class="ma-3" size="47" rounded="50">
                     <UiElementsIcons
                       :icon-name="icon.icon"

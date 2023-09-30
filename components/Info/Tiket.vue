@@ -38,6 +38,7 @@ const tableHeaders = [
     <article class="main_cover">
       <CardColumn :enable-card-slot="true">
         <v-img
+          :alt="ticketMain.title"
           :src="ticketMain.imageBgLink"
           class="align-end"
           gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
@@ -82,6 +83,7 @@ const tableHeaders = [
                   color="#01579b"
                   variant="flat"
                   size="x-large"
+                  title="Buy ticket"
                   append-icon="mdi-paw"
                   to="/info/help">
                   Buy ticket
@@ -89,12 +91,13 @@ const tableHeaders = [
               </td>
               <td>
                 <v-btn
+                  title="Become a Zoo Member"
                   class="ticket_btn font-weight-bold justify-start"
                   color="#01579b"
                   variant="flat"
                   size="x-large"
                   append-icon="mdi-paw"
-                  to="/info/help">
+                  to="/info/membership">
                   Become a Zoo Member
                 </v-btn>
               </td>

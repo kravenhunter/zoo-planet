@@ -148,6 +148,7 @@ function parseData(price: string) {
         <article class="order bg-brown-lighten-5">
           <CardColumn :enable-card-slot="true">
             <v-img
+              :alt="membership.title"
               :src="membership.imageBgLink"
               class="align-end"
               gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
@@ -180,6 +181,7 @@ function parseData(price: string) {
                     </td>
                     <td class="d-flex align-center">
                       <v-icon
+                        title="close-icon"
                         v-if="selectedPrecesState.adult"
                         color="error"
                         icon="mdi-close-thick"
@@ -197,6 +199,7 @@ function parseData(price: string) {
                         v-if="selectedPrecesState.child"
                         color="error"
                         icon="mdi-close-thick"
+                        title="mdi-close-thick"
                         size="17px"
                         @click="selectedPrecesState.child = 0"></v-icon>
                     </td>
@@ -209,6 +212,7 @@ function parseData(price: string) {
                     <td class="d-flex align-center">
                       <v-icon
                         v-if="selectedPrecesState.zooCrew"
+                        title="mdi-close-thick"
                         color="error"
                         icon="mdi-close-thick"
                         size="17px"
@@ -225,6 +229,7 @@ function parseData(price: string) {
                         v-if="selectedPrecesState.concession"
                         color="error"
                         icon="mdi-close-thick"
+                        title="mdi-close-thick"
                         size="17px"
                         @click="selectedPrecesState.concession = 0"></v-icon>
                     </td>
@@ -239,6 +244,7 @@ function parseData(price: string) {
                         v-if="selectedPrecesState.senior"
                         color="error"
                         icon="mdi-close-thick"
+                        title="mdi-close-thick"
                         size="17px"
                         @click="selectedPrecesState.senior = 0"></v-icon>
                     </td>
@@ -253,6 +259,7 @@ function parseData(price: string) {
                         v-if="selectedPrecesState.teacher"
                         color="error"
                         icon="mdi-close-thick"
+                        title="mdi-close-thick"
                         size="17px"
                         @click="selectedPrecesState.teacher = 0"></v-icon>
                     </td>
@@ -267,6 +274,7 @@ function parseData(price: string) {
                         v-if="selectedPrecesState.supporter"
                         color="error"
                         icon="mdi-close-thick"
+                        title="mdi-close-thick"
                         size="17px"
                         @click="selectedPrecesState.supporter = 0"></v-icon>
                     </td>
@@ -293,6 +301,7 @@ function parseData(price: string) {
                         v-if="selectedPrecesState.adult"
                         color="error"
                         icon="mdi-close-thick"
+                        title="mdi-close-thick"
                         size="17px"
                         @click="selectedPrecesState.adult = 0"></v-icon>
                     </td>
@@ -307,6 +316,7 @@ function parseData(price: string) {
                         v-if="selectedPrecesState.child"
                         color="error"
                         icon="mdi-close-thick"
+                        title="mdi-close-thick"
                         size="17px"
                         @click="selectedPrecesState.child = 0"></v-icon>
                     </td>
@@ -321,6 +331,7 @@ function parseData(price: string) {
                         v-if="selectedPrecesState.zooCrew"
                         color="error"
                         icon="mdi-close-thick"
+                        title="mdi-close-thick"
                         size="17px"
                         @click="selectedPrecesState.zooCrew = 0"></v-icon>
                     </td>
@@ -334,6 +345,7 @@ function parseData(price: string) {
                       <v-icon
                         v-if="selectedPrecesState.concession"
                         color="error"
+                        title="mdi-close-thick"
                         icon="mdi-close-thick"
                         size="17px"
                         @click="selectedPrecesState.concession = 0"></v-icon>
@@ -349,6 +361,7 @@ function parseData(price: string) {
                         v-if="selectedPrecesState.senior"
                         color="error"
                         icon="mdi-close-thick"
+                        title="mdi-close-thick"
                         size="17px"
                         @click="selectedPrecesState.senior = 0"></v-icon>
                     </td>
@@ -363,6 +376,7 @@ function parseData(price: string) {
                         v-if="selectedPrecesState.teacher"
                         color="error"
                         icon="mdi-close-thick"
+                        title="mdi-close-thick"
                         size="17px"
                         @click="selectedPrecesState.teacher = 0"></v-icon>
                     </td>
@@ -377,6 +391,7 @@ function parseData(price: string) {
                         v-if="selectedPrecesState.supporter"
                         color="error"
                         icon="mdi-close-thick"
+                        title="mdi-close-thick"
                         size="17px"
                         @click="selectedPrecesState.supporter = 0"></v-icon>
                     </td>
@@ -395,6 +410,7 @@ function parseData(price: string) {
           </v-window>
           <v-card-actions>
             <v-btn
+              title=" Buy tickets"
               class="text-subtitle-1 text-white"
               color="#395A03"
               variant="flat"
@@ -403,7 +419,7 @@ function parseData(price: string) {
               :disabled="!totalPrice"
               @click="currentTab = 'Details'">
               Buy tickets
-              <v-icon :size="30" color="#ffc107" class="ml-3 mb-1">mdi-paw</v-icon>
+              <v-icon title="mdi-paw" :size="30" color="#ffc107" class="ml-3 mb-1">mdi-paw</v-icon>
             </v-btn>
           </v-card-actions>
         </article>

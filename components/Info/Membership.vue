@@ -70,6 +70,7 @@ const activateormTag = (index: number) => {
     <article class="main_cover">
       <CardColumn heigth-card="600" :enable-card-slot="true">
         <v-img
+          :alt="memberMain.title"
           :src="memberMain.imageBgLink"
           class="align-end"
           gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"

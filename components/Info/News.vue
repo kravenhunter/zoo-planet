@@ -13,6 +13,7 @@ defineProps<Props>();
     <article class="main_cover">
       <CardColumn :enable-card-slot="true">
         <v-img
+          :alt="mainContent.title"
           :src="mainContent.imageBgLink"
           class="align-end"
           gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"

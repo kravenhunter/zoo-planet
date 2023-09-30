@@ -19,6 +19,7 @@ const extinction = {
     <article class="card">
       <CardColumn :enable-card-slot="true">
         <v-img
+          :alt="fightingMain.title"
           :src="fightingMain.imageBgLink"
           class="align-end"
           gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
@@ -77,9 +78,10 @@ const extinction = {
               :enable-button="false" />
           </v-col>
           <v-col>
-            <NuxtLink to="/info/species">
+            <NuxtLink to="/info/species" title="species">
               <CardColumn max-width-card="600" class="mx-auto" :enable-card-slot="true">
                 <v-img
+                  :alt="extinction.title"
                   :src="extinction.sourceTitle"
                   class="align-end"
                   gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
@@ -104,9 +106,10 @@ const extinction = {
             :enable-button="false" />
           <div class="retrospective_two">
             <v-col cols="12">
-              <NuxtLink :to="{ path: `/news/${programs[1].id}` }">
+              <NuxtLink :to="{ path: `/news/${programs[1].id}` }" :title="programs[1].title">
                 <CardColumn heigth-card="100%" max-height-card="475" :enable-card-slot="true">
                   <v-img
+                    :alt="programs[1].title"
                     :src="programs[1].imagePreviewLink!"
                     gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
                     class="align-end"
@@ -120,13 +123,14 @@ const extinction = {
               </NuxtLink>
             </v-col>
             <v-col cols="12" v-for="el in programs.slice(2, 4)" :key="el.id">
-              <NuxtLink :to="{ path: `/news/${el.id}` }">
+              <NuxtLink :to="{ path: `/news/${el.id}` }" :title="el.title">
                 <CardColumn
                   v-if="programs.length"
                   heigth-card="100%"
                   max-height-card="475"
                   :enable-card-slot="true">
                   <v-img
+                    :alt="programs[1].title"
                     :src="el.imagePreviewLink!"
                     class="align-end"
                     gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
@@ -143,9 +147,10 @@ const extinction = {
           <div class="retrospective_one">
             <v-row align="start">
               <v-col cols="12" lg="8">
-                <NuxtLink :to="{ path: `/news/${programs[1].id}` }">
+                <NuxtLink :to="{ path: `/news/${programs[1].id}` }" :title="programs[1].title">
                   <CardColumn heigth-card="475px" :enable-card-slot="true">
                     <v-img
+                      :alt="programs[1].title"
                       :src="programs[1].imagePreviewLink!"
                       height="100%"
                       class="align-end"
@@ -163,9 +168,10 @@ const extinction = {
               <v-col cols="12" lg="4">
                 <v-row>
                   <v-col cols="12" lg="12" v-for="el in programs.slice(2, 4)" :key="el.id">
-                    <NuxtLink :to="{ path: `/news/${el.id}` }">
+                    <NuxtLink :to="{ path: `/news/${el.id}` }" :title="el.title">
                       <CardColumn v-if="programs.length" heigth-card="225" :enable-card-slot="true">
                         <v-img
+                          :alt="programs[1].title"
                           :src="el.imagePreviewLink!"
                           class="align-end"
                           gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
@@ -203,9 +209,10 @@ const extinction = {
             <div class="conversation_retrospective_one">
               <v-row align="start">
                 <v-col cols="6" v-for="el in programs.slice(2, 4)" :key="el.id">
-                  <NuxtLink :to="{ path: `/news/${el.id}` }">
+                  <NuxtLink :to="{ path: `/news/${el.id}` }" :title="el.title">
                     <CardColumn max-width-card="600" class="mx-auto" :enable-card-slot="true">
                       <v-img
+                        :alt="programs[1].title"
                         :src="el.imagePreviewLink!"
                         class="align-end"
                         gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
@@ -220,9 +227,10 @@ const extinction = {
                   </NuxtLink>
                 </v-col>
                 <v-col cols="3" v-for="el in programs.slice(2, 6)" :key="el.id">
-                  <NuxtLink :to="{ path: `/news/${el.id}` }">
+                  <NuxtLink :to="{ path: `/news/${el.id}` }" :title="el.title">
                     <CardColumn max-width-card="600" class="mx-auto" :enable-card-slot="true">
                       <v-img
+                        :alt="programs[1].title"
                         :src="el.imagePreviewLink!"
                         class="align-end"
                         gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
@@ -241,13 +249,14 @@ const extinction = {
             <div class="conversation_retrospective_two">
               <v-row align="start">
                 <v-col cols="12" v-for="el in programs.slice(2, 6)" :key="el.id">
-                  <NuxtLink :to="{ path: `/news/${el.id}` }">
+                  <NuxtLink :to="{ path: `/news/${el.id}` }" :title="el.title">
                     <CardColumn
                       v-if="programs.length"
                       heigth-card="100%"
                       max-height-card="475"
                       :enable-card-slot="true">
                       <v-img
+                        :alt="programs[1].title"
                         :src="el.imagePreviewLink!"
                         class="align-end"
                         gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"

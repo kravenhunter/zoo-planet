@@ -77,6 +77,7 @@ defineProps({
         <div v-if="enableButton">
           <div class="d-flex" :class="buttonPosition" v-if="!buttonSlot">
             <v-btn
+              :title="buttonTitle"
               :class="buttonClass"
               variant="flat"
               :size="buttonSize"

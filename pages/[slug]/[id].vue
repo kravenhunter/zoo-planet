@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, useRoute } from "#imports";
+import { ref, useRoute, useSeoMeta } from "#imports";
 import { useUnionStore } from "@/stores/storeGenerics";
 import type { ContactUs, ContentPages, MembershipPrice, Post, TicketPrice } from "@prisma/client";
 import { storeToRefs } from "pinia";
@@ -8,6 +8,7 @@ const route = useRoute();
 const { postlist, specieList, mainPages, contactPage, membershipTable, ticketTable, planTable } =
   storeToRefs(useUnionStore());
 
+const metaTitle = ref<string | undefined>("");
 const newsMainPageContent = ref<ContentPages>();
 const latestNewsList = ref<Post[]>();
 // // Membership Prices
@@ -26,21 +27,26 @@ const eboutData = ref<ContentPages[]>();
 if (route.params.id === "news") {
   newsMainPageContent.value = mainPages.value?.find((el) => el.subTitle === "News");
   latestNewsList.value = postlist.value?.filter((el) => el.category === "News");
+  metaTitle.value = newsMainPageContent.value?.title;
 }
 if (route.params.id === "extinction") {
   newsMainPageContent.value = mainPages.value?.find((el) => el.subTitle === "Fighting Extinction");
   latestNewsList.value = postlist.value?.filter((el) => el.category === "FightingExtinction");
+  metaTitle.value = newsMainPageContent.value?.title;
 }
 if (route.params.id === "plain") {
   newsMainPageContent.value = mainPages.value?.find((el) => el.subTitle === "Plan");
+  metaTitle.value = newsMainPageContent.value?.title;
 }
 if (route.params.id === "species") {
   newsMainPageContent.value = mainPages.value?.find((el) => el.subTitle === "Species");
+  metaTitle.value = newsMainPageContent.value?.title;
 }
 
 if (route.params.id === "education") {
   newsMainPageContent.value = mainPages.value?.find((el) => el.subTitle === "Education");
   latestNewsList.value = postlist.value?.filter((el) => el.category === "Education");
+  metaTitle.value = newsMainPageContent.value?.title;
 }
 if (route.params.id === "about") {
   const about = mainPages.value?.find((el) => el.subTitle === "AboutUs");
@@ -76,6 +82,8 @@ if (route.params.id === "about") {
         extraeDscription: contacts.value?.extraeDscription,
       },
     ]);
+
+  metaTitle.value = about?.title;
 }
 if (route.params.id === "membership") {
   newsMainPageContent.value = mainPages.value?.find((el) => el.subTitle === "Membership");
@@ -83,6 +91,7 @@ if (route.params.id === "membership") {
     stateMonth.value = membershipTable.value[0];
     stateYaer.value = membershipTable.value[1];
   }
+  metaTitle.value = newsMainPageContent.value?.title;
 }
 if (route.params.id === "ticket") {
   newsMainPageContent.value = mainPages.value?.find((el) => el.subTitle === "Tickets");
@@ -90,60 +99,69 @@ if (route.params.id === "ticket") {
     singleState.value = ticketTable.value[0];
     unlimitedSTate.value = ticketTable.value[1];
   }
+  metaTitle.value = newsMainPageContent.value?.title;
 }
 if (route.params.id === "donate") {
   newsMainPageContent.value = mainPages.value?.find((el) => el.subTitle === "Donate");
+  metaTitle.value = newsMainPageContent.value?.title;
 }
 if (route.params.id === "contact") {
   contactPage.value?.length && (contacts.value = contactPage.value[0]);
+  metaTitle.value = contacts.value?.title;
 }
+useSeoMeta({
+  title: metaTitle.value ? metaTitle.value : "Error result",
+  ogTitle: metaTitle.value ? metaTitle.value : "Error result",
+});
 </script>
 
 <template>
   <div class="wrapper">
-    <InfoDonate
+    <LazyInfoDonate
       v-if="route.params.id === 'donate' && newsMainPageContent"
       :donate="newsMainPageContent" />
-    <InfoAbout
+    <LazyInfoAbout
       v-else-if="route.params.id === 'about' && eboutData?.length && contacts"
       :about-us="eboutData"
       :contacts="contacts" />
-    <InfoExtinction
+    <LazyInfoExtinction
       v-else-if="route.params.id === 'extinction' && newsMainPageContent && latestNewsList"
       :fighting-main="newsMainPageContent"
       :programs="latestNewsList" />
-    <InfoEducation
+    <LazyInfoEducation
       v-else-if="route.params.id === 'education' && newsMainPageContent && latestNewsList"
       :education="newsMainPageContent"
       :programs="latestNewsList" />
-    <InfoPlain
+    <LazyInfoPlain
       v-else-if="route.params.id === 'plain' && planTable && newsMainPageContent"
       :plain="newsMainPageContent"
       :tables="planTable" />
-    <InfoNews
+    <LazyInfoNews
       v-else-if="route.params.id === 'news' && newsMainPageContent && latestNewsList"
       :main-content="newsMainPageContent"
       :news="latestNewsList" />
-    <InfoSpecies
+    <LazyInfoSpecies
       v-else-if="route.params.id === 'species' && newsMainPageContent && specieList"
       :species="newsMainPageContent"
       :specie-list="specieList" />
-    <InfoContactUs v-else-if="route.params.id === 'contact' && contacts" :contact-main="contacts" />
-    <InfoTiket
+    <LazyInfoContactUs
+      v-else-if="route.params.id === 'contact' && contacts"
+      :contact-main="contacts" />
+    <LazyInfoTiket
       v-else-if="
         route.params.id === 'ticket' && newsMainPageContent && singleState && unlimitedSTate
       "
       :ticket-main="newsMainPageContent"
       :single-state="singleState"
       :unlimited-s-tate="unlimitedSTate" />
-    <InfoMember
+    <LazyInfoMember
       v-else-if="route.params.id === 'membership' && newsMainPageContent && stateMonth && stateYaer"
       :member-main="newsMainPageContent"
       :state-month="stateMonth"
       :state-yaer="stateYaer" />
 
-    <TestComponent v-else-if="route.params.id === 'test'" />
-    <ErrorResult v-else />
+    <LazyTestComponent v-else-if="route.params.id === 'test'" />
+    <LazyErrorResult v-else />
   </div>
 </template>
 

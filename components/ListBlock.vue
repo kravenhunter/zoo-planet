@@ -38,6 +38,7 @@ defineProps<Props>();
             class="news_btn px-10 w-100 font-weight-medium"
             color="#ffc107"
             size="large"
+            :title="item.title"
             :to="`/news/${item.id}`"
             append-icon="mdi-paw">
             Learn more

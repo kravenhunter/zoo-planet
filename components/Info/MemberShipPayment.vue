@@ -206,7 +206,9 @@ watchEffect(async () => {
   <v-sheet class="bg-orange-lighten-5 pa-5 mb-5">
     <v-list-item prepend-icon="mdi-account" class="text-green-darken-4 pb-0">
       <template #prepend>
-        <v-icon size="25" class="text-h6 font-weight-bold">mdi-credit-card-check</v-icon>
+        <v-icon title=">mdi-credit-card-check" size="25" class="text-h6 font-weight-bold"
+          >mdi-credit-card-check</v-icon
+        >
         <v-list-item-title class="px-2 text-subtitle-2 font-weight-bold">
           Credit Card
         </v-list-item-title>
@@ -234,6 +236,7 @@ watchEffect(async () => {
           </div>
           <v-card-actions>
             <v-btn
+              title="Pay"
               class="mx-auto px-10 text-subtitle-1 text-white"
               color="#395A03"
               variant="flat"
@@ -248,5 +251,3 @@ watchEffect(async () => {
     </v-row>
   </v-sheet>
 </template>
-
-<style scoped></style>

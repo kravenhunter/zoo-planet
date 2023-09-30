@@ -168,6 +168,7 @@ console.log(props.programs);
       <v-carousel hide-delimiters class="card_main" cycle height="100vh" :show-arrows="false">
         <v-carousel-item v-for="(slide, i) in carousel" :key="i">
           <v-img
+            :alt="slide.title"
             :src="slide.sourceTitle"
             gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
             cover
@@ -199,6 +200,7 @@ console.log(props.programs);
             <v-col cols="8">
               <CardColumn heigth-card="475" :enable-card-slot="true">
                 <v-img
+                  :alt="programs[0].title"
                   :src="programs[0].imagePreviewLink!"
                   class="align-end"
                   gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
@@ -216,6 +218,7 @@ console.log(props.programs);
                 <v-col cols="12" v-for="el in programs.slice(1, 3)" :key="el.id">
                   <CardColumn v-if="programs.length" heigth-card="225" :enable-card-slot="true">
                     <v-img
+                      :alt="el.title"
                       :src="el.imagePreviewLink!"
                       class="align-end"
                       gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
@@ -235,6 +238,7 @@ console.log(props.programs);
             <v-col cols="4" v-for="el in programs.slice(3, 6)" :key="el.id">
               <CardColumn v-if="programs.length" heigth-card="450" :enable-card-slot="true">
                 <v-img
+                  :alt="el.title"
                   :src="el.imagePreviewLink!"
                   class="align-end"
                   gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
@@ -252,13 +256,14 @@ console.log(props.programs);
         <div class="conservation_retrospective_two">
           <v-row align="start">
             <v-col cols="12" v-for="el in programs.slice(3, 6)" :key="el.id">
-              <NuxtLink :to="{ path: `/news/${el.id}` }">
+              <NuxtLink :to="{ path: `/news/${el.id}` }" :title="el.title">
                 <CardColumn
                   v-if="programs.length"
                   heigth-card="100%"
                   max-height-card="475"
                   :enable-card-slot="true">
                   <v-img
+                    :alt="el.title"
                     :src="el.imagePreviewLink!"
                     class="align-end"
                     gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
@@ -334,6 +339,7 @@ console.log(props.programs);
               text-card="Fill out an online form to request a booking for your zoo education experience"
               font-title-size="1.5rem" />
             <v-btn
+              title="Request booking"
               class="px-10 ml-5 text-subtitle-1 font-weight-bold"
               color="grey-lighten-5"
               variant="flat"

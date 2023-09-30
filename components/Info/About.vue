@@ -28,6 +28,7 @@ if (route.params.id === "about") {
     <article class="card">
       <CardColumn :enable-card-slot="true">
         <v-img
+          :alt="aboutUs[0].title"
           :src="aboutUs[0].imageBgLink"
           class="align-end"
           :max-height="600"

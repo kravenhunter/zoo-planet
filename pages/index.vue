@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "#imports";
+import { ref, useSeoMeta } from "#imports";
 import { useUnionStore } from "@/stores/storeGenerics";
 import type { ContentPages, Post } from "@prisma/client";
 import { storeToRefs } from "pinia";
@@ -99,6 +99,10 @@ const bgImages = [
       "https://epjfkkmrnhyxzevpvbjf.supabase.co/storage/v1/object/public/images/cover/red_bear2.webp",
   },
 ];
+useSeoMeta({
+  title: "Visit ZOO-PLANET",
+  ogTitle: "Visit ZOO-PLANET",
+});
 </script>
 
 <template>
@@ -107,6 +111,7 @@ const bgImages = [
       <CardColumn :enable-card-slot="true">
         <v-img
           :src="bgImages[0].imageBgLink"
+          :alt="bgImages[0].title"
           max-height="100vh"
           :aspect-ratio="16 / 9"
           gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.7)"
@@ -137,9 +142,9 @@ const bgImages = [
                 </v-item-group>
               </div>
             </Card>
-            <article class="offer_test d-flex">
+            <article class="offer_test">
               <v-row class="justify-center">
-                <v-col cols="12" lg="5" md="12" class="d-flex justify-center">
+                <v-col cols="12" lg="5" class="panda_column d-flex justify-center">
                   <v-card color="transparent" max-width="533">
                     <div class="panda_card">
                       <v-avatar class="ma-3 panda_img" size="181" rounded="50">
@@ -173,11 +178,11 @@ const bgImages = [
                   md="12"
                   v-for="n in 2"
                   :key="n"
-                  class="d-flex align-center justify-center">
+                  class="rabbit_columns d-flex align-center justify-center">
                   <div class="rabbit_block">
                     <div class="rabbit">
                       <v-avatar class="mx-3 mb-4" size="50" rounded="0">
-                        <v-img src="/images/rabbit_in_hat.svg"></v-img>
+                        <v-img src="/images/rabbit_in_hat.svg" :alt="`rabbit_in_hat_${n}`"></v-img>
                       </v-avatar>
                     </div>
 
@@ -431,6 +436,7 @@ const bgImages = [
 }
 
 .offer_test {
+  display: block;
   & .panda_card {
     position: relative;
     display: grid;
@@ -474,6 +480,10 @@ const bgImages = [
     & .rabbit {
       align-self: flex-end;
     }
+  }
+
+  @media (max-width: 600px) {
+    display: none;
   }
 }
 

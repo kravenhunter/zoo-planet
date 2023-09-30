@@ -16,7 +16,7 @@ const updateValue = (event: Event) => {
 
 <template>
   <div class="search">
-    <input type="text" placeholder="search" :value="value" @input="updateValue" />
+    <input type="text" placeholder="search" name="Search" :value="value" @input="updateValue" />
   </div>
 </template>
 

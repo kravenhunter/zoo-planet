@@ -30,6 +30,7 @@ const load = async () => {
   <v-dialog v-model="dialog" persistent width="500">
     <template #activator="{ props }">
       <v-btn
+        title="Sign in"
         class="mx-2 text-subtitle-2"
         color="#FBB03B"
         variant="text"
@@ -43,6 +44,7 @@ const load = async () => {
       <v-card-text>
         <v-card-actions class="justify-end">
           <v-btn
+            title="$close"
             class="text-end"
             :disabled="loading"
             size="20"
@@ -70,6 +72,7 @@ const load = async () => {
       </v-card-text>
       <v-card-actions>
         <v-btn
+          title="Log In"
           class="mx-auto mb-5 px-10 text-subtitle-1 text-white"
           color="light-blue-darken-4"
           size="x-large"

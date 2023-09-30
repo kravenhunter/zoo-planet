@@ -29,6 +29,7 @@ Australia`,
     <article class="main_cover" v-if="contactMain">
       <CardColumn :enable-card-slot="true">
         <v-img
+          :alt="contactMain.title"
           :src="contactMain.imageBgLink"
           class="align-end"
           :max-height="600"
@@ -55,6 +56,7 @@ Australia`,
                 color="#01579b"
                 variant="flat"
                 size="x-large"
+                title="Read Our FAQ's"
                 append-icon="mdi-paw">
                 Read Our FAQ's
               </v-btn>
@@ -62,6 +64,7 @@ Australia`,
                 class="px-10 ma-10 text-subtitle-2 font-weight-bold"
                 color="#01579b"
                 variant="flat"
+                title="Change ticket"
                 size="x-large"
                 append-icon="mdi-paw">
                 Change ticket
@@ -70,6 +73,7 @@ Australia`,
                 class="px-10 ma-10 text-subtitle-2 font-weight-bold"
                 color="#01579b"
                 variant="flat"
+                title="Emergansy help"
                 size="x-large"
                 append-icon="mdi-paw">
                 Emergansy help
@@ -86,7 +90,7 @@ Australia`,
 
           <ul class="socials d-flex mx-auto">
             <li>
-              <NuxtLink :to="contactMain.socialLink_1!">
+              <NuxtLink :to="contactMain.socialLink_1!" :title="contactMain.title">
                 <v-avatar color="#395A03" class="ma-3" size="47" rounded="50">
                   <UiElementsIcons
                     icon-name="ri:facebook-fill"
@@ -97,7 +101,7 @@ Australia`,
               </NuxtLink>
             </li>
             <li>
-              <NuxtLink :to="contactMain.socialLink_2!">
+              <NuxtLink :to="contactMain.socialLink_2!" :title="contactMain.title">
                 <v-avatar color="#395A03" class="ma-3" size="47" rounded="50">
                   <UiElementsIcons
                     icon-name="mdi:twitter"
@@ -108,7 +112,7 @@ Australia`,
               </NuxtLink>
             </li>
             <li>
-              <NuxtLink :to="contactMain.socialLink_3!">
+              <NuxtLink :to="contactMain.socialLink_3!" :title="contactMain.title">
                 <v-avatar color="#395A03" class="ma-3" size="47" rounded="50">
                   <UiElementsIcons
                     icon-name="mdi:youtube"
@@ -119,7 +123,7 @@ Australia`,
               </NuxtLink>
             </li>
             <li>
-              <NuxtLink :to="contactMain.socialLink_4!">
+              <NuxtLink :to="contactMain.socialLink_4!" :title="contactMain.title">
                 <v-avatar color="#395A03" class="ma-3" size="47" rounded="50">
                   <UiElementsIcons
                     icon-name="mdi:instagram"

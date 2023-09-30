@@ -11,6 +11,7 @@ defineProps<{
     <article class="card">
       <CardColumn :enable-card-slot="true">
         <v-img
+          :alt="donate.title"
           :src="donate.imageBgLink"
           class="align-end"
           :max-height="600"

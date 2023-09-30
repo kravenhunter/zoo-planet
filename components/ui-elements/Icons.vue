@@ -35,6 +35,7 @@ defineProps({
 
 <template>
   <Icon
+    :title="iconName"
     :icon="iconName"
     :color="colorIcon"
     :width="sizeWidth"
