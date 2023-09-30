@@ -155,13 +155,6 @@ let instance: SupabaseClient | null = null;
 export function useImageStorage() {
   const counter = useCounter();
 
-  // if (!supabaseObject.value) {
-  //   console.log("init", !supabaseObject.value);
-  //   Избавляет от ошибки  POCO при  передачи ссылки createClient реактивной переменной
-  // const supabase = createClient(supabaseUrl, supabaseKey);
-  // копируем объект
-  //   supabaseObject.value = JSON.parse(JSON.stringify(supabase));
-  // }
   if (!instance) {
     const config = useRuntimeConfig();
     const supabaseUrl = config.public.supabaseUrl;
