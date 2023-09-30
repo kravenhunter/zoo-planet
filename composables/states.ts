@@ -166,7 +166,7 @@ export function useImageStorage() {
     const config = useRuntimeConfig();
     const supabaseUrl = config.public.supabaseUrl;
     const supabaseKey = config.public.supabaseKey;
-    instance = createClient(supabaseUrl, supabaseKey);
+    instance = createClient(supabaseUrl, supabaseKey, { auth: { persistSession: false } });
     counter.value += 1;
   }
 
