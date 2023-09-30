@@ -10,8 +10,6 @@ export default defineEventHandler(async (event) => {
   });
 
   try {
-    console.log(amount);
-    console.log(currency);
     const payment = await stripe.paymentIntents.create({
       amount: Number(amount),
       currency: String(currency), //  currency: "usd",
@@ -19,11 +17,8 @@ export default defineEventHandler(async (event) => {
       automatic_payment_methods: { enabled: true },
     });
 
-    console.log(payment);
-
     return payment.client_secret;
   } catch (error) {
-    console.log(error);
     throw createError({
       statusCode: 500,
       statusMessage: (error as Error).message,

@@ -13,7 +13,6 @@ export default defineEventHandler(async (event) => {
 
     return "Success";
   } catch (error) {
-    console.log(error);
     return error;
   }
 });

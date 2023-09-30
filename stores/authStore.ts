@@ -67,15 +67,12 @@ export const useAuthStore = defineStore("auth-store", () => {
       }
       isAuthorized.value = true;
       sessionData.value = data.session;
-      const createSession = useCookie<string | null>("supabase-auth-token", {
-        default: () => null,
-        watch: "shallow",
-      });
-      createSession.value = JSON.stringify({
+      const currentCookie = useCookie<IToken | null>("supabase-auth-token");
+
+      currentCookie.value = {
         access_token: data.session.access_token,
-        expire: data.session.expires_at,
-      });
-      console.log(createSession.value);
+        expire: data.session.expires_at!,
+      };
     } catch (error) {
       console.log(error);
     }
@@ -88,12 +85,12 @@ export const useAuthStore = defineStore("auth-store", () => {
         throw error;
       }
       const delCookie = useCookie("supabase-auth-token");
-      console.log(delCookie.value);
+
       delCookie.value = null;
-      console.log(delCookie.value);
+
       sessionData.value = null;
       isAuthorized.value = false;
-      console.log("Success");
+
       return true;
     } catch (error) {
       console.log("Error Log Out", error);

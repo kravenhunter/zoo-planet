@@ -133,7 +133,6 @@ export const useUnionStore = defineStore("union-store", () => {
         throw errorPlanPrice.value;
       }
 
-      console.log("Posts", postResult.value);
       postlist.value = postResult.value;
       specieList.value = specieResult.value;
       mainPages.value = mainPagesResult.value;

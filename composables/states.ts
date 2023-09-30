@@ -103,7 +103,6 @@ export const useStoreState = () =>
     const supabaseUrl = config.public.supabaseUrl;
     const supabaseKey = config.public.supabaseKey;
     const supabase = createClient(supabaseUrl, supabaseKey);
-    console.log(supabaseUrl);
 
     return supabase;
   });
@@ -159,10 +158,11 @@ export function useImageStorage() {
     const config = useRuntimeConfig();
     const supabaseUrl = config.public.supabaseUrl;
     const supabaseKey = config.public.supabaseKey;
-    instance = createClient(supabaseUrl, supabaseKey, { auth: { persistSession: false } });
+    // { auth: { persistSession: false } - перестает записывать  сессию в localStorage
+    // instance = createClient(supabaseUrl, supabaseKey, { auth: { persistSession: false } });
+    instance = createClient(supabaseUrl, supabaseKey, { auth: { persistSession: true } });
     counter.value += 1;
   }
-  console.log("supabase instance", instance);
 
   return instance;
 }
