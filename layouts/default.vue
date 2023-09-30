@@ -128,6 +128,8 @@ const getSearchResult = computed(() => {
 const searchHandler = (search: string) => {
   search && navigateTo(`/search/${search}`);
 };
+console.log(contactPage.value);
+
 onMounted(() => {
   isAuthorized.value = checkAuth();
 });
