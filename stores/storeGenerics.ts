@@ -1,6 +1,5 @@
 import { ref, useFetch } from "#imports";
 import { compressToBestSize } from "@/composables/compressFile";
-
 import { useImageStorage } from "@/composables/states";
 import type {
   AboutUs,

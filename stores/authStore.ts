@@ -14,13 +14,10 @@ export const useAuthStore = defineStore("auth-store", () => {
   const isAuthorized = ref(false);
 
   const checkAuth = () => {
-    const res = false;
     const currentCookie = useCookie<IToken | null>("supabase-auth-token");
     const getlocalDataJSON = localStorage.getItem("sb-epjfkkmrnhyxzevpvbjf-auth-token");
     if (getlocalDataJSON && currentCookie.value) {
       sessionData.value = JSON.parse(getlocalDataJSON) as Session;
-
-      // const parseObject = JSON.parse(getlocalDataJSON) as Session;
 
       sessionData.value.expires_at &&
         currentCookie.value.expire !== sessionData.value.expires_at &&
