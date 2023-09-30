@@ -26,7 +26,7 @@ if (
 // Contacts Data
 const contacts = ref<ContactUs>();
 const socialsLink = ref<string[]>();
-const collapseBurger = ref(true);
+const collapseBurger = ref(false);
 
 contactPage.value?.length && (contacts.value = contactPage.value[0]);
 if (contactPage.value?.length) {
@@ -62,10 +62,6 @@ const navTop = [
   {
     title: "Membership",
     link: "/info/membership",
-  },
-  {
-    title: "Test",
-    link: "/info/test",
   },
 ];
 const navigationMain = [

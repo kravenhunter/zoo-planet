@@ -50,7 +50,7 @@ const speciesList = [
 <template>
   <section class="species">
     <article class="main_cover">
-      <CardColumn heigth-card="600" :enable-card-slot="true">
+      <CardColumn :enable-card-slot="true">
         <v-img
           :src="species.imageBgLink"
           class="align-end"
@@ -77,7 +77,7 @@ const speciesList = [
           <v-icon icon="mdi-menu-down" size="large"></v-icon> SCROLL DOWN TO EXPLORE
         </h4>
         <v-row>
-          <v-col cols="6" v-for="(el, i) in specieList" :key="i">
+          <v-col cols="12" sm="6" v-for="(el, i) in specieList" :key="i">
             <NuxtLink :to="{ path: `/article/${el.id}` }">
               <v-img
                 class="align-end"

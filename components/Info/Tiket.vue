@@ -65,7 +65,7 @@ FREE everyday`,
 <template>
   <section class="tikets">
     <article class="main_cover">
-      <CardColumn heigth-card="600" :enable-card-slot="true">
+      <CardColumn :enable-card-slot="true">
         <v-img
           :src="ticketMain.imageBgLink"
           class="align-end"
@@ -107,7 +107,7 @@ FREE everyday`,
               <td></td>
               <td>
                 <v-btn
-                  class="my-10 text-subtitle-2 font-weight-bold"
+                  class="my-10 ticket_btn font-weight-bold"
                   color="#01579b"
                   variant="flat"
                   size="x-large"
@@ -118,7 +118,7 @@ FREE everyday`,
               </td>
               <td>
                 <v-btn
-                  class="text-subtitle-2 font-weight-bold justify-start"
+                  class="ticket_btn font-weight-bold justify-start"
                   color="#01579b"
                   variant="flat"
                   size="x-large"
@@ -166,6 +166,12 @@ FREE everyday`,
 </template>
 
 <style scoped lang="scss">
+.v-btn {
+  font-size: 1rem;
+  @media (max-width: 1000px) {
+    font-size: 1.2rem;
+  }
+}
 .v-card {
   &-title {
     font-family: gothic;
@@ -176,8 +182,16 @@ FREE everyday`,
     font-size: 1.5rem;
   }
 }
+
 .tikets {
   background-color: #f2f2f2;
+  & .table td,
+  th {
+    font-size: 1rem;
+    @media (max-width: 1000px) {
+      font-size: 1.5rem;
+    }
+  }
   & .main_cover {
     max-height: 800px;
   }

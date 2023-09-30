@@ -21,8 +21,8 @@ const state = reactive({
 });
 const email = ref("");
 const password = ref("");
-const login = ref("mailtest9999@yandex.ru");
-const passwordLogin = ref("sup@b@se2023");
+const login = ref("");
+const passwordLogin = ref("");
 
 const titleResult = ref("");
 const iconResult = ref("");
@@ -308,13 +308,7 @@ const checkAuth = async () => {
 
     const getData = getlocalData && JSON.parse(getlocalData);
     getSession.value = getlocalData;
-    // const result = await supabaseStorage.auth.onAuthStateChange(async (user) => {
-    //   console.log(user);
-    //   await supabaseStorage?.auth.getSession().then(({ data: { session } }) => {
-    //     console.log(session);
-    //     sessionData.value = session;
-    //   });
-    // });
+
     const { data, error } = await supabaseStorage.auth.getSession();
 
     if (error) {
@@ -413,58 +407,7 @@ onMounted(async () => {
     <AuthLogin />
     <v-btn color="primary" @click="checkAuth"> Open Dialog </v-btn>
     <v-btn color="primary" @click="text"> Delete Cookie </v-btn>
-    <!--     <div class="grid">
-      <div class="list1 grid">
-        <div class="text1">text1 Lorem ipsum dolor sit amet.</div>
-        <div class="text2">text2 Lorem ipsum dolor sit amet.</div>
-        <div class="text3">text2 Lorem ipsum dolor sit amet.</div>
-        <div class="text4">text2 Lorem ipsum dolor sit amet.</div>
-      </div>
-      <div class="list2 grid">
-        <div class="text1">text1 Lorem ipsum dolor sit amet.</div>
-        <div class="text2">text2 Lorem ipsum dolor sit amet.</div>
-        <div class="text3">text2 Lorem ipsum dolor sit amet.</div>
-      </div>
-    </div> -->
-    <!--  <Card2
-          colorbg="black"
-          class-card="pb-2"
-          image-source="/images/red_bear.jpg"
-          image-title="Top 10 Australian beaches"
-          title-card="Australian beaches"
-          subtitle-card="Number 10"
-          text-card="  Lorem  Lorem  Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia laudantium id et animi voluptatum libero!"
-          button-title="See all animals"
-          button-size="large"
-          btn-text-size="text-subtitle-1"
-          icon-button="mdi-paw" /> -->
-    <!--     <div class="galary">
-      <div class="galary_first">
-        <CardItem
-          class="main"
-          colorbg="black"
-          title-card="Australian beaches"
-          title-align="text-center"
-          subtitle-card="Number 10"
-          sun-title-align="text-center"
-          text-card=" All of our animals are gently handled from the moment they arrive at the shop and are even put on a “probationary” period of 2-4 weeks prior to customer availability."
-          text-align="text-center"
-          button-title="See all animals"
-          button-size="large"
-          btn-text-size="text-subtitle-1"
-          button-align="justify-center"
-          button-class="text-none"
-          icon-button="mdi-paw" />
-        <CardItem image-source="/images/parrot_galary.jpg" class="parrot" image-heigth="100%" />
-        <CardItem image-source="/images/lynx_galary.jpg" class="lynx" />
-        <CardItem image-source="/images/animal1.jpg" class="opossums" />
-      </div>
-      <div class="galary_second">
-        <CardItem class="red_bear" image-source="/images/red_bear.jpg" />
-        <CardItem class="coala" image-source="/images/coala.jpg" />
-        <CardItem class="bober" image-source="/images/bober.jpg" />
-      </div>
-    </div> -->
+
     <v-container>
       <!-- <NuxtPicture
         format="webp"
@@ -671,14 +614,6 @@ onMounted(async () => {
   & .red_bear {
     grid-column: span 2;
   }
-  /*   & .coala {
-    grid-column: 1;
-    grid-row: 3;
-  }
-  & .bober {
-    grid-column: 2;
-    grid-row: 3;
-  } */
 }
 .galary_first {
   display: grid;
@@ -693,14 +628,6 @@ onMounted(async () => {
     grid-column: 1;
     grid-row: 2 / 4;
   }
-  /*   & .lynx {
-    grid-column: 2;
-    grid-row: 2;
-  }
-  & .opossums {
-    grid-column: 2;
-    grid-row: 3;
-  } */
 }
 .about_wrapper {
   padding: 20px 0;

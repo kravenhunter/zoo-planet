@@ -1,4 +1,10 @@
 <script setup lang="ts">
+import { navigateTo } from "#imports";
+import { useAuthStore } from "@/stores/authStore";
+
+// import { navigateTo } from "nuxt/app";
+
+const { logOut } = useAuthStore();
 const nav = [
   { title: "Main Pages", icon: "mdi-folder", to: "/guard/section/main" },
   { title: "My News", icon: "mdi-folder", to: "/guard/section/news" },
@@ -14,6 +20,12 @@ const nav = [
   { title: "Back", icon: "mdi-cloud-upload", to: "/" },
 ];
 const open = ["Details"];
+const signOut = async () => {
+  const resultLogout = await logOut();
+  if (resultLogout) {
+    await navigateTo("/", { replace: true });
+  }
+};
 </script>
 
 <template>
@@ -24,15 +36,7 @@ const open = ["Details"];
         title="John Leider"
         subtitle="john@google.com">
       </v-list-item>
-      <v-list-group value="Details">
-        <template #activator="{ props }">
-          <v-list-item
-            v-bind="props"
-            prepend-icon="mdi-cog-outline"
-            title="More Details :"></v-list-item>
-        </template>
-        <v-list-item title="State :" subtitle="Administrator"> </v-list-item>
-      </v-list-group>
+      <v-list-item title="State :" subtitle="Administrator"> </v-list-item>
     </v-list>
     <v-divider></v-divider>
     <v-list>
@@ -45,6 +49,11 @@ const open = ["Details"];
         </NuxtLink>
       </v-list-item>
     </v-list>
+    <template #append>
+      <div class="pa-2">
+        <v-btn color="black" block @click="signOut"> Logout </v-btn>
+      </div>
+    </template>
   </v-navigation-drawer>
 </template>
 

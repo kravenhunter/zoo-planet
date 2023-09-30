@@ -22,6 +22,7 @@ const props = defineProps<Props>();
     <v-row class="justify-center">
       <v-col cols="7" lg="4" md="5" v-for="(item, i) in news" :key="i" class="news_item">
         <CardColumn
+          class-card="mx-auto"
           max-width-card="373"
           image-width="360"
           image-heigth="260"
@@ -30,11 +31,11 @@ const props = defineProps<Props>();
           :text-card="item?.description"
           class-text-block="overflow-hidden mb-5"
           class-text="pa-1  text-black"
-          text-block-size="100px"
+          text-block-size="280px"
           :image-source="item.imagePreviewLink!"
           :button-slot="true">
           <v-btn
-            class="px-10 w-100 text-subtitle-1 font-weight-medium"
+            class="news_btn px-10 w-100 font-weight-medium"
             color="#ffc107"
             size="large"
             :to="`/news/${item.id}`"
@@ -48,9 +49,17 @@ const props = defineProps<Props>();
 </template>
 
 <style scoped lang="scss">
+.news_btn {
+  @media (max-width: 1280px) {
+    font-size: 1.2rem;
+  }
+  @media (max-width: 1000px) {
+    font-size: 1.5rem;
+  }
+}
 .news_item {
   @media (max-width: 1280px) {
-    max-height: 500px;
+    max-height: 700px;
   }
 }
 </style>

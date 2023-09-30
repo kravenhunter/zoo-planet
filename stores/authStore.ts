@@ -57,6 +57,7 @@ export const useAuthStore = defineStore("auth-store", () => {
       console.log(error);
     }
   };
+
   const logIn = async (emailUser: string, passswordUser: string) => {
     try {
       const { data, error } = await supabaseStorage.auth.signInWithPassword({
@@ -83,7 +84,7 @@ export const useAuthStore = defineStore("auth-store", () => {
     }
   };
 
-  const logOut = async () => {
+  const logOut = async (): Promise<boolean> => {
     try {
       const { error } = await supabaseStorage.auth.signOut();
       if (error) {
@@ -96,8 +97,10 @@ export const useAuthStore = defineStore("auth-store", () => {
       sessionData.value = null;
       isAuthorized.value = false;
       console.log("Success");
+      return true;
     } catch (error) {
       console.log("Error Log Out", error);
+      return false;
     }
   };
 

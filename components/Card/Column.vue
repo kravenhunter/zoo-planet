@@ -134,6 +134,15 @@ defineProps({
   &-title {
     font-family: gothic;
     font-size: v-bind(fontTitleSize);
+    @media (max-width: 1280px) {
+      font-size: 1.6rem;
+    }
+    @media (max-width: 1000px) {
+      font-size: 1.7rem;
+    }
+    @media (max-width: 600px) {
+      font-size: 2rem;
+    }
   }
   &-text {
     line-height: 2;

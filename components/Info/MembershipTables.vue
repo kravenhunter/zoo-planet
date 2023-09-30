@@ -143,8 +143,10 @@ function parseData(price: string) {
             </tbody>
           </v-table>
         </article>
+        <v-divider></v-divider>
       </v-col>
-      <v-col class="px-5" cols="4">
+
+      <v-col class="px-5" cols="12" lg="4">
         <article class="order bg-brown-lighten-5">
           <CardColumn :enable-card-slot="true">
             <v-img
@@ -394,7 +396,6 @@ function parseData(price: string) {
             </v-window-item>
           </v-window>
           <v-card-actions>
-            <!-- <v-btn class="mx-auto" color="black" variant="flat" @click="nextTab">Next Step</v-btn> -->
             <v-btn
               class="text-subtitle-1 text-white"
               color="#395A03"

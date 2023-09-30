@@ -58,7 +58,7 @@ const tableHeaders = [
 <template>
   <section class="plain" v-if="plain && tables">
     <article>
-      <CardColumn heigth-card="600" :enable-card-slot="true">
+      <CardColumn :enable-card-slot="true">
         <v-img
           :src="plain.imageBgLink"
           class="align-end"

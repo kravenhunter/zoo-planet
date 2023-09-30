@@ -57,7 +57,7 @@ const nextTab = () => {
 <template>
   <section class="membership" v-if="memberMain && stateMonth && stateYaer">
     <article class="main_cover">
-      <CardColumn heigth-card="600" :enable-card-slot="true">
+      <CardColumn :enable-card-slot="true">
         <v-img
           :src="memberMain.imageBgLink"
           class="align-end"
@@ -147,10 +147,7 @@ const nextTab = () => {
               <v-card-text v-if="item === 'Payment'">
                 <InfoMemberShipPayment />
               </v-card-text>
-              <!-- <v-card v-if="item === 'Confirmation'">
-                <v-card-title class="text-h6 text-center">Payment confimed!</v-card-title>
-                <v-card-text class="text-center">Please, visit us to get your tikets.</v-card-text>
-              </v-card> -->
+
               <CardColumn
                 v-if="item === 'Confirmation'"
                 title-card="Payment confimed!"

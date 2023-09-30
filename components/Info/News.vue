@@ -11,7 +11,7 @@ const props = defineProps<Props>();
 <template>
   <section class="news" v-if="mainContent && news">
     <article class="main_cover">
-      <CardColumn heigth-card="600" :enable-card-slot="true">
+      <CardColumn :enable-card-slot="true">
         <v-img
           :src="mainContent.imageBgLink"
           class="align-end"
