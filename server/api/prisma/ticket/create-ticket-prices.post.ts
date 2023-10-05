@@ -18,7 +18,6 @@ export default defineEventHandler(async (event) => {
     });
     return postCreate;
   } catch (error) {
-    console.log(error);
     return error;
   }
 });

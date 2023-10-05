@@ -18,7 +18,6 @@ export default defineEventHandler(async () => {
 
     return posts;
   } catch (error) {
-    console.log(error);
     return error;
   }
 
