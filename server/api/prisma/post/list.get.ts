@@ -23,16 +23,4 @@ export default defineEventHandler(async () => {
       statusMessage: (error as Error).message,
     });
   }
-
-  // const orders = await prismaCLient.orders.findMany({
-  //   where:{userId: event?.context.params.userId},
-  //   orderBy: { timeStamp: "desc" },
-  //   include:{
-  //      orderItem: {
-  //       include: {
-  //         product: true
-  //       }
-  //      }
-  //   }
-  // });
 });

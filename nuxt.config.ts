@@ -33,7 +33,19 @@ export default defineNuxtConfig({
         { charset: "utf-8" },
         { name: "viewport", content: "width=device-width, initial-scale=1" },
 
+        { name: "description", content: " ZOO PLANET - the zoo planet blog" },
+        {
+          name: "keywords",
+          content: " ZOO PLANET, news,blog, zoo news",
+        },
+        { name: "ogTitle", content: " ZOO PLANET - the zoo  news blog" },
+        { name: "ogDescription", content: " ZOO PLANET - a blog of  zoo world" },
+        // Запрет активации  телефона поссылке
         { name: "format-detection", content: "telephone=no" },
+        //Запрет индексации  картинок и ссылок, текст контента доступен
+        { name: "robots", content: "noimageindex, nofollow" },
+        { name: "author", content: "Sergio Below" },
+        { name: "copyright", content: "Sergio Below" },
       ],
     },
   },
@@ -55,4 +67,11 @@ export default defineNuxtConfig({
   //   *     'style': fileURLToPath(new URL('./assets/style', import.meta.url)),
   //   *     'data': fileURLToPath(new URL('./assets/other/data', import.meta.url))
   //   *   }
+  postcss: {
+    plugins: {
+      autoprefixer: {
+        overrideBrowserslist: ["cover 99.5%", "not IE < 9"],
+      },
+    },
+  },
 });

@@ -24,19 +24,4 @@ export default defineEventHandler(async (event) => {
     console.log(error);
     return error;
   }
-
-  /*  const url = 'https://google.com/404' // or: baseURL+'/company?bookingAppApiKey='+config.apiSecret
-
-  try {
-    return await $fetch(url)
-  } catch (err) {
-    throw createError({
-      statusCode: 444,
-      message: 'Oh no!',
-      data: {
-        statusCode: (err as FetchError).response?.status,
-        responseBody: (err as FetchError).data,
-      },
-    })
-  } */
 });

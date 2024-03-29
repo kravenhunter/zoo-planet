@@ -17,13 +17,4 @@ export default defineEventHandler(async (event) => {
     console.log(error);
     return error;
   }
-
-  /*  body.array.forEach(async prod => {
-      await prismaCLient.orderItem.create({
-        data:{
-            orderId: postCreate.id,
-            productId: Number(prod.id), 
-        }
-      })
-  }); */
 });

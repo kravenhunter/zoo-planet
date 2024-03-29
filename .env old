@@ -1,0 +1,9 @@
+
+ENDPOINT_SECRET ='https://starlit-blancmange-38708b.netlify.app'
+STRIPE_PK_KEY="pk_test_51NuecXL0QQJrJ8rNo6gDNvkm0L6X0Fquawh10VNbOqzsTYAh8DMTksP9MKoRITMfAcwyp8FEqZgkAJqUN9MQ0spn00OnEcTkzU"
+STRIPE_SK_KEY="sk_test_51NuecXL0QQJrJ8rNhToCnCxecqnbsMYbe8xEwEBtjbmuq2R0EhUN5Q2Q3jcg94e8DGxFLm4BNosjBxLgKGQm8QlT00k04mEI9o"
+SUPABASE_URL="https://epjfkkmrnhyxzevpvbjf.supabase.co"
+SUPABASE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVwamZra21ybmh5eHpldnB2YmpmIiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTQ0NDYwMjAsImV4cCI6MjAxMDAyMjAyMH0.Y5pzvdiB9ko9y38ILZb1kBXRBjGwJ3tXfUoysUQOUtY"
+DATABASE_URL="postgres://postgres:o0p@ssw0rd99990o@db.epjfkkmrnhyxzevpvbjf.supabase.co:5432/postgres"
+
+

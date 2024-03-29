@@ -13,7 +13,7 @@
     //"valid-typeof": ["error", { "requireStringLiterals": true }]
     "spaced-comment": "off",
     "sort-imports": "off",
-    "vue/attributes-order": "off",
+    "vue/attributes-order": "on",
     "import/order": 0,
     "no-debugger": "off",
     "no-restricted-syntax": "off",

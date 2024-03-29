@@ -9,7 +9,7 @@ export default defineEventHandler(async (event) => {
       where: {
         title: {
           contains: event?.context?.params?.id,
-          mode: "insensitive",
+          //   mode: "insensitive",
         },
       },
     });

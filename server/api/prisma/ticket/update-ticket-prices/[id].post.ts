@@ -22,12 +22,4 @@ export default defineEventHandler(async (event) => {
   } catch (error) {
     return error;
   }
-  /*  body.array.forEach(async prod => {
-      await prismaCLient.orderItem.create({
-        data:{
-            orderId: postCreate.id,
-            productId: Number(prod.id), 
-        }
-      })
-  }); */
 });
