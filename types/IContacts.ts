@@ -1,6 +1,7 @@
-export interface IContacts {
+export default interface IContacts {
+  id: string;
   imageBgLink: string;
-  imagePreviewLink?: string;
+  imagePreviewLink: string;
   title: string;
   description: string;
   extraeDscription?: string;

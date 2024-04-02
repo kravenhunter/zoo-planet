@@ -1,61 +1,61 @@
 <script setup lang="ts">
-import type { ContentPages, Post } from "@prisma/client";
+import type { IContentPage, IPost } from "~/types";
 
 interface Props {
-  education: ContentPages;
-  programs: Post[];
+  education: IContentPage;
+  programs: IPost[];
 }
 const props = defineProps<Props>();
 
 const carousel = [
   {
-    sourceTitle: "/images/education_1.webp",
+    sourceTitle: "/images/carusel/education_1.webp",
     title: "",
     description: ``,
   },
 
   {
-    sourceTitle: "/images/education_2.webp",
+    sourceTitle: "/images/carusel/education_2.webp",
     title: "",
     description: ``,
   },
   {
-    sourceTitle: "/images/education_3.webp",
+    sourceTitle: "/images/carusel/education_3.webp",
     title: "",
     description: ``,
   },
   {
-    sourceTitle: "/images/education_4.webp",
+    sourceTitle: "/images/carusel/education_4.webp",
     title: "",
     description: ``,
   },
   {
-    sourceTitle: "/images/education_5.webp",
+    sourceTitle: "/images/carusel/education_5.webp",
     title: "",
     description: ``,
   },
   {
-    sourceTitle: "/images/education_6.webp",
+    sourceTitle: "/images/carusel/education_6.webp",
     title: "",
     description: ``,
   },
   {
-    sourceTitle: "/images/education_7.webp",
+    sourceTitle: "/images/carusel/education_7.webp",
     title: "",
     description: ``,
   },
   {
-    sourceTitle: "/images/education_8.webp",
+    sourceTitle: "/images/carusel/education_8.webp",
     title: "",
     description: ``,
   },
   {
-    sourceTitle: "/images/education_9.webp",
+    sourceTitle: "/images/carusel/education_9.webp",
     title: "",
     description: ``,
   },
   {
-    sourceTitle: "/images/education_10.webp",
+    sourceTitle: "/images/carusel/education_10.webp",
     title: "",
     description: ``,
   },
@@ -88,72 +88,71 @@ const educationText = [
 
 const communityLinks = [
   {
-    sourceTitle: "/images/volunteer_4.jpg",
+    sourceTitle: "/images/volunteer/volunteer_4.webp",
     title: "Build Project",
     description: `Learn more about the Zoos Victoria community.`,
   },
   {
-    sourceTitle: "/images/volunteer_3.jpg",
+    sourceTitle: "/images/volunteer/volunteer_3.webp",
     title: "Careers",
     description: `Learn more about the Zoos Victoria community.`,
   },
   {
-    sourceTitle: "/images/volunteer_2.jpg",
+    sourceTitle: "/images/volunteer/volunteer_2.webp",
     title: "Volunteer",
     description: `Learn more about the Zoos Victoria community.`,
   },
   {
-    sourceTitle: "/images/volunteer_1.jpg",
+    sourceTitle: "/images/carusel/education_6.webp",
     title: "Board, governance, policies &  procurement",
     description: `Learn more about the Zoos Victoria community.`,
   },
   {
-    sourceTitle: "/images/zoo_4.jpg",
+    sourceTitle: "/images/carusel/education_2.webp",
     title: "Contact Us",
     description: `Learn more about the Zoos Victoria community.`,
   },
   {
-    sourceTitle: "/images/zoo_2.jpg",
+    sourceTitle: "/images/carusel/education_3.webp",
     title: "Contact Us",
     description: `Learn more about the Zoos Victoria community.`,
   },
   {
-    sourceTitle: "/images/zoo_1.jpg",
+    sourceTitle: "/images/carusel/education_4.webp",
     title: "Contact Us",
     description: `Learn more about the Zoos Victoria community.`,
   },
   {
-    sourceTitle: "/images/z00_3.jpg",
+    sourceTitle: "/images/carusel/z00_3.webp",
     title: "Contact Us",
     description: `Learn more about the Zoos Victoria community.`,
   },
   {
-    sourceTitle: "/images/unsplash_1z913JEirLU.jpg",
+    sourceTitle: "/images/carusel/education_1.webp",
     title: "Contact Us",
     description: `Learn more about the Zoos Victoria community.`,
   },
   {
-    sourceTitle: "/images/unsplash_8uJ0Am-ZdTA.jpg",
+    sourceTitle: "/images/volunteer/elephants.webp",
     title: "Contact Us",
     description: `Learn more about the Zoos Victoria community.`,
   },
   {
-    sourceTitle: "/images/unsplash_T8sYhSINRyU.jpg",
+    sourceTitle: "/images/volunteer/jiraph.webp",
     title: "Contact Us",
     description: `Learn more about the Zoos Victoria community.`,
   },
   {
-    sourceTitle: "/images/unsplash_T8sYhSINRyU-1.jpg",
+    sourceTitle: "/images/volunteer/jiraphs2.webp",
     title: "Contact Us",
     description: `Learn more about the Zoos Victoria community.`,
   },
   {
-    sourceTitle: "/images/unsplash_W0DhyRtHjIg.jpg",
+    sourceTitle: "/images/volunteer/lama.webp",
     title: "Contact Us",
     description: `Learn more about the Zoos Victoria community.`,
   },
 ];
-console.log(props.programs);
 </script>
 
 <template>
@@ -185,7 +184,7 @@ console.log(props.programs);
           :enable-button="false" />
       </v-container>
     </article>
-    <article class="conservation" v-if="programs.length">
+    <article v-if="programs.length" class="conservation">
       <v-container flued>
         <CardColumn
           title-card="Fighting Extinction Schools Program"
@@ -200,14 +199,15 @@ console.log(props.programs);
             <v-col cols="8">
               <CardColumn heigth-card="475" :enable-card-slot="true">
                 <v-img
+                  v-if="programs[0].imagePreviewLink"
                   :alt="programs[0].title"
-                  :src="programs[0].imagePreviewLink!"
+                  :src="`/${programs[0].imagePreviewLink}`"
                   class="align-end"
                   gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
                   :aspect-ratio="4 / 3"
                   cover>
                   <template #sources>
-                    <source :srcset="programs[0].imagePreviewLink!" />
+                    <source :srcset="`/${programs[0].imagePreviewLink}`" />
                   </template>
                   <h4 class="text-amber mb-10 ml-10" v-text="programs[0].title"></h4>
                 </v-img>
@@ -215,17 +215,18 @@ console.log(props.programs);
             </v-col>
             <v-col cols="4">
               <v-row>
-                <v-col cols="12" v-for="el in programs.slice(1, 3)" :key="el.id">
+                <v-col v-for="el in programs.slice(1, 3)" :key="el.id" cols="12">
                   <CardColumn v-if="programs.length" heigth-card="225" :enable-card-slot="true">
                     <v-img
+                      v-if="el.imagePreviewLink"
                       :alt="el.title"
-                      :src="el.imagePreviewLink!"
+                      :src="`/${el.imagePreviewLink}`"
                       class="align-end"
                       gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
                       :aspect-ratio="4 / 3"
                       cover>
                       <template #sources>
-                        <source :srcset="el.imagePreviewLink!" />
+                        <source :srcset="`/${el.imagePreviewLink}`" />
                       </template>
                       <h4 class="text-amber mb-10 ml-10" v-text="el.title"></h4>
                     </v-img>
@@ -235,17 +236,18 @@ console.log(props.programs);
             </v-col>
           </v-row>
           <v-row align="start">
-            <v-col cols="4" v-for="el in programs.slice(3, 6)" :key="el.id">
+            <v-col v-for="el in programs.slice(3, 6)" :key="el.id" cols="4">
               <CardColumn v-if="programs.length" heigth-card="450" :enable-card-slot="true">
                 <v-img
+                  v-if="el.imagePreviewLink"
                   :alt="el.title"
-                  :src="el.imagePreviewLink!"
+                  :src="`/${el.imagePreviewLink}`"
                   class="align-end"
                   gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
                   :aspect-ratio="4 / 3"
                   cover>
                   <template #sources>
-                    <source :srcset="el.imagePreviewLink!" />
+                    <source :srcset="`/${el.imagePreviewLink}`" />
                   </template>
                   <h4 class="text-amber mb-10 ml-10" v-text="el.title"></h4>
                 </v-img>
@@ -255,7 +257,7 @@ console.log(props.programs);
         </div>
         <div class="conservation_retrospective_two">
           <v-row align="start">
-            <v-col cols="12" v-for="el in programs.slice(3, 6)" :key="el.id">
+            <v-col v-for="el in programs.slice(3, 6)" :key="el.id" cols="12">
               <NuxtLink :to="{ path: `/news/${el.id}` }" :title="el.title">
                 <CardColumn
                   v-if="programs.length"
@@ -263,13 +265,14 @@ console.log(props.programs);
                   max-height-card="475"
                   :enable-card-slot="true">
                   <v-img
+                    v-if="el.imagePreviewLink"
                     :alt="el.title"
-                    :src="el.imagePreviewLink!"
+                    :src="`/${el.imagePreviewLink}`"
                     class="align-end"
                     gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
                     cover>
                     <template #sources>
-                      <source :srcset="el.imageBgLink!" />
+                      <source :srcset="`/${el.imagePreviewLink}`" />
                     </template>
                     <h4 class="text-amber mb-10 ml-10" v-text="el.title"></h4>
                   </v-img>
@@ -281,7 +284,7 @@ console.log(props.programs);
       </v-container>
     </article>
 
-    <article class="who_we_are" v-if="programs.length">
+    <article v-if="programs.length" class="who_we_are">
       <ProgramsBlock
         :programs-list="programs.slice(4, 9)"
         title="Fighting Extinction Schools Community"

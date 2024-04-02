@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { ref } from "#imports";
 import { useCurrentMemberTab, useSelectedPrecesState } from "@/composables/states";
-import type { ContentPages, MembershipPrice } from "@prisma/client";
+import type { IContentPage, IMembershipPrice } from "~/types";
 
 interface Props {
-  memberMain: ContentPages;
-  stateMonth: MembershipPrice;
-  stateYaer: MembershipPrice;
+  memberMain: IContentPage;
+  stateMonth: IMembershipPrice;
+  stateYaer: IMembershipPrice;
 }
 
 defineProps<Props>();
@@ -33,7 +33,7 @@ const goBack = () => {
 </script>
 
 <template>
-  <section class="membership" v-if="memberMain && stateMonth && stateYaer">
+  <section v-if="memberMain && stateMonth && stateYaer" class="membership">
     <article class="main_cover">
       <CardColumn :enable-card-slot="true">
         <v-img
@@ -64,57 +64,57 @@ const goBack = () => {
 
           <v-window v-model="currentTab">
             <v-window-item v-for="item in items" :key="item" :value="item">
-              <v-card color="basil" flat v-if="item === 'Member'">
+              <v-card v-if="item === 'Member'" color="basil" flat>
                 <InfoMembershipTables
                   v-if="memberMain && stateMonth && stateYaer"
                   :membership="memberMain"
                   :state-month="stateMonth"
                   :state-yaer="stateYaer" />
               </v-card>
-              <v-card color="basil" flat v-if="item === 'Details'">
-                <div class="adults_form" v-if="selectedPrecesState.adult">
+              <v-card v-if="item === 'Details'" color="basil" flat>
+                <div v-if="selectedPrecesState.adult" class="adults_form">
                   <InfoMemberForm
                     v-for="personNumber in selectedPrecesState.adult"
                     :key="personNumber"
                     :index="personNumber"
                     title="Adult" />
                 </div>
-                <div class="adults_form" v-if="selectedPrecesState.concession">
+                <div v-if="selectedPrecesState.concession" class="adults_form">
                   <InfoMemberForm
                     v-for="personNumber in selectedPrecesState.concession"
                     :key="personNumber"
                     :index="personNumber"
                     title="Concessions" />
                 </div>
-                <div class="adults_form" v-if="selectedPrecesState.child">
+                <div v-if="selectedPrecesState.child" class="adults_form">
                   <InfoMemberForm
                     v-for="personNumber in selectedPrecesState.child"
                     :key="personNumber"
                     :index="personNumber"
                     title="Child" />
                 </div>
-                <div class="adults_form" v-if="selectedPrecesState.zooCrew">
+                <div v-if="selectedPrecesState.zooCrew" class="adults_form">
                   <InfoMemberForm
                     v-for="personNumber in selectedPrecesState.zooCrew"
                     :key="personNumber"
                     :index="personNumber"
                     title="Zoo Crew" />
                 </div>
-                <div class="adults_form" v-if="selectedPrecesState.teacher">
+                <div v-if="selectedPrecesState.teacher" class="adults_form">
                   <InfoMemberForm
                     v-for="personNumber in selectedPrecesState.teacher"
                     :key="personNumber"
                     :index="personNumber"
                     title="Teacher" />
                 </div>
-                <div class="adults_form" v-if="selectedPrecesState.senior">
+                <div v-if="selectedPrecesState.senior" class="adults_form">
                   <InfoMemberForm
                     v-for="personNumber in selectedPrecesState.senior"
                     :key="personNumber"
                     :index="personNumber"
                     title="Senior" />
                 </div>
-                <div class="adults_form" v-if="selectedPrecesState.supporter">
+                <div v-if="selectedPrecesState.supporter" class="adults_form">
                   <InfoMemberForm
                     v-for="personNumber in selectedPrecesState.supporter"
                     :key="personNumber"

@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import { ref, useRoute } from "#imports";
-import type { ContentPages } from "@prisma/client";
+import type { IContentPage } from "~/types";
 
 const props = defineProps<{
-  aboutUs: ContentPages[];
+  aboutUs: IContentPage[];
 }>();
 const route = useRoute();
 
-const about = ref<ContentPages>();
-const sponsor = ref<ContentPages>();
-const career = ref<ContentPages>();
-const education = ref<ContentPages>();
-const volunteer = ref<ContentPages>();
+const about = ref<IContentPage>();
+const sponsor = ref<IContentPage>();
+const career = ref<IContentPage>();
+const education = ref<IContentPage>();
+const volunteer = ref<IContentPage>();
 
 about.value = props.aboutUs?.find((el) => el.subTitle === "AboutUs");
 sponsor.value = props.aboutUs?.find((el) => el.subTitle === "Sponsors");
@@ -29,14 +29,14 @@ if (route.params.id === "about") {
       <CardColumn :enable-card-slot="true">
         <v-img
           :alt="aboutUs[0].title"
-          :src="aboutUs[0].imageBgLink"
+          :src="`/${aboutUs[0].imageBgLink}`"
           class="align-end"
           :max-height="600"
           :aspect-ratio="16 / 9"
           gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
           cover>
           <template #sources>
-            <source :srcset="aboutUs[0].imageBgLink" />
+            <source :srcset="`/${aboutUs[0].imageBgLink}`" />
           </template>
           <v-card-title
             class="text-amber text-center mb-10"

@@ -4,6 +4,18 @@ export interface IFileObject {
   compressedFILE: File;
   preview: string;
 }
+
+export async function getSizeImage(fileImage: File): Promise<number> {
+  return await new Promise((resolve) => {
+    const newImage = new Image();
+    //Create Blob Link
+    newImage.src = URL.createObjectURL(fileImage);
+    newImage.onload = function () {
+      resolve(newImage.width);
+    };
+  });
+}
+
 export async function compressToBestSize(
   imaageWidth: number,
   fileImage: File,
@@ -17,7 +29,7 @@ export async function compressToBestSize(
 
   const promise = await new Promise((resolve, reject) => {
     const compress = new Compressor(fileImage, {
-      quality: 0.1,
+      quality: 0.4,
       // quality: 0.6,
       width: imaageWidth,
       height: currentHeight,

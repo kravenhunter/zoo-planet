@@ -1,27 +1,27 @@
 <script setup lang="ts">
-import type { ContentPages, Post } from "@prisma/client";
+import type { IContentPage, IPost } from "~/types";
 
 interface Props {
-  mainContent: ContentPages;
-  news: Post[];
+  mainContent: IContentPage;
+  news: IPost[];
 }
 defineProps<Props>();
 </script>
 
 <template>
-  <section class="news" v-if="mainContent && news">
+  <section v-if="mainContent && news" class="news">
     <article class="main_cover">
       <CardColumn :enable-card-slot="true">
         <v-img
           :alt="mainContent.title"
-          :src="mainContent.imageBgLink"
+          :src="`/${mainContent.imageBgLink}`"
           class="align-end"
           gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
           :max-height="600"
           :aspect-ratio="16 / 9"
           cover>
           <template #sources>
-            <source :srcset="mainContent.imageBgLink" />
+            <source :srcset="`/${mainContent.imageBgLink}`" />
           </template>
           <v-card-title
             class="text-amber text-center mb-10"

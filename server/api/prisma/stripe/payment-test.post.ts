@@ -1,4 +1,5 @@
 import { createError, defineEventHandler, readBody, useRuntimeConfig } from "#imports";
+import type { H3Error } from "h3";
 import Stripe from "stripe";
 
 export default defineEventHandler(async (event) => {
@@ -23,9 +24,11 @@ export default defineEventHandler(async (event) => {
     return paymentIntent.client_secret;
   } catch (error) {
     console.log(error);
+
+    const getError = error as H3Error;
     throw createError({
-      statusCode: 500,
-      statusMessage: (error as Error).message,
+      statusCode: getError.statusCode,
+      statusMessage: getError.statusMessage,
     });
   }
 });

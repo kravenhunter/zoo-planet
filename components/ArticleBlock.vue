@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { ref, useRoute } from "#imports";
-import { useUnionStore } from "@/stores/storeGenerics";
-import type { Specie } from "@prisma/client";
+import { useUnionStorage } from "@/stores/unionStore";
 import { storeToRefs } from "pinia";
+import type { ISpecie } from "~/types";
 
-defineProps<{ specie: Specie }>();
+defineProps<{ specie: ISpecie }>();
 
 const route = useRoute();
-const { specieList } = storeToRefs(useUnionStore());
+const { specieList } = storeToRefs(useUnionStorage());
 
-const currentSpecie = ref<Specie>();
+const currentSpecie = ref<ISpecie>();
 currentSpecie.value = specieList.value?.find((el) => el.id === route.params.id);
 
 const items = [

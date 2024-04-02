@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { ref, useRoute, useSeoMeta } from "#imports";
-import { useUnionStore } from "@/stores/storeGenerics";
-import type { Post } from "@prisma/client";
+import { useUnionStorage } from "@/stores/unionStore";
 import { storeToRefs } from "pinia";
+import type { IPost } from "~/types";
 
 const route = useRoute();
-const { postlist } = storeToRefs(useUnionStore());
+const { postlist } = storeToRefs(useUnionStorage());
 
-const currentArticles = ref<Post[]>();
+const currentArticles = ref<IPost[]>();
 currentArticles.value = postlist.value?.filter((el) => el.title.includes(String(route.params.id)));
 useSeoMeta({
   title: "Searcxh Result",

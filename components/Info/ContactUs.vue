@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { ContactUs } from "@prisma/client";
+import type { IContacts } from "~/types";
 
 defineProps<{
-  contactMain: ContactUs;
+  contactMain: IContacts;
 }>();
 const contactData = {
-  source: "/images/monkey.jpg",
+  source: "/images/bgImages/monkey.webp",
   title: "insight into the wild day-today life of the zoo planet in the ... ",
   subtitle1:
     "Before getting in touch with us, check out our latest FAQs in case your question has already been answered:",
@@ -26,7 +26,7 @@ Australia`,
 
 <template>
   <section class="article">
-    <article class="main_cover" v-if="contactMain">
+    <article v-if="contactMain" class="main_cover">
       <CardColumn :enable-card-slot="true">
         <v-img
           :alt="contactMain.title"

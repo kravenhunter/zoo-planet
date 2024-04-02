@@ -24,7 +24,7 @@ const activateormTag = (index: number) => {
 
 <template>
   <article class="bg-orange-lighten-5">
-    <v-sheet class="bg-orange-lighten-5 pa-5 mb-5" v-if="title === 'Adult'">
+    <v-sheet v-if="title === 'Adult'" class="bg-orange-lighten-5 pa-5 mb-5">
       <v-list-item prepend-icon="mdi-account" class="text-green-darken-4 pb-0">
         <template #prepend>
           <v-icon size="25" class="text-h6 font-weight-bold">mdi-account</v-icon>
@@ -43,9 +43,9 @@ const activateormTag = (index: number) => {
         <v-col cols="3" class="pl-6">
           <v-radio-group v-model="statePersons.adults[index - 1].personGender" column>
             <v-radio
-              class="text-subtitle-2 pb-3"
               v-for="person in personList"
               :key="person"
+              class="text-subtitle-2 pb-3"
               :label="person"
               color="red"
               :value="person"></v-radio>
@@ -101,7 +101,7 @@ const activateormTag = (index: number) => {
       </v-row>
     </v-sheet>
 
-    <v-sheet class="bg-orange-lighten-5 pa-5 mb-5" v-if="title === 'Concessions'">
+    <v-sheet v-if="title === 'Concessions'" class="bg-orange-lighten-5 pa-5 mb-5">
       <v-list-item prepend-icon="mdi-account" class="text-green-darken-4 pb-0">
         <template #prepend>
           <v-icon size="25" class="text-h6 font-weight-bold">mdi-account</v-icon>
@@ -120,9 +120,9 @@ const activateormTag = (index: number) => {
         <v-col cols="3" class="pl-6">
           <v-radio-group v-model="statePersons.concessions[index - 1].personGender" column>
             <v-radio
-              class="text-subtitle-2 pb-3"
               v-for="person in personList"
               :key="person"
+              class="text-subtitle-2 pb-3"
               :label="person"
               color="red"
               :value="person"></v-radio>
@@ -178,7 +178,7 @@ const activateormTag = (index: number) => {
       </v-row>
     </v-sheet>
 
-    <v-sheet class="bg-orange-lighten-5 pa-5 mb-5" v-if="title === 'Child'">
+    <v-sheet v-if="title === 'Child'" class="bg-orange-lighten-5 pa-5 mb-5">
       <v-list-item prepend-icon="mdi-account" class="text-green-darken-4 pb-0">
         <template #prepend>
           <v-icon size="25" class="text-h6 font-weight-bold">mdi-account</v-icon>
@@ -197,9 +197,9 @@ const activateormTag = (index: number) => {
         <v-col cols="3" class="pl-6">
           <v-radio-group v-model="statePersons.child[index - 1].personGender" column>
             <v-radio
-              class="text-subtitle-2 pb-3"
               v-for="person in personList"
               :key="person"
+              class="text-subtitle-2 pb-3"
               :label="person"
               color="red"
               :value="person"></v-radio>
@@ -255,7 +255,7 @@ const activateormTag = (index: number) => {
       </v-row>
     </v-sheet>
 
-    <v-sheet class="bg-orange-lighten-5 pa-5 mb-5" v-if="title === 'Zoo Crew'">
+    <v-sheet v-if="title === 'Zoo Crew'" class="bg-orange-lighten-5 pa-5 mb-5">
       <v-list-item prepend-icon="mdi-account" class="text-green-darken-4 pb-0">
         <template #prepend>
           <v-icon size="25" class="text-h6 font-weight-bold">mdi-account</v-icon>
@@ -274,9 +274,9 @@ const activateormTag = (index: number) => {
         <v-col cols="3" class="pl-6">
           <v-radio-group v-model="statePersons.zooCrew[index - 1].personGender" column>
             <v-radio
-              class="text-subtitle-2 pb-3"
               v-for="person in personList"
               :key="person"
+              class="text-subtitle-2 pb-3"
               :label="person"
               color="red"
               :value="person"></v-radio>
@@ -331,7 +331,7 @@ const activateormTag = (index: number) => {
         </v-col>
       </v-row>
     </v-sheet>
-    <v-sheet class="bg-orange-lighten-5 pa-5 mb-5" v-if="title === 'Teacher'">
+    <v-sheet v-if="title === 'Teacher'" class="bg-orange-lighten-5 pa-5 mb-5">
       <v-list-item prepend-icon="mdi-account" class="text-green-darken-4 pb-0">
         <template #prepend>
           <v-icon size="25" class="text-h6 font-weight-bold">mdi-account</v-icon>
@@ -350,9 +350,9 @@ const activateormTag = (index: number) => {
         <v-col cols="3" class="pl-6">
           <v-radio-group v-model="statePersons.teacher[index - 1].personGender" column>
             <v-radio
-              class="text-subtitle-2 pb-3"
               v-for="person in personList"
               :key="person"
+              class="text-subtitle-2 pb-3"
               :label="person"
               color="red"
               :value="person"></v-radio>
@@ -407,7 +407,7 @@ const activateormTag = (index: number) => {
         </v-col>
       </v-row>
     </v-sheet>
-    <v-sheet class="bg-orange-lighten-5 pa-5 mb-5" v-if="title === 'Senior'">
+    <v-sheet v-if="title === 'Senior'" class="bg-orange-lighten-5 pa-5 mb-5">
       <v-list-item prepend-icon="mdi-account" class="text-green-darken-4 pb-0">
         <template #prepend>
           <v-icon size="25" class="text-h6 font-weight-bold">mdi-account</v-icon>
@@ -426,9 +426,9 @@ const activateormTag = (index: number) => {
         <v-col cols="3" class="pl-6">
           <v-radio-group v-model="statePersons.senior[index - 1].personGender" column>
             <v-radio
-              class="text-subtitle-2 pb-3"
               v-for="person in personList"
               :key="person"
+              class="text-subtitle-2 pb-3"
               :label="person"
               color="red"
               :value="person"></v-radio>
@@ -484,7 +484,7 @@ const activateormTag = (index: number) => {
       </v-row>
     </v-sheet>
 
-    <v-sheet class="bg-orange-lighten-5 pa-5 mb-5" v-if="title === 'Supporter'">
+    <v-sheet v-if="title === 'Supporter'" class="bg-orange-lighten-5 pa-5 mb-5">
       <v-list-item prepend-icon="mdi-account" class="text-green-darken-4 pb-0">
         <template #prepend>
           <v-icon size="25" class="text-h6 font-weight-bold">mdi-account</v-icon>
@@ -503,9 +503,9 @@ const activateormTag = (index: number) => {
         <v-col cols="3" class="pl-6">
           <v-radio-group v-model="statePersons.supporter[index - 1].personGender" column>
             <v-radio
-              class="text-subtitle-2 pb-3"
               v-for="person in personList"
               :key="person"
+              class="text-subtitle-2 pb-3"
               :label="person"
               color="red"
               :value="person"></v-radio>

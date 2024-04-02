@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { Post } from "@prisma/client";
+import type { IPost } from "~/types";
 
 interface Props {
-  searchList: Post[];
+  searchList: IPost[];
 }
 defineProps<Props>();
 </script>

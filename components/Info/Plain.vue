@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { ContentPages, PlanPrice } from "@prisma/client";
+import type { IContentPage, IPlan } from "~/types";
 
-defineProps<{ plain?: ContentPages; tables: PlanPrice[] }>();
+defineProps<{ plain?: IContentPage; tables: IPlan[] }>();
 const plainText = [
   {
-    sourceTitle: "/images/plain_visit.png",
+    sourceTitle: "/images/plan/plain_visit.webp",
     title: "Plan your visit",
     description: "",
   },
@@ -33,7 +33,7 @@ School excursions are only available on weekdays during the Victorian school ter
     description: "Get support and grow your network.",
   },
   {
-    sourceTitle: "/images/comunity.jpg",
+    sourceTitle: "/images/plan/community.webp",
     title: "Plan your visit",
     description:
       "Prices and payment information, risk assessments, getting here, sensory maps, and more",
@@ -41,7 +41,7 @@ School excursions are only available on weekdays during the Victorian school ter
 ];
 const tableHeaders = [
   {
-    title: "Education level ",
+    title: "Education level",
   },
   {
     title: "Admission cost (includes education program)",
@@ -56,7 +56,7 @@ const tableHeaders = [
 </script>
 
 <template>
-  <section class="plain" v-if="plain && tables">
+  <section v-if="plain && tables" class="plain">
     <article>
       <CardColumn :enable-card-slot="true">
         <v-img
@@ -86,15 +86,15 @@ const tableHeaders = [
             <tr>
               <th class="pl-7 py-5 text-left font-weight-bold">{{ tableHeaders[0].title }}</th>
               <th
-                class="py-5 text-left font-weight-bold"
                 v-for="(el, i) in tableHeaders.slice(1, 4)"
-                :key="i">
+                :key="i"
+                class="py-5 text-left font-weight-bold">
                 {{ el.title }}
               </th>
             </tr>
           </thead>
           <tbody class="text-subtitle-2">
-            <tr v-for="(item, i) in tables" :key="i">
+            <tr v-for="item in tables" :key="item.id">
               <td class="pl-7 py-5">{{ item.title }}</td>
               <td>{{ item.admission }}</td>
               <td>{{ item.faunaPark }}</td>
@@ -103,8 +103,8 @@ const tableHeaders = [
           </tbody>
         </v-table>
         <CardColumn
-          class-title="text-green-darken-4 "
           v-if="plain.extraeDscription"
+          class-title="text-green-darken-4 "
           :text-html-card="plain.extraeDscription"
           :enable-button="false" />
       </v-container>

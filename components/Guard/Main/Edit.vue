@@ -1,39 +1,50 @@
 <script setup lang="ts">
-import { computed, ref, useRoute } from "#imports";
+import { computed, navigateTo, reactive, ref, useRoute } from "#imports";
 import { delayLoading, useIsLoading } from "@/composables/states";
-
-import { useUnionStore } from "@/stores/storeGenerics";
+import { useUnionStorage } from "@/stores/unionStore";
 import { storeToRefs } from "pinia";
-import type { IContentPage } from "types/IContentPage";
+import extractFileFromEvent from "~/utils/extractFileFromEvent";
+import packToFormData from "~/utils/packToFormData";
 
 const route = useRoute();
+console.log(route);
 
-const { mainPages } = storeToRefs(useUnionStore());
+const { mainPages } = storeToRefs(useUnionStorage());
 
-const { updateData, createData } = useUnionStore();
+const { createOrUpdateData, loadDataList } = useUnionStorage();
 
 const pendingData = useIsLoading();
-const newsMainPageContent = ref<IContentPage>();
-
 const getRecord = mainPages.value?.find((el) =>
   el.subTitle?.toLocaleLowerCase().includes(String(route.params.id)),
 );
-newsMainPageContent.value = {
+
+const state = reactive({
   title: getRecord?.title ?? "",
-  imageBgLink: getRecord?.imageBgLink ?? "",
-  imagePreviewLink: getRecord?.imagePreviewLink ?? "",
   subTitle: getRecord?.subTitle ?? "",
   shortDescription: getRecord?.shortDescription ?? "",
   description: getRecord?.description ?? "",
   extraeDscription: getRecord?.extraeDscription ?? "",
-};
-
-const isEmpty = computed(() => {
-  if (!newsMainPageContent.value?.title && !newsMainPageContent.value?.shortDescription) {
-    return true;
-  }
-  return false;
 });
+
+const subtitle = [
+  "news",
+  "extinction",
+  "plan",
+  "species",
+  "education",
+  "aboutus",
+  "sponsors",
+  "careers",
+  "volunteer",
+  "membership",
+  "tickets",
+  "donate",
+];
+
+const isEmpty = computed(() =>
+  state.title && state.subTitle && state.shortDescription && state.description ? false : true,
+);
+
 const rules = [
   (value: string) => {
     if (value) {
@@ -44,42 +55,61 @@ const rules = [
   },
 ];
 
-const filCover = ref<File>();
-const filePreview = ref<File>();
-const selectCoverImage = async (event: Event) => {
-  const fileEvent = event.target as HTMLInputElement;
-  fileEvent.files?.length && (filCover.value = fileEvent.files[0]);
-  console.log(filCover.value);
+const filCover = ref<File | null>();
+const filePreview = ref<File | null>();
+const selectCoverImage = (event: Event) => {
+  filCover.value = extractFileFromEvent(event);
 };
-const selectPreviewImage = async (event: Event) => {
-  const fileEvent = event.target as HTMLInputElement;
-  fileEvent.files?.length && (filePreview.value = fileEvent.files[0]);
-  console.log(filePreview.value);
+const selectPreviewImage = (event: Event) => {
+  filePreview.value = extractFileFromEvent(event);
 };
 
 const addPost = async () => {
-  if (newsMainPageContent.value) {
-    pendingData.value = true;
+  pendingData.value = true;
+  if (!isEmpty.value) {
     if (getRecord?.id) {
-      const result = await updateData(
-        getRecord.id,
+      const getpackData = await packToFormData(
+        { ...state },
+        null,
         filCover.value,
         filePreview.value,
-        newsMainPageContent.value,
-        "main-content-pages",
-        "update",
       );
-      delayLoading(result);
+      const result = await createOrUpdateData(
+        `maincontent/update-by-id/${getRecord.id}`,
+        getpackData,
+      );
+
+      if (result.statusCode === 200) {
+        delayLoading("Success");
+        await new Promise((resolve) =>
+          setTimeout(() => {
+            navigateTo(String(route.query.id));
+          }, 2500),
+        );
+        //   Promise.resolve( delayLoading("Success")).then(() =>  setTimeout(async() => {
+        //   await  navigateTo( "/guard/section/main")
+        // }, 1000) )
+      } else {
+        delayLoading("Error");
+      }
     } else {
       if (filCover.value && filePreview.value) {
-        const result = await createData(
-          filCover.value,
-          filePreview.value,
-          newsMainPageContent.value,
-          "main-content-pages",
-          "create",
+        const getpackData = await packToFormData(state, null, filCover.value, filePreview.value);
+
+        const result = await createOrUpdateData(
+          `base/create-by-type/main-content-pages`,
+          getpackData,
         );
-        delayLoading(result);
+        if (result.statusCode === 200) {
+          delayLoading("Success");
+          await new Promise((resolve) =>
+            setTimeout(() => {
+              navigateTo(String(route.query.id));
+            }, 2500),
+          );
+        } else {
+          delayLoading("Error");
+        }
       }
     }
   }
@@ -88,7 +118,7 @@ const addPost = async () => {
 
 <template>
   <section class="edit">
-    <article v-if="newsMainPageContent">
+    <article>
       <v-overlay tabindex="0" :model-value="pendingData" class="align-center justify-center">
         <v-progress-circular color="primary" indeterminate size="64"></v-progress-circular>
       </v-overlay>
@@ -108,14 +138,9 @@ const addPost = async () => {
                   >create</v-btn
                 >
                 <v-form class="bg-grey-darken-4">
-                  <v-text-field
-                    v-model="newsMainPageContent.title"
-                    :rules="rules"
-                    label="Title"></v-text-field>
-                  <v-text-field
-                    v-model="newsMainPageContent.subTitle"
-                    :rules="rules"
-                    label="SubTitle"></v-text-field>
+                  <v-text-field v-model="state.title" :rules="rules" label="Title"></v-text-field>
+                  <v-select v-model="state.subTitle" :items="subtitle"></v-select>
+
                   <v-file-input
                     clearable
                     label="Image cover"
@@ -125,7 +150,7 @@ const addPost = async () => {
                     label="Image preview"
                     @change="selectPreviewImage"></v-file-input>
                   <v-text-field
-                    v-model="newsMainPageContent.shortDescription"
+                    v-model="state.shortDescription"
                     :rules="rules"
                     label="Shord Description"></v-text-field>
                 </v-form>
@@ -135,22 +160,20 @@ const addPost = async () => {
           <v-col cols="6">
             <v-sheet>
               <v-card-title class="text-center">Description</v-card-title>
-              <UiElementsAddEditor v-model:value="newsMainPageContent.description" />
+              <UiElementsAddEditor v-model:value="state.description" />
             </v-sheet>
           </v-col>
           <v-col cols="6">
-            <div class="editor_content bg-white" v-html="newsMainPageContent.description"></div>
+            <div class="editor_content bg-white" v-html="state.description"></div>
           </v-col>
           <v-col cols="6">
             <v-sheet>
               <v-card-title class="text-center">Extra Description</v-card-title>
-              <UiElementsAddEditor v-model:value="newsMainPageContent.extraeDscription" />
+              <UiElementsAddEditor v-model:value="state.extraeDscription" />
             </v-sheet>
           </v-col>
           <v-col cols="6">
-            <div
-              class="editor_content bg-white"
-              v-html="newsMainPageContent.extraeDscription"></div>
+            <div class="editor_content bg-white" v-html="state.extraeDscription"></div>
           </v-col>
         </v-row>
       </v-container>

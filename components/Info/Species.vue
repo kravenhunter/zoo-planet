@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type { ContentPages, Specie } from "@prisma/client";
+import type { IContentPage, ISpecie } from "~/types";
 
 interface Props {
-  species: ContentPages;
-  specieList: Specie[];
+  species: IContentPage;
+  specieList: ISpecie[];
 }
 
 defineProps<Props>();

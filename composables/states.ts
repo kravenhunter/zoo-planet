@@ -1,8 +1,7 @@
 import { useRuntimeConfig, useState } from "#imports";
 
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
-import type { IAlert } from "types/IAlert";
-import type { IPerson, ISelectedPrices } from "types/ITypes";
+import type { IAlert, IPerson, ISelectedPrices } from "~/types";
 
 interface IFormState {
   adults: IPerson[];

@@ -1,29 +1,31 @@
 <script setup lang="ts">
-import { computed, ref, useRoute } from "#imports";
+import { computed, navigateTo, reactive, ref, useRoute } from "#imports";
 import { delayLoading, useIsLoading } from "@/composables/states";
-import { useUnionStore } from "@/stores/storeGenerics";
-import type { Post } from "@prisma/client";
+import { useUnionStorage } from "@/stores/unionStore";
 import { storeToRefs } from "pinia";
+import extractFileFromEvent from "~/utils/extractFileFromEvent";
+import packToFormData from "~/utils/packToFormData";
 
 const route = useRoute();
 
 const pendingData = useIsLoading();
 
-const { postlist } = storeToRefs(useUnionStore());
+const { postlist } = storeToRefs(useUnionStorage());
 
-const { updateData } = useUnionStore();
-const currentPost = ref<Post>();
-const selected = ref("Education");
+const { createOrUpdateData } = useUnionStorage();
+
 const category = ["Education", "FightingExtinction", "News"];
-currentPost.value = postlist.value?.find((el) => el.id === String(route.params.id));
-selected.value = currentPost.value ? currentPost.value.category : "Education";
-
-const isEmpty = computed(() => {
-  if (currentPost.value?.title && currentPost.value?.description) {
-    return false;
-  }
-  return true;
+const getPost = postlist.value?.find((el) => el.id === String(route.params.id));
+const state = reactive({
+  title: getPost?.title ?? "",
+  description: getPost?.description ?? "",
+  category: getPost?.category ?? "News",
+  extraeDscription: getPost?.extraeDscription ?? "",
 });
+
+const isEmpty = computed(() =>
+  state.title && state.description && state.extraeDscription ? false : true,
+);
 const rules = [
   (value: string) => {
     if (value) {
@@ -34,39 +36,32 @@ const rules = [
   },
 ];
 
-const filCover = ref<File>();
-const filePreview = ref<File>();
-const selectCoverImage = async (event: Event) => {
-  const fileEvent = event.target as HTMLInputElement;
-  fileEvent.files?.length && (filCover.value = fileEvent.files[0]);
-  console.log(filCover.value);
+const filCover = ref<File | null>();
+const filePreview = ref<File | null>();
+const selectCoverImage = (event: Event) => {
+  filCover.value = extractFileFromEvent(event);
 };
-const selectPreviewImage = async (event: Event) => {
-  const fileEvent = event.target as HTMLInputElement;
-  fileEvent.files?.length && (filePreview.value = fileEvent.files[0]);
-  console.log(filePreview.value);
+const selectPreviewImage = (event: Event) => {
+  filePreview.value = extractFileFromEvent(event);
 };
 
 const addPost = async () => {
   pendingData.value = true;
-  if (currentPost.value) {
-    const result = await updateData(
-      currentPost.value?.id,
-      filCover.value,
-      filePreview.value,
-      {
-        title: currentPost.value.title,
-        imageBgLink: currentPost.value?.imageBgLink,
-        imagePreviewLink: currentPost.value?.imagePreviewLink ?? undefined,
-        category: selected.value,
-        description: currentPost.value?.description,
-        extraeDscription: currentPost.value?.extraeDscription ?? undefined,
-      },
-      "post",
-      "update",
-    );
 
-    delayLoading(result);
+  if (getPost?.id) {
+    const getpackData = await packToFormData({ ...state }, null, filCover.value, filePreview.value);
+
+    const result = await createOrUpdateData(`post/update/${getPost.id}`, getpackData);
+    if (result.statusCode === 200) {
+      delayLoading("Success");
+      await new Promise((resolve) =>
+        setTimeout(() => {
+          navigateTo(String(route.query.id));
+        }, 2500),
+      );
+    } else {
+      delayLoading("Error");
+    }
   }
 };
 </script>
@@ -77,7 +72,7 @@ const addPost = async () => {
       <v-progress-circular color="primary" indeterminate size="64"></v-progress-circular>
     </v-overlay>
 
-    <v-container v-if="currentPost" class="position-relative d-flex justify-end" fluid>
+    <v-container class="position-relative d-flex justify-end" fluid>
       <v-row>
         <v-col>
           <div class="content_item">
@@ -93,10 +88,7 @@ const addPost = async () => {
                 >update data</v-btn
               >
               <v-form>
-                <v-text-field
-                  v-model="currentPost.title"
-                  :rules="rules"
-                  label="Title"></v-text-field>
+                <v-text-field v-model="state.title" :rules="rules" label="Title"></v-text-field>
                 <v-file-input
                   clearable
                   label="Image cover"
@@ -105,21 +97,20 @@ const addPost = async () => {
                   clearable
                   label="Image preview"
                   @change="selectPreviewImage"></v-file-input>
-                <v-select v-model="selected" :items="category"></v-select>
+                <v-select v-model="state.category" :items="category"></v-select>
                 <v-text-field
-                  v-model="currentPost.description"
+                  v-model="state.description"
                   :rules="rules"
                   label="Shord Description"></v-text-field>
               </v-form>
               <span class="text-subtitle-1 pl-5">Description</span>
-              <UiElementsAddEditor
-                v-if="currentPost.extraeDscription"
-                v-model:value="currentPost.extraeDscription" />
+
+              <UiElementsAddEditor v-model:value="state.extraeDscription" />
             </v-sheet>
           </div>
         </v-col>
         <v-col class="content_news">
-          <div class="editor_content bg-white mt-5" v-html="currentPost.extraeDscription"></div>
+          <div class="editor_content bg-white mt-5" v-html="state.extraeDscription"></div>
         </v-col>
       </v-row>
     </v-container>

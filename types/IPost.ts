@@ -1,8 +1,9 @@
-export interface IPost {
-  title?: string | null | undefined;
-  imageBgLink?: string | undefined;
-  imagePreviewLink?: string;
-  category?: string | null | undefined;
-  description?: string | null | undefined;
-  extraeDscription: string | null | undefined;
+export default interface IPost {
+  id: string;
+  title: string;
+  imageBgLink: string;
+  imagePreviewLink: string;
+  category: string;
+  description: string;
+  extraeDscription?: string;
 }

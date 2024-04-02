@@ -165,7 +165,7 @@ const pay = async () => {
             },
             name: stateData.name,
           },
-          return_url: "http://localhost:3000/success",
+          return_url: `${runtimeCOnfig.public.app_url}/success`,
         },
       });
 

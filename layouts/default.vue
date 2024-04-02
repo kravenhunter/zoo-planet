@@ -1,43 +1,47 @@
 <script setup lang="ts">
 import { navigateTo, onMounted, ref, useSeoMeta } from "#imports";
 import { useAuthStore } from "@/stores/authStore";
-import { useUnionStore } from "@/stores/storeGenerics";
-import type { ContactUs } from "@prisma/client";
+import { useUnionStorage } from "@/stores/unionStore";
 import { storeToRefs } from "pinia";
 
 const showSearch = ref(false);
 const searchRequest = ref<string>("");
 const { logOut, checkAuth } = useAuthStore();
 const { isAuthorized } = storeToRefs(useAuthStore());
-const { postlist, specieList, mainPages, contactPage, membershipTable, ticketTable } = storeToRefs(
-  useUnionStore(),
-);
-const { loadDataList } = useUnionStore();
-if (
-  !mainPages.value &&
-  !specieList.value &&
-  !postlist.value &&
-  !membershipTable.value &&
-  !ticketTable.value &&
-  !contactPage.value
-) {
-  await loadDataList();
+const { mainPages, contactPage } = storeToRefs(useUnionStorage());
+const { loadDataList } = useUnionStorage();
+// const { data } = await useFetch("/api/prisma/base/list-by-type/:id");
+
+if (!mainPages.value.length) {
+  const newsPromise = loadDataList("base/list-by-type/post");
+  const planPricesPromise = loadDataList("base/list-by-type/plan");
+  const speciesPromise = loadDataList("base/list-by-type/specie");
+  const mainPagesPromise = loadDataList("base/list-by-type/main-content-pages");
+  const contactsPromise = loadDataList("base/list-by-type/contacts");
+  const membershipPriceыPromise = loadDataList("base/list-by-type/membership-price");
+  const ticketPriceыPromise = loadDataList("base/list-by-type/ticket-price");
+
+  await Promise.allSettled([
+    newsPromise,
+    planPricesPromise,
+    contactsPromise,
+    speciesPromise,
+    mainPagesPromise,
+    membershipPriceыPromise,
+    ticketPriceыPromise,
+  ]);
 }
 // Contacts Data
-const contacts = ref<ContactUs>();
-const socialsLink = ref<string[]>();
+
+const socialsLink = ref<string[]>([]);
 const collapseBurger = ref(false);
 
-contactPage.value?.length && (contacts.value = contactPage.value[0]);
-if (contactPage.value?.length) {
-  contacts.value = contactPage.value[0];
-  socialsLink.value = [
-    contacts.value.socialLink_1!,
-    contacts.value.socialLink_2!,
-    contacts.value.socialLink_3!,
-    contacts.value.socialLink_4!,
-    contacts.value.socialLink_5!,
-  ];
+if (contactPage.value) {
+  contactPage.value.socialLink_1 && socialsLink.value.push(contactPage.value.socialLink_1);
+  contactPage.value.socialLink_2 && socialsLink.value.push(contactPage.value.socialLink_2);
+  contactPage.value.socialLink_3 && socialsLink.value.push(contactPage.value.socialLink_3);
+  contactPage.value.socialLink_4 && socialsLink.value.push(contactPage.value.socialLink_4);
+  contactPage.value.socialLink_5 && socialsLink.value.push(contactPage.value.socialLink_5);
 }
 
 const navTop = [
@@ -414,7 +418,7 @@ useSeoMeta({
 
           <div class="footer_copyright_title">
             <p class="text-subtitle-2">
-              {{ contacts?.copyright }}
+              {{ contactPage?.copyright }}
             </p>
           </div>
           <div class="footer_copyright_socials">

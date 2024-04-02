@@ -1,30 +1,27 @@
 <script setup lang="ts">
-import { computed, reactive, ref } from "#imports";
-
+import { computed, navigateTo, reactive, ref, useRoute } from "#imports";
 import { delayLoading, useIsLoading } from "@/composables/states";
-import { useUnionStore } from "@/stores/storeGenerics";
+import { useUnionStorage } from "@/stores/unionStore";
+import extractFileFromEvent from "~/utils/extractFileFromEvent";
+import packToFormData from "~/utils/packToFormData";
 
-const { createData } = useUnionStore();
+const { createOrUpdateData } = useUnionStorage();
 const state = reactive({
   title: "",
-  imageBgLink: "image",
-  imagePreviewLink: "",
-  category: "",
+  category: "News",
   description: "",
   extraeDscription: "",
 });
 
+const route = useRoute();
+console.log(route);
 const pendingData = useIsLoading();
 
-const selected = ref("Education");
 const category = ["Education", "FightingExtinction", "News"];
 
-const isEmpty = computed(() => {
-  if (state.title && state.description && state.extraeDscription) {
-    return false;
-  }
-  return true;
-});
+const isEmpty = computed(() =>
+  state.title && state.description && state.extraeDscription ? false : true,
+);
 const rules = [
   (value: string) => {
     if (value) {
@@ -35,25 +32,30 @@ const rules = [
   },
 ];
 
-const filCover = ref<File>();
-const filePreview = ref<File>();
-const selectCoverImage = async (event: Event) => {
-  const fileEvent = event.target as HTMLInputElement;
-  fileEvent.files?.length && (filCover.value = fileEvent.files[0]);
-  console.log(filCover.value);
+const filCover = ref<File | null>();
+const filePreview = ref<File | null>();
+const selectCoverImage = (event: Event) => {
+  filCover.value = extractFileFromEvent(event);
 };
-const selectPreviewImage = async (event: Event) => {
-  const fileEvent = event.target as HTMLInputElement;
-  fileEvent.files?.length && (filePreview.value = fileEvent.files[0]);
-  console.log(filePreview.value);
+const selectPreviewImage = (event: Event) => {
+  filePreview.value = extractFileFromEvent(event);
 };
+
 const addPost = async () => {
   pendingData.value = true;
   if (filCover.value && filePreview.value) {
-    state.category = selected.value;
-    const result = await createData(filCover.value, filePreview.value, state, "post", "create");
-
-    delayLoading(result);
+    const getpackData = await packToFormData(state, null, filCover.value, filePreview.value);
+    const result = await createOrUpdateData(`base/create-by-type/post`, getpackData);
+    if (result.statusCode === 200) {
+      delayLoading("Success");
+      await new Promise((resolve) =>
+        setTimeout(() => {
+          navigateTo(String(route.query.id));
+        }, 2500),
+      );
+    } else {
+      delayLoading("Error");
+    }
   }
 };
 </script>
@@ -89,7 +91,7 @@ const addPost = async () => {
                   clearable
                   label="Image preview"
                   @change="selectPreviewImage"></v-file-input>
-                <v-select v-model="selected" :items="category"></v-select>
+                <v-select v-model="state.category" :items="category"></v-select>
                 <v-text-field
                   v-model="state.description"
                   :rules="rules"

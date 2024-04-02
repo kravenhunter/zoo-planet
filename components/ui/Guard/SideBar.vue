@@ -1,13 +1,16 @@
 <script setup lang="ts">
-import { navigateTo } from "#imports";
+import { navigateTo, useRoute } from "#imports";
 import { useAuthStore } from "@/stores/authStore";
+
+const route = useRoute();
+console.log(route);
 
 const { logOut } = useAuthStore();
 const nav = [
   { title: "Main Pages", icon: "mdi-folder", to: "/guard/section/main" },
   { title: "My News", icon: "mdi-folder", to: "/guard/section/news" },
   { title: "Species", icon: "mdi-account-multiple", to: "/guard/section/species" },
-  { title: "Fighting Extintion", icon: "mdi-star", to: "/guard/section/fighting" },
+  { title: "Fighting Extintion", icon: "mdi-star", to: "/guard/section/extinction" },
   { title: "Education", icon: "mdi-history", to: "/guard/section/education" },
   { title: "About Us", icon: "mdi-check-circle", to: "/guard/section/aboutus" },
   { title: "Contact Us", icon: "mdi-upload", to: "/guard/section/contactus" },
@@ -42,7 +45,9 @@ const signOut = async () => {
         <template #prepend>
           <v-icon size="30" :icon="item.icon"></v-icon>
         </template>
-        <NuxtLink :to="item.to">
+        <NuxtLink
+          :to="item.to"
+          :class="route.fullPath === item.to ? 'router-link-active router-link-exact-active' : ''">
           <v-list-item-title v-text="item.title"></v-list-item-title>
         </NuxtLink>
       </v-list-item>

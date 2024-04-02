@@ -8,12 +8,13 @@ export default defineNuxtConfig({
   runtimeConfig: {
     private: {
       stripeSK: process.env.STRIPE_SK_KEY,
-      endpoinSK: process.env.ENDPOINT_SECRET,
+      endpoinSK: process.env.ENDPOINT_SECRET ?? "http://localhost:3000",
     },
     public: {
       supabaseUrl: process.env.SUPABASE_URL,
       supabaseKey: process.env.SUPABASE_KEY,
       stripePK: process.env.STRIPE_PK_KEY,
+      app_url: process.env.APP_URL ?? "http://localhost:3000",
     },
   },
   // image: {

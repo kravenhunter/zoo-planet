@@ -10,43 +10,15 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
-model Education {
-  id                 String      @id @default(uuid())
-  timeStamp          DateTime    @default(now())
-  imageBgLink         String 
-  imagePreviewLink   String?
-  title              String     
-  description        String
-  extraeDscription   String?
-}
-model FightingExtinction {
-  id                 String      @id @default(uuid())
-  timeStamp          DateTime    @default(now())
-  imageBgLink        String 
-  imagePreviewLink   String?
-  title              String     
-  description        String
-  extraeDscription   String?
-}
 
-
-model AboutUs {
-  id                 String      @id @default(uuid())
-  timeStamp          DateTime    @default(now())
-  imageBgLink         String 
-  imagePreviewLink   String?
-  title              String     
-  description        String
-  extraeDscription   String?
-}
 model ContactUs {
   id                String      @id @default(uuid())
   timeStamp         DateTime    @default(now())
   imageBgLink        String
   imagePreviewLink   String? 
   title             String     
-  description       String
-  extraeDscription  String?
+  description       String @db.MediumText
+  extraeDscription  String? @db.MediumText
   phone             String
   email             String
   socialLink_1       String?
@@ -58,16 +30,6 @@ model ContactUs {
      
 }
 
-model Ticket {
-  id                String      @id @default(uuid())
-  timeStamp         DateTime    @default(now())
-  imageBgLink       String
-  imagePreviewLink   String? 
-  title             String     
-  description       String
-  extraeDscription  String?   
-
-}
 model TicketPrice {
   id                String      @id @default(uuid())
   timeStamp         DateTime    @default(now()) 
@@ -78,16 +40,6 @@ model TicketPrice {
   seniors             String   
 }
 
-model Membership {
-  id                String      @id @default(uuid())
-  timeStamp         DateTime    @default(now())
-  imageBgLink       String
-  imagePreviewLink   String? 
-  title             String     
-  description       String
-  extraeDscription  String?   
-
-}
 
 model MembershipPrice {
   id                String      @id @default(uuid())
@@ -107,9 +59,9 @@ model Post {
   title             String     
   imageBgLink       String
   imagePreviewLink   String? 
-  description       String
+  description       String   @db.MediumText
   category          Category
-  extraeDscription  String?
+  extraeDscription  String?   @db.MediumText
 }
 
 enum Category {
@@ -126,9 +78,9 @@ model ContentPages {
   imagePreviewLink   String? 
   title              String  
   subTitle           String?  
-  shortDescription   String 
-  description        String
-  extraeDscription   String?
+  shortDescription   String       @db.MediumText
+  description        String       @db.MediumText
+  extraeDscription   String?      @db.MediumText
 }
 
 model Specie {
@@ -142,8 +94,8 @@ model Specie {
   countLeft          String
   conservationStatus  ConservationStatus
   shordDescription       String
-  description        String
-  extraeDscription  String?
+  description        String   @db.MediumText
+  extraeDscription  String?   @db.MediumText
 }
 
 enum ConservationStatus  {
@@ -170,3 +122,55 @@ model PlanPrice {
   faunaPark          String
   adultRatio           String   
 }
+
+
+// model Ticket {
+//   id                String      @id @default(uuid())
+//   timeStamp         DateTime    @default(now())
+//   imageBgLink       String
+//   imagePreviewLink   String? 
+//   title             String     
+//   description       String  @db.MediumText
+//   extraeDscription  String?    @db.MediumText
+
+// }
+
+// model Education {
+//   id                 String      @id @default(uuid())
+//   timeStamp          DateTime    @default(now())
+//   imageBgLink         String 
+//   imagePreviewLink   String?
+//   title              String     
+//   description        String       @db.MediumText
+//   extraeDscription   String?      @db.MediumText
+// }
+// model FightingExtinction {
+//   id                 String      @id @default(uuid())
+//   timeStamp          DateTime    @default(now())
+//   imageBgLink        String 
+//   imagePreviewLink   String?
+//   title              String     
+//   description        String       @db.MediumText
+//   extraeDscription   String?      @db.MediumText
+// }
+
+
+// model AboutUs {
+//   id                 String      @id @default(uuid())
+//   timeStamp          DateTime    @default(now())
+//   imageBgLink         String 
+//   imagePreviewLink   String?
+//   title              String     
+//   description        String       @db.MediumText
+//   extraeDscription   String?      @db.MediumText
+// }
+// model Membership {
+//   id                String      @id @default(uuid())
+//   timeStamp         DateTime    @default(now())
+//   imageBgLink       String
+//   imagePreviewLink   String? 
+//   title             String     
+//   description       String  @db.MediumText
+//   extraeDscription  String?    @db.MediumText
+
+// }

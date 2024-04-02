@@ -72,7 +72,7 @@ defineProps({
           format="webp"
           :width="imageWidth"
           :height="imageHeigth"
-          :src="imageSource"
+          :src="`/${imageSource}`"
           :alt="titleCard"
           :title="titleCard"
           :class="imageClass"

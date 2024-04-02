@@ -1,41 +1,60 @@
-import { defineEventHandler, readBody } from "#imports";
-import { PrismaClient } from "@prisma/client";
-
-const prismaCLient = new PrismaClient();
+import { createError, defineEventHandler, readMultipartFormData } from "#imports";
+import type { H3Error } from "h3";
+import { IPropsContacts } from "~/server/types";
+import { extractMultipartData } from "~/server/utils/extractFormData";
+import { write_MultiPartData_To_File } from "~/server/utils/saving_file_helper";
 
 export default defineEventHandler(async (event) => {
-  const body = await readBody(event);
+  const getId = event?.context?.params?.id;
 
   try {
-    const result = await prismaCLient.contactUs.update({
-      where: { id: event?.context?.params?.id },
-      data: {
-        title: body.title,
-        imageBgLink: body.imageBgLink,
-        imagePreviewLink: body.imagePreviewLink,
-        description: body.description,
-        extraeDscription: body.extraeDscription,
-        phone: body.phone,
-        email: body.email,
-        socialLink_1: body.socialLink_1,
-        socialLink_2: body.socialLink_2,
-        socialLink_3: body.socialLink_3,
-        socialLink_4: body.socialLink_4,
-        socialLink_5: body.socialLink_5,
-        copyright: body.copyright,
-      },
-    });
+    const body = await readMultipartFormData(event);
+    if (getId && body?.length) {
+      const getContacts = extractMultipartData<IPropsContacts>(body);
 
-    return result;
+      const getPathImageBgFile =
+        getContacts.imageBgLink && (await write_MultiPartData_To_File(getContacts.imageBgLink));
+      const getPathimagePreviewFile =
+        getContacts.imagePreviewLink &&
+        (await write_MultiPartData_To_File(getContacts.imagePreviewLink));
+
+      const contactUs = await event.context.prisma.contactUs.update({
+        where: { id: getId },
+        data: {
+          title: getContacts.title,
+          imageBgLink: getPathImageBgFile && getPathImageBgFile,
+          imagePreviewLink: getPathimagePreviewFile && getPathimagePreviewFile,
+          description: getContacts.description,
+          extraeDscription: getContacts.extraeDscription && getContacts.extraeDscription,
+          phone: getContacts.phone,
+          email: getContacts.email,
+          socialLink_1: getContacts.socialLink_1 && getContacts.socialLink_1,
+          socialLink_2: getContacts.socialLink_2 && getContacts.socialLink_2,
+          socialLink_3: getContacts.socialLink_3 && getContacts.socialLink_3,
+          socialLink_4: getContacts.socialLink_4 && getContacts.socialLink_4,
+          socialLink_5: getContacts.socialLink_5 && getContacts.socialLink_5,
+          copyright: getContacts.copyright,
+        },
+      });
+      return {
+        statusCode: 200,
+        statusMessage: "Success",
+        table: "contacts",
+        method: "update",
+        // objectResult: getItem,
+      };
+    }
+    return {
+      statusCode: 400,
+      statusMessage: "Error - ID is empty",
+    };
   } catch (error) {
-    return error;
+    console.log(error);
+
+    const getError = error as H3Error;
+    throw createError({
+      statusCode: getError.statusCode,
+      statusMessage: getError.statusMessage,
+    });
   }
-  /*  body.array.forEach(async prod => {
-      await prismaCLient.orderItem.create({
-        data:{
-            orderId: postCreate.id,
-            productId: Number(prod.id), 
-        }
-      })
-  }); */
 });

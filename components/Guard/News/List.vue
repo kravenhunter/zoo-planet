@@ -1,7 +1,11 @@
 <script setup lang="ts">
-import type { Post } from "@prisma/client";
+import { useRoute } from "#imports";
+import type { IPost } from "~/types";
 
-defineProps<{ latestNewsList: Post[] }>();
+defineProps<{ latestNewsList?: IPost[] }>();
+
+const route = useRoute();
+console.log(route);
 </script>
 
 <template>
@@ -12,11 +16,11 @@ defineProps<{ latestNewsList: Post[] }>();
         color="light-blue-darken-4"
         variant="flat"
         size="large"
-        to="/guard/posts/create"
+        :to="{ path: '/guard/posts/create', query: { id: route.fullPath } }"
         append-icon="mdi-paw">
         Create post
       </v-btn>
-      <v-btn
+      <!--       <v-btn
         class="px-10 text-subtitle-1 ma-6 text-white text-grey-lighten-5"
         color="light-blue-darken-4"
         variant="flat"
@@ -24,8 +28,9 @@ defineProps<{ latestNewsList: Post[] }>();
         to="/guard/main/create"
         append-icon="mdi-paw">
         Create Main Page
-      </v-btn>
+      </v-btn> -->
     </v-col>
+    <div v-if="latestNewsList"></div>
     <v-col cols="12" v-for="el in latestNewsList" :key="el.id">
       <CardInline
         max-width-card="1200px"

@@ -1,37 +1,94 @@
 <script setup lang="ts">
-import { ref } from "#imports";
+import { navigateTo, ref, useRoute } from "#imports";
 import { delayLoading, useIsLoading } from "@/composables/states";
-import { useUnionStore } from "@/stores/storeGenerics";
-import type { PlanPrice } from "@prisma/client";
+import { useUnionStorage } from "@/stores/unionStore";
+import type { IPlan } from "~/types";
+import packToFormData from "~/utils/packToFormData";
 
 const props = defineProps<{
-  planPrices: PlanPrice[] | undefined;
+  planPrices?: IPlan[];
 }>();
 const loadingMemberPrices = useIsLoading();
+const route = useRoute();
+console.log(route);
 
-const { updatePlanPrices } = useUnionStore();
-const firstTable = ref<PlanPrice>();
-const secondTable = ref<PlanPrice>();
-const thirdTable = ref<PlanPrice>();
-console.log(props.planPrices);
+const { createOrUpdateData } = useUnionStorage();
+const firstTable = ref<IPlan>();
+const secondTable = ref<IPlan>();
+const thirdTable = ref<IPlan>();
+// console.log(props.planPrices);
 firstTable.value = props.planPrices && { ...props.planPrices[0] };
 secondTable.value = props.planPrices && { ...props.planPrices[1] };
 thirdTable.value = props.planPrices && { ...props.planPrices[2] };
 
 const addPrices = async () => {
+  loadingMemberPrices.value = true;
   if (firstTable.value?.id && secondTable.value?.id && thirdTable.value?.id) {
-    loadingMemberPrices.value = true;
-    const result = await updatePlanPrices(
-      firstTable.value?.id,
-      secondTable.value?.id,
-      thirdTable.value?.id,
-      "plan",
-      "update",
-      firstTable.value,
-      secondTable.value,
-      thirdTable.value,
+    //  const { data } = await useFetch("/api/prisma/base/create-by-type/membership-price");
+
+    const getpackfirstTable = await packToFormData(firstTable.value, firstTable.value.id);
+    const getpacksecondTable = await packToFormData(secondTable.value, secondTable.value.id);
+    const getpackthirdTable = await packToFormData(thirdTable.value, thirdTable.value.id);
+
+    const firstTableResult = await createOrUpdateData(
+      `base/update-by-type/plan`,
+      getpackfirstTable,
     );
-    delayLoading(result);
+    const secondTableResult = await createOrUpdateData(
+      `base/update-by-type/plan`,
+      getpacksecondTable,
+    );
+    const thirdTableResult = await createOrUpdateData(
+      `base/update-by-type/plan`,
+      getpackthirdTable,
+    );
+
+    if (
+      firstTableResult.statusCode === 200 &&
+      secondTableResult.statusCode === 200 &&
+      thirdTableResult.statusCode === 200
+    ) {
+      delayLoading("Success");
+      await new Promise((resolve) =>
+        setTimeout(() => {
+          navigateTo(String(route.query.id));
+        }, 2500),
+      );
+    } else {
+      delayLoading("Error");
+    }
+  } else {
+    const getpackfirstTable = await packToFormData(firstTable.value, null);
+    const getpacksecondTable = await packToFormData(secondTable.value, null);
+    const getpackthirdTable = await packToFormData(thirdTable.value, null);
+
+    const firstTableResult = await createOrUpdateData(
+      `base/create-by-type/plan`,
+      getpackfirstTable,
+    );
+    const secondTableResult = await createOrUpdateData(
+      `base/create-by-type/plan`,
+      getpacksecondTable,
+    );
+    const thirdTableResult = await createOrUpdateData(
+      `base/create-by-type/plan`,
+      getpackthirdTable,
+    );
+
+    if (
+      firstTableResult.statusCode === 200 &&
+      secondTableResult.statusCode === 200 &&
+      thirdTableResult.statusCode === 200
+    ) {
+      delayLoading("Success");
+      await new Promise((resolve) =>
+        setTimeout(() => {
+          navigateTo(String(route.query.id));
+        }, 2500),
+      );
+    } else {
+      delayLoading("Error");
+    }
   }
 };
 

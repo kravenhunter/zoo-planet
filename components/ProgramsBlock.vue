@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { ContentPages, Post } from "@prisma/client";
+import type { IContentPage, IPost } from "~/types";
 
 interface Props {
-  programsList: Post[] | ContentPages[];
+  programsList: IPost[] | IContentPage[];
   title: string;
   titleClass: string;
   text: string;
@@ -27,13 +27,14 @@ defineProps<Props>();
           <NuxtLink :to="{ path: `/news/${el.id}` }">
             <CardColumn heigth-card="450" :enable-card-slot="true">
               <v-img
-                :src="el.imagePreviewLink!"
+                v-if="el.imagePreviewLink"
+                :src="`/${el.imagePreviewLink}`"
                 class="align-end"
                 gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
                 :aspect-ratio="4 / 3"
                 cover>
                 <template #sources>
-                  <source :srcset="el.imageBgLink" />
+                  <source :srcset="`/${el.imagePreviewLink}`" />
                 </template>
                 <h4 class="text-amber mb-10 ml-10" v-text="el.title"></h4>
               </v-img>
@@ -45,14 +46,15 @@ defineProps<Props>();
           <NuxtLink :to="{ path: `/news/${el.id}` }">
             <CardColumn heigth-card="450" :enable-card-slot="true">
               <v-img
-                :src="el.imagePreviewLink!"
+                v-if="el.imagePreviewLink"
+                :src="`/${el.imagePreviewLink}`"
                 class="align-end"
                 gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
                 :aspect-ratio="4 / 3"
                 cover
                 >>
                 <template #sources>
-                  <source :srcset="el.imageBgLink" />
+                  <source :srcset="`/${el.imagePreviewLink}`" />
                 </template>
 
                 <p class="small_title text-amber mb-2 ml-10" v-text="el.title"></p>
@@ -68,12 +70,13 @@ defineProps<Props>();
           <NuxtLink :to="{ path: `/news/${el.id}` }">
             <CardColumn heigth-card="100%" max-height-card="475" :enable-card-slot="true">
               <v-img
-                :src="el.imagePreviewLink!"
+                v-if="el.imagePreviewLink"
+                :src="`/${el.imagePreviewLink}`"
                 class="align-end"
                 gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
                 cover>
                 <template #sources>
-                  <source :srcset="el.imageBgLink!" />
+                  <source :srcset="`/${el.imagePreviewLink}`" />
                 </template>
                 <h4 class="text-amber mb-10 ml-10" v-text="el.title"></h4>
               </v-img>

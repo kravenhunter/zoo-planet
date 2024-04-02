@@ -1,25 +1,34 @@
 <script setup lang="ts">
-import { computed, ref, toRefs } from "#imports";
-
+import { computed, navigateTo, reactive, ref, useRoute } from "#imports";
 import { delayLoading, useIsLoading } from "@/composables/states";
+import { useUnionStorage } from "@/stores/unionStore";
+import type { IContacts } from "~/types";
+import extractFileFromEvent from "~/utils/extractFileFromEvent";
+import packToFormData from "~/utils/packToFormData";
 
-import { useUnionStore } from "@/stores/storeGenerics";
-import type { ContactUs } from "@prisma/client";
+const route = useRoute();
+const props = defineProps<{ contacTable: IContacts }>();
 
-const props = defineProps<{ contacTable: ContactUs }>();
+const { createOrUpdateData } = useUnionStorage();
+// const { contacTable } = toRefs(props);
 
-const { updateData } = useUnionStore();
-const { contacTable } = toRefs(props);
-
+const state = reactive({
+  title: props.contacTable.title ?? "",
+  description: props.contacTable.description ?? "",
+  email: props.contacTable.email ?? "",
+  extraeDscription: props.contacTable.extraeDscription ?? "",
+  phone: props.contacTable.phone ?? "",
+  socialLink_1: props.contacTable.socialLink_1 ?? "",
+  socialLink_2: props.contacTable.socialLink_2 ?? "",
+  socialLink_3: props.contacTable.socialLink_3 ?? "",
+  socialLink_4: props.contacTable.socialLink_4 ?? "",
+  socialLink_5: props.contacTable.socialLink_5 ?? "",
+  copyright: props.contacTable.copyright ?? "",
+});
 const isLoadingContacts = useIsLoading();
 
-const isEmpty = computed(() => {
-  if (contacTable.value?.title && contacTable.value.extraeDscription) {
-    return false;
-  }
+const isEmpty = computed(() => (state?.title && state.extraeDscription ? false : true));
 
-  return true;
-});
 const rules = [
   (value: string) => {
     if (value) {
@@ -30,45 +39,50 @@ const rules = [
   },
 ];
 
-const filCover = ref<File>();
-const filePreview = ref<File>();
-const selectCoverImage = async (event: Event) => {
-  const fileEvent = event.target as HTMLInputElement;
-  fileEvent.files?.length && (filCover.value = fileEvent.files[0]);
-  console.log(filCover.value);
+const filCover = ref<File | null>();
+const filePreview = ref<File | null>();
+const selectCoverImage = (event: Event) => {
+  filCover.value = extractFileFromEvent(event);
 };
-const selectPreviewImage = async (event: Event) => {
-  const fileEvent = event.target as HTMLInputElement;
-  fileEvent.files?.length && (filePreview.value = fileEvent.files[0]);
-  console.log(filePreview.value);
+const selectPreviewImage = (event: Event) => {
+  filePreview.value = extractFileFromEvent(event);
 };
+
 const addPost = async () => {
   isLoadingContacts.value = !isLoadingContacts.value;
-  if (contacTable.value) {
-    const result = await updateData(
-      contacTable.value.id,
-      filCover.value,
-      filePreview.value,
-      {
-        imageBgLink: contacTable.value.imageBgLink,
-        imagePreviewLink: contacTable.value.imagePreviewLink ?? undefined,
-        title: contacTable.value.title,
-        description: contacTable.value.description,
-        extraeDscription: contacTable.value.extraeDscription ?? undefined,
-        phone: contacTable.value.phone,
-        email: contacTable.value.email,
-        socialLink_1: contacTable.value.socialLink_1 ?? undefined,
-        socialLink_2: contacTable.value.socialLink_2 ?? undefined,
-        socialLink_3: contacTable.value.socialLink_3 ?? undefined,
-        socialLink_4: contacTable.value.socialLink_4 ?? undefined,
-        socialLink_5: contacTable.value.socialLink_5 ?? undefined,
-        copyright: contacTable.value.copyright,
-      },
-      "contacts",
-      "update",
-    );
+  if (!isEmpty.value) {
+    if (props.contacTable.id) {
+      const getpackData = await packToFormData(state, null, filCover.value, filePreview.value);
 
-    delayLoading(result);
+      const result = await createOrUpdateData(
+        `contacts/update/${props.contacTable.id}`,
+        getpackData,
+      );
+
+      if (result.statusCode === 200) {
+        delayLoading("Success");
+        await new Promise((resolve) =>
+          setTimeout(() => {
+            navigateTo(String(route.query.id));
+          }, 2500),
+        );
+      } else {
+        delayLoading("Error");
+      }
+    } else {
+      const getpackData = await packToFormData(state, null, filCover.value, filePreview.value);
+      const result = await createOrUpdateData(`base/create-by-type/contacts`, getpackData);
+      if (result.statusCode === 200) {
+        delayLoading("Success");
+        await new Promise((resolve) =>
+          setTimeout(() => {
+            navigateTo(String(route.query.id));
+          }, 2500),
+        );
+      } else {
+        delayLoading("Error");
+      }
+    }
   }
 };
 </script>

@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import type { ContentPages } from "@prisma/client";
+import type { IContentPage } from "~/types";
 
 defineProps<{
-  donate: ContentPages;
+  donate: IContentPage;
 }>();
 </script>
 
 <template>
-  <section class="donate" v-if="donate">
+  <section v-if="donate" class="donate">
     <article class="card">
       <CardColumn :enable-card-slot="true">
         <v-img

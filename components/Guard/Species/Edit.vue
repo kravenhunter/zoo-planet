@@ -1,31 +1,21 @@
 <script setup lang="ts">
-import { computed, ref, useRoute } from "#imports";
+import { computed, navigateTo, reactive, ref, useRoute } from "#imports";
 import { delayLoading, useIsLoading } from "@/composables/states";
-
-import { useUnionStore } from "@/stores/storeGenerics";
+import { useUnionStorage } from "@/stores/unionStore";
 import { storeToRefs } from "pinia";
-import type { ISpecie } from "types/ISpecie";
+import extractFileFromEvent from "~/utils/extractFileFromEvent";
+import packToFormData from "~/utils/packToFormData";
 
 const route = useRoute();
+console.log(route);
 
-const { specieList } = storeToRefs(useUnionStore());
+const { specieList } = storeToRefs(useUnionStorage());
 
-const { updateData, createData } = useUnionStore();
+const { createOrUpdateData } = useUnionStorage();
 const pendingData = useIsLoading();
-
-const currentSpecie = ref<ISpecie>();
-const selected = ref("LC");
-const conservationStatus = ["LC", "NT", "VU", "EN", "CR", "EW", "EX"];
-const selectedPopulation = ref("Stable");
-const popelationStatus = ["Decreasing", "Increasing", "Stable"];
-
 const getRecord = specieList.value?.find((el) => el.id === route.params.id);
-console.log(getRecord);
-console.log(specieList.value);
 
-selected.value = getRecord ? getRecord.conservationStatus : "LC";
-selectedPopulation.value = getRecord ? getRecord.populationTrend : "Stable";
-currentSpecie.value = {
+const currentSpecie = reactive({
   title: getRecord?.title ?? "",
   imageBgLink: getRecord?.imageBgLink ?? "",
   habitain: getRecord?.habitain ?? "",
@@ -35,15 +25,19 @@ currentSpecie.value = {
   shordDescription: getRecord?.shordDescription ?? "",
   description: getRecord?.description ?? "",
   extraeDscription: getRecord?.extraeDscription ?? "",
-};
-
-const isEmpty = computed(() => {
-  if (currentSpecie.value?.title && currentSpecie.value.description) {
-    return false;
-  }
-
-  return true;
 });
+const selected = ref("LC");
+const conservationStatus = ["LC", "NT", "VU", "EN", "CR", "EW", "EX"];
+const selectedPopulation = ref("Stable");
+const popelationStatus = ["Decreasing", "Increasing", "Stable"];
+
+console.log(getRecord);
+console.log(specieList.value);
+
+selected.value = getRecord ? getRecord.conservationStatus : "LC";
+selectedPopulation.value = getRecord ? getRecord.populationTrend : "Stable";
+
+const isEmpty = computed(() => (currentSpecie?.title && currentSpecie.description ? false : true));
 const rules = [
   (value: string) => {
     if (value) {
@@ -53,47 +47,62 @@ const rules = [
     return "Field is empty";
   },
 ];
-const filCover = ref<File>();
-const filePreview = ref<File>();
-const selectCoverImage = async (event: Event) => {
-  const fileEvent = event.target as HTMLInputElement;
-  fileEvent.files?.length && (filCover.value = fileEvent.files[0]);
-  console.log(filCover.value);
+const filCover = ref<File | null>();
+const filePreview = ref<File | null>();
+const selectCoverImage = (event: Event) => {
+  filCover.value = extractFileFromEvent(event);
 };
-const selectPreviewImage = async (event: Event) => {
-  const fileEvent = event.target as HTMLInputElement;
-  fileEvent.files?.length && (filePreview.value = fileEvent.files[0]);
-  console.log(filePreview.value);
+const selectPreviewImage = (event: Event) => {
+  filePreview.value = extractFileFromEvent(event);
 };
+
 const addPost = async () => {
   pendingData.value = true;
 
   if (getRecord?.id) {
-    currentSpecie.value!.conservationStatus = selected.value;
-    currentSpecie.value!.populationTrend = selectedPopulation.value;
+    currentSpecie.conservationStatus = selected.value;
+    currentSpecie.populationTrend = selectedPopulation.value;
 
-    const result = await updateData(
-      getRecord.id,
+    const getpackData = await packToFormData(
+      currentSpecie,
+      null,
       filCover.value,
       filePreview.value,
-      currentSpecie.value!,
-      "specie",
-      "update",
     );
-    delayLoading(result);
+    const result = await createOrUpdateData(`specie/update/${getRecord.id}`, getpackData);
+    if (result.statusCode === 200) {
+      delayLoading("Success");
+      await new Promise((resolve) =>
+        setTimeout(() => {
+          navigateTo(String(route.query.id));
+        }, 2500),
+      );
+    } else {
+      delayLoading("Error");
+    }
   } else {
     if (filCover.value && filePreview.value) {
-      currentSpecie.value!.conservationStatus = selected.value;
-      currentSpecie.value!.populationTrend = selectedPopulation.value;
+      currentSpecie.conservationStatus = selected.value;
+      currentSpecie.populationTrend = selectedPopulation.value;
 
-      const result = await createData(
+      const getpackData = await packToFormData(
+        currentSpecie,
+        null,
         filCover.value,
         filePreview.value,
-        currentSpecie.value!,
-        "specie",
-        "create",
       );
-      delayLoading(result);
+
+      const result = await createOrUpdateData(`base/create-by-type/specie`, getpackData);
+      if (result.statusCode === 200) {
+        delayLoading("Success");
+        await new Promise((resolve) =>
+          setTimeout(() => {
+            navigateTo(String(route.query.id));
+          }, 2500),
+        );
+      } else {
+        delayLoading("Error");
+      }
     }
   }
 };

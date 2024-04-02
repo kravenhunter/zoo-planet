@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { reactive, ref } from "#imports";
 import { useSelectedPrecesState } from "@/composables/states";
-import type { ContentPages, MembershipPrice } from "@prisma/client";
+import type { IContentPage, IMembershipPrice } from "~/types";
 
 interface Props {
-  memberMain: ContentPages;
-  stateMonth: MembershipPrice;
-  stateYaer: MembershipPrice;
+  memberMain: IContentPage;
+  stateMonth: IMembershipPrice;
+  stateYaer: IMembershipPrice;
 }
 
 interface Person {
@@ -66,7 +66,7 @@ const activateormTag = (index: number) => {
 </script>
 
 <template>
-  <section class="membership" v-if="memberMain && stateMonth && stateYaer">
+  <section v-if="memberMain && stateMonth && stateYaer" class="membership">
     <article class="main_cover">
       <CardColumn heigth-card="600" :enable-card-slot="true">
         <v-img
@@ -108,11 +108,11 @@ const activateormTag = (index: number) => {
     </article>
     <article class="by-membership">
       <v-container>
-        <div class="adults_form" v-if="selectedPrecesState.adult && statePersons.adults">
+        <div v-if="selectedPrecesState.adult && statePersons.adults" class="adults_form">
           <v-sheet
-            class="bg-orange-lighten-5 pa-5 mb-5"
             v-for="index in selectedPrecesState.adult"
-            :key="index">
+            :key="index"
+            class="bg-orange-lighten-5 pa-5 mb-5">
             <v-list-item prepend-icon="mdi-account" class="text-green-darken-4 pb-0">
               <template #prepend>
                 <v-icon size="25" class="text-h6 font-weight-bold">mdi-account</v-icon>
@@ -131,9 +131,9 @@ const activateormTag = (index: number) => {
               <v-col cols="3" class="pl-6">
                 <v-radio-group v-model="statePersons.adults[index - 1].personGender" column>
                   <v-radio
-                    class="text-subtitle-2 pb-3"
                     v-for="person in personList"
                     :key="person"
+                    class="text-subtitle-2 pb-3"
                     :label="person"
                     color="red"
                     :value="person"></v-radio>

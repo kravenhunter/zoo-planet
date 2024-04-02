@@ -1,16 +1,7 @@
 <script setup lang="ts">
-import { ref } from "#imports";
-import type { ContactUs } from "@prisma/client";
+import type { IContacts } from "~/types";
 
-import { useUnionStore } from "@/stores/storeGenerics";
-import { storeToRefs } from "pinia";
-
-defineProps<{ contactData: ContactUs }>();
-
-const { contactPage } = storeToRefs(useUnionStore());
-
-const contacts = ref<ContactUs>();
-contactPage.value?.length && (contacts.value = contactPage.value[0]);
+defineProps<{ contactData: IContacts }>();
 </script>
 
 <template>

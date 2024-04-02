@@ -1,21 +1,22 @@
 <script setup lang="ts">
 import { ref, useSeoMeta } from "#imports";
-import { useUnionStore } from "@/stores/storeGenerics";
-import type { ContentPages, Post } from "@prisma/client";
-import { storeToRefs } from "pinia";
+import { useUnionStorage } from "@/stores/unionStore";
 
-const { postlist, mainPages } = storeToRefs(useUnionStore());
+import { storeToRefs } from "pinia";
+import type { IContentPage, IPost } from "~/types";
+
+const { postlist, mainPages } = storeToRefs(useUnionStorage());
 
 // Education Data
-const educationMain = ref<ContentPages>();
-const educationNews = ref<Post[]>();
-educationMain.value = mainPages.value?.find((el) => el.subTitle === "Education");
+const educationMain = ref<IContentPage>();
+const educationNews = ref<IPost[]>();
+educationMain.value = mainPages.value?.find((el) => el.subTitle === "education");
 educationNews.value = postlist.value?.filter((el) => el.category === "Education");
 
 // News Data
-const newsMain = ref<ContentPages>();
-const lastNews = ref<Post[]>();
-newsMain.value = mainPages.value?.find((el) => el.subTitle === "News");
+const newsMain = ref<IContentPage>();
+const lastNews = ref<IPost[]>();
+newsMain.value = mainPages.value?.find((el) => el.subTitle === "news");
 lastNews.value = postlist.value?.filter((el) => el.category === "News");
 
 const conversationIcons = [
@@ -45,58 +46,49 @@ const bgImages = [
   {
     id: 1,
     title: "headet main",
-    imageBgLink:
-      "https://epjfkkmrnhyxzevpvbjf.supabase.co/storage/v1/object/public/images/cover/citten_bg.webp",
+    imageBgLink: "/images/bgImages/citten_bg.webp",
   },
   {
     id: 2,
     title: "animals bg",
 
-    imageBgLink:
-      "https://epjfkkmrnhyxzevpvbjf.supabase.co/storage/v1/object/public/images/cover/parrot_bg.webp",
+    imageBgLink: "/images/bgImages/parrot_bg.webp",
   },
   {
     title: "lynx",
     id: 3,
-    imageBgLink:
-      "https://epjfkkmrnhyxzevpvbjf.supabase.co/storage/v1/object/public/images/cover/LYNX.webp",
+    imageBgLink: "/images/bgImages/LYNX.webp",
   },
   {
     title: "parrot",
     id: 4,
-    imageBgLink:
-      "https://epjfkkmrnhyxzevpvbjf.supabase.co/storage/v1/object/public/images/cover/perrot1.webp",
+    imageBgLink: "/images/bgImages/perrot1.webp",
   },
   {
     title: "coala",
     id: 5,
-    imageBgLink:
-      "https://epjfkkmrnhyxzevpvbjf.supabase.co/storage/v1/object/public/images/cover/coala1.webp",
+    imageBgLink: "/images/bgImages/coala1.webp",
   },
 
   {
     title: "panda",
     id: 6,
-    imageBgLink:
-      "https://epjfkkmrnhyxzevpvbjf.supabase.co/storage/v1/object/public/images/cover/panda1.webp",
+    imageBgLink: "/images/bgImages/panda1.webp",
   },
   {
     title: "opossums",
     id: 7,
-    imageBgLink:
-      "https://epjfkkmrnhyxzevpvbjf.supabase.co/storage/v1/object/public/images/cover/opossums1.webp",
+    imageBgLink: "/images/bgImages/opossums1.webp",
   },
   {
     title: "bobers",
     id: 8,
-    imageBgLink:
-      "https://epjfkkmrnhyxzevpvbjf.supabase.co/storage/v1/object/public/images/cover/bobera.webp",
+    imageBgLink: "/images/bgImages/bobera.webp",
   },
   {
     title: "red bear",
     id: 9,
-    imageBgLink:
-      "https://epjfkkmrnhyxzevpvbjf.supabase.co/storage/v1/object/public/images/cover/red_bear2.webp",
+    imageBgLink: "/images/bgImages/red_bear2.webp",
   },
 ];
 useSeoMeta({
@@ -173,11 +165,11 @@ useSeoMeta({
                 </v-col>
 
                 <v-col
+                  v-for="n in 2"
+                  :key="n"
                   cols="12"
                   lg="3"
                   md="12"
-                  v-for="n in 2"
-                  :key="n"
                   class="rabbit_columns d-flex align-center justify-center">
                   <div class="rabbit_block">
                     <div class="rabbit">
@@ -273,7 +265,7 @@ useSeoMeta({
             </v-container>
             <v-container fluid>
               <v-row>
-                <v-col class="conversation_icon" v-for="(icon, i) in conversationIcons" :key="i">
+                <v-col v-for="(icon, i) in conversationIcons" :key="i" class="conversation_icon">
                   <v-avatar class="ma-3" size="104" rounded="50">
                     <UiElementsIcons
                       :icon-name="icon.iconName"

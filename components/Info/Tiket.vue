@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import type { ContentPages, TicketPrice } from "@prisma/client";
+import type { IContentPage, ITicketPrice } from "~/types";
 
 interface Props {
-  ticketMain: ContentPages;
-  singleState: TicketPrice;
-  unlimitedSTate: TicketPrice;
+  ticketMain: IContentPage;
+  singleState: ITicketPrice;
+  unlimitedSTate: ITicketPrice;
 }
 
 defineProps<Props>();
 const book = {
-  source: "/images/unsplash_8uJ0Am-ZdTA.jpg",
+  source: "/images/volunteer/elephants.webp",
   title: "Book tickets ",
   subtitle1: "We are open every day 9am – 5pm",
   text1:
@@ -67,9 +67,9 @@ const tableHeaders = [
             <tr>
               <th class="pl-7 py-5 text-left font-weight-bold">{{ tableHeaders[0].title }}</th>
               <th
-                class="py-5 text-left font-weight-bold"
                 v-for="(el, i) in tableHeaders.slice(1, 3)"
-                :key="i">
+                :key="i"
+                class="py-5 text-left font-weight-bold">
                 {{ el.title }}
               </th>
             </tr>

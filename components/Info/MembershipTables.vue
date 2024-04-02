@@ -2,12 +2,12 @@
 import { computed, ref } from "#imports";
 import { useCurrentMemberTab, useSelectedPrecesState, useTotalPrice } from "@/composables/states";
 
-import type { ContentPages, MembershipPrice } from "@prisma/client";
+import type { IContentPage, IMembershipPrice } from "~/types";
 
 interface Props {
-  membership: ContentPages;
-  stateMonth: MembershipPrice;
-  stateYaer: MembershipPrice;
+  membership: IContentPage;
+  stateMonth: IMembershipPrice;
+  stateYaer: IMembershipPrice;
 }
 
 const props = defineProps<Props>();

@@ -1,15 +1,17 @@
 <script setup lang="ts">
-import { reactive } from "#imports";
+import { navigateTo, reactive, useRoute } from "#imports";
 import { delayLoading, useIsLoading } from "@/composables/states";
-import { useUnionStore } from "@/stores/storeGenerics";
-
-import type { MembershipPrice } from "@prisma/client";
+import { useUnionStorage } from "@/stores/unionStore";
+import type { IMembershipPrice } from "~/types";
+import packToFormData from "~/utils/packToFormData";
 
 const props = defineProps<{
-  monthly: MembershipPrice | undefined;
-  yarly: MembershipPrice | undefined;
+  monthly?: IMembershipPrice;
+  yarly?: IMembershipPrice;
 }>();
 
+const route = useRoute();
+console.log(route);
 const stateMonth = reactive({
   adult: props.monthly?.adult ?? "",
   childCategoryFirst: props.monthly?.childCategoryFirst ?? "",
@@ -30,7 +32,7 @@ const stateYaer = reactive({
   supporter: props.yarly?.supporter ?? "",
 });
 
-const { createTablesData, updateDataPrices } = useUnionStore();
+const { createOrUpdateData } = useUnionStorage();
 const loadingMemberPrices = useIsLoading();
 
 const tableRow = [{ title: "Monthly" }, { title: "Yearly" }];
@@ -38,23 +40,50 @@ const tableRow = [{ title: "Monthly" }, { title: "Yearly" }];
 const addPrices = async () => {
   loadingMemberPrices.value = true;
   if (props.monthly?.id && props.yarly?.id) {
-    const result = await updateDataPrices(
-      props.monthly!.id,
-      props.yarly!.id,
-      "membership",
-      "update-member-prices",
-      stateMonth,
-      stateYaer,
+    //  const { data } = await useFetch("/api/prisma/base/create-by-type/membership-price");
+
+    const getpackDataMonth = await packToFormData(stateMonth, props.monthly.id);
+    const getpackDataYar = await packToFormData(stateMonth, props.yarly.id);
+    const monthlyResult = await createOrUpdateData(
+      `base/update-by-type/membership-price`,
+      getpackDataMonth,
     );
-    delayLoading(result);
+    const yearlyResult = await createOrUpdateData(
+      `base/update-by-type/membership-price`,
+      getpackDataYar,
+    );
+
+    if (monthlyResult.statusCode === 200 && yearlyResult.statusCode === 200) {
+      delayLoading("Success");
+      await new Promise((resolve) =>
+        setTimeout(() => {
+          navigateTo(String(route.query.id));
+        }, 2500),
+      );
+    } else {
+      delayLoading("Error");
+    }
   } else {
-    const result = await createTablesData(
-      "membership",
-      "create-member-prices",
-      stateMonth,
-      stateYaer,
+    const getpackDataMonth = await packToFormData(stateMonth, null);
+    const getpackDataYar = await packToFormData(stateMonth, null);
+    const monthlyResult = await createOrUpdateData(
+      `base/create-by-type/membership-price`,
+      getpackDataMonth,
     );
-    delayLoading(result);
+    const yearlyResult = await createOrUpdateData(
+      `base/create-by-type/membership-price`,
+      getpackDataYar,
+    );
+    if (monthlyResult.statusCode === 200 && yearlyResult.statusCode === 200) {
+      delayLoading("Success");
+      await new Promise((resolve) =>
+        setTimeout(() => {
+          navigateTo(String(route.query.id));
+        }, 2500),
+      );
+    } else {
+      delayLoading("Error");
+    }
   }
 };
 </script>

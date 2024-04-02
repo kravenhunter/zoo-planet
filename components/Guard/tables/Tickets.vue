@@ -1,16 +1,18 @@
 <script setup lang="ts">
-import { reactive } from "#imports";
+import { navigateTo, reactive, useRoute } from "#imports";
 import { delayLoading, useIsLoading } from "@/composables/states";
-import { useUnionStore } from "@/stores/storeGenerics";
-import type { TicketPrice } from "@prisma/client";
+import { useUnionStorage } from "@/stores/unionStore";
+import type { ITicketPrice } from "~/types";
+import packToFormData from "~/utils/packToFormData";
 
 const props = defineProps<{
-  singlEntry: TicketPrice | null | undefined;
-  unlimited: TicketPrice | null | undefined;
+  singlEntry: ITicketPrice | null | undefined;
+  unlimited: ITicketPrice | null | undefined;
 }>();
 const loadingMemberPrices = useIsLoading();
-
-const { createTablesData, updateDataPrices } = useUnionStore();
+const route = useRoute();
+console.log(route);
+const { createOrUpdateData } = useUnionStorage();
 
 const stateSingle = reactive({
   adult: props.singlEntry?.adult ?? "",
@@ -30,24 +32,55 @@ const stateUnlimited = reactive({
 
 const addPrices = async () => {
   loadingMemberPrices.value = true;
+
   if (props.singlEntry?.id && props.unlimited?.id) {
-    const result = await updateDataPrices(
-      props.singlEntry!.id,
-      props.unlimited!.id,
-      "ticket",
-      "update-ticket-prices",
-      stateSingle,
-      stateUnlimited,
+    //  const { data } = await useFetch("/api/prisma/base/create-by-type/membership-price");
+
+    const getpacksinglEntry = await packToFormData(props.singlEntry, props.singlEntry?.id);
+    const getpackunlimited = await packToFormData(props.unlimited, props.unlimited.id);
+
+    const singlEntryResult = await createOrUpdateData(
+      `base/update-by-type/ticket-price`,
+      getpacksinglEntry,
     );
-    delayLoading(result);
+    const unlimitedResult = await createOrUpdateData(
+      `base/update-by-type/ticket-price`,
+      getpackunlimited,
+    );
+
+    if (singlEntryResult.statusCode === 200 && unlimitedResult.statusCode === 200) {
+      delayLoading("Success");
+      await new Promise((resolve) =>
+        setTimeout(() => {
+          navigateTo(String(route.query.id));
+        }, 2500),
+      );
+    } else {
+      delayLoading("Error");
+    }
   } else {
-    const result = await createTablesData(
-      "ticket",
-      "create-ticket-prices",
-      stateSingle,
-      stateUnlimited,
+    const getpacksinglEntry = await packToFormData(props.singlEntry, null);
+    const getpackunlimited = await packToFormData(props.unlimited, null);
+
+    const singlEntryResult = await createOrUpdateData(
+      `base/create-by-type/ticket-price`,
+      getpacksinglEntry,
     );
-    delayLoading(result);
+    const unlimitedResult = await createOrUpdateData(
+      `base/create-by-type/ticket-price`,
+      getpackunlimited,
+    );
+
+    if (singlEntryResult.statusCode === 200 && unlimitedResult.statusCode === 200) {
+      delayLoading("Success");
+      await new Promise((resolve) =>
+        setTimeout(() => {
+          navigateTo(String(route.query.id));
+        }, 2500),
+      );
+    } else {
+      delayLoading("Error");
+    }
   }
 };
 

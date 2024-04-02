@@ -1,50 +1,38 @@
 <script setup lang="ts">
 import { useAlertDialog } from "@/composables/states";
-import { useUnionStore } from "@/stores/storeGenerics";
+import { useUnionStorage } from "@/stores/unionStore";
 import { storeToRefs } from "pinia";
 
-// import { useBookingStore } from "@/stores/bookingStore";
-// import { useContactsStore } from "@/stores/contactsStore";
-// import { useMainContentStore } from "@/stores/mainContentStore";
-// import { usePostStore } from "@/stores/postStore";
-// import { useSpeciesStore } from "@/stores/speciesStore";
-// import { storeToRefs } from "pinia";
+const { mainPages } = storeToRefs(useUnionStorage());
 
-const { postlist, specieList, mainPages, contactPage, membershipTable, ticketTable, planTable } =
-  storeToRefs(useUnionStore());
-const { loadDataList } = useUnionStore();
 //Alert Instance
 const alertDialog = useAlertDialog();
 
-// //Species Data
-// const { specieList } = storeToRefs(useSpeciesStore());
-// const { loadSpeciesList } = useSpeciesStore();
+// const { data, error } = await useFetch<IResponse>(
+//   "/api/prisma/base/list-by-type/main-content-pages",
+// );
+// console.log(error.value);
+// console.log(data.value?.objectResult);
+const { loadDataList } = useUnionStorage();
 
-// //Contacts Data
-// const { contactPage } = storeToRefs(useContactsStore());
-// const { loadContacts } = useContactsStore();
+if (!mainPages.value.length) {
+  const mainPagesPromise = loadDataList("base/list-by-type/main-content-pages");
+  const newsPromise = loadDataList("base/list-by-type/post");
+  const planPricesPromise = loadDataList("base/list-by-type/plan");
+  const speciesPromise = loadDataList("base/list-by-type/specie");
+  const contactsPromise = loadDataList("base/list-by-type/contacts");
+  const membershipPriceыPromise = loadDataList("base/list-by-type/membership-price");
+  const ticketPriceыPromise = loadDataList("base/list-by-type/ticket-price");
 
-// const { mainPages } = storeToRefs(useMainContentStore());
-// const { loadPagesContent } = useMainContentStore();
-
-// //  Articles
-// const { postlist } = storeToRefs(usePostStore());
-// const { loadPostList } = usePostStore();
-
-// // Membership Prices & Table
-// const { membershipTable, ticketTable } = storeToRefs(useBookingStore());
-// const { loadTables } = useBookingStore();
-
-if (
-  !mainPages.value &&
-  !specieList.value &&
-  !postlist.value &&
-  !membershipTable.value &&
-  !ticketTable.value &&
-  !contactPage.value &&
-  !planTable.value
-) {
-  await loadDataList();
+  await Promise.allSettled([
+    newsPromise,
+    planPricesPromise,
+    contactsPromise,
+    speciesPromise,
+    mainPagesPromise,
+    membershipPriceыPromise,
+    ticketPriceыPromise,
+  ]);
 }
 </script>
 
@@ -74,6 +62,7 @@ if (
           </v-fade-transition>
         </div>
       </div>
+
       <v-main class="d-flex align-center justify-center">
         <slot />
       </v-main>

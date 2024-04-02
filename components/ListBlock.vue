@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import type { ContentPages, Post } from "@prisma/client";
-
+import { IContentPage, IPost } from "~/types";
 interface Props {
-  mainContent: ContentPages;
-  news: Post[];
+  mainContent: IContentPage;
+  news: IPost[];
 }
 defineProps<Props>();
 </script>
@@ -20,7 +19,7 @@ defineProps<Props>();
         :enable-button="false" />
     </article>
     <v-row class="justify-center">
-      <v-col cols="7" lg="4" md="5" v-for="(item, i) in news" :key="i" class="news_item">
+      <v-col cols="7" lg="4" md="5" v-for="item in news" :key="item.id" class="news_item">
         <CardColumn
           class-card="mx-auto"
           max-width-card="373"

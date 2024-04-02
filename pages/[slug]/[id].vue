@@ -1,113 +1,105 @@
 <script setup lang="ts">
 import { ref, useRoute, useSeoMeta } from "#imports";
-import { useUnionStore } from "@/stores/storeGenerics";
-import type { ContactUs, ContentPages, MembershipPrice, Post, TicketPrice } from "@prisma/client";
+import { useUnionStorage } from "@/stores/unionStore";
 import { storeToRefs } from "pinia";
+import type { IContacts, IContentPage, IMembershipPrice, IPost, ITicketPrice } from "~/types";
 
 const route = useRoute();
 const { postlist, specieList, mainPages, contactPage, membershipTable, ticketTable, planTable } =
-  storeToRefs(useUnionStore());
+  storeToRefs(useUnionStorage());
 
-const metaTitle = ref<string | undefined>("");
-const newsMainPageContent = ref<ContentPages>();
-const latestNewsList = ref<Post[]>();
+const metaTitle = ref<string>("");
+const newsMainPageContent = ref<IContentPage>();
+const latestNewsList = ref<IPost[]>();
 // // Membership Prices
-const stateMonth = ref<MembershipPrice>();
-const stateYaer = ref<MembershipPrice>();
+const stateMonth = ref<IMembershipPrice>();
+const stateYaer = ref<IMembershipPrice>();
 // // Ticket Prices & Table
-const singleState = ref<TicketPrice>();
-const unlimitedSTate = ref<TicketPrice>();
+const singleState = ref<ITicketPrice>();
+const unlimitedSTate = ref<ITicketPrice>();
 // //Contacts Data
-const contacts = ref<ContactUs>();
+const contacts = ref<IContacts>();
 //About Data
 
-const eboutData = ref<ContentPages[]>();
+const eboutData = ref<IContentPage[]>();
 
 //Checking ROutes
 if (route.params.id === "news") {
-  newsMainPageContent.value = mainPages.value?.find((el) => el.subTitle === "News");
+  newsMainPageContent.value = mainPages.value?.find((el) => el.subTitle === "news");
   latestNewsList.value = postlist.value?.filter((el) => el.category === "News");
-  metaTitle.value = newsMainPageContent.value?.title;
+  newsMainPageContent.value?.title && (metaTitle.value = newsMainPageContent.value.title);
 }
 if (route.params.id === "extinction") {
-  newsMainPageContent.value = mainPages.value?.find((el) => el.subTitle === "Fighting Extinction");
+  newsMainPageContent.value = mainPages.value?.find((el) => el.subTitle === "extinction");
   latestNewsList.value = postlist.value?.filter((el) => el.category === "FightingExtinction");
-  metaTitle.value = newsMainPageContent.value?.title;
+  newsMainPageContent.value?.title && (metaTitle.value = newsMainPageContent.value.title);
 }
 if (route.params.id === "plain") {
-  newsMainPageContent.value = mainPages.value?.find((el) => el.subTitle === "Plan");
-  metaTitle.value = newsMainPageContent.value?.title;
+  newsMainPageContent.value = mainPages.value?.find((el) => el.subTitle === "plan");
+
+  newsMainPageContent.value?.title && (metaTitle.value = newsMainPageContent.value.title);
 }
 if (route.params.id === "species") {
-  newsMainPageContent.value = mainPages.value?.find((el) => el.subTitle === "Species");
-  metaTitle.value = newsMainPageContent.value?.title;
+  newsMainPageContent.value = mainPages.value?.find((el) => el.subTitle === "species");
+  newsMainPageContent.value?.title && (metaTitle.value = newsMainPageContent.value.title);
 }
 
 if (route.params.id === "education") {
-  newsMainPageContent.value = mainPages.value?.find((el) => el.subTitle === "Education");
+  newsMainPageContent.value = mainPages.value?.find((el) => el.subTitle === "education");
   latestNewsList.value = postlist.value?.filter((el) => el.category === "Education");
-  metaTitle.value = newsMainPageContent.value?.title;
+  newsMainPageContent.value?.title && (metaTitle.value = newsMainPageContent.value.title);
 }
 if (route.params.id === "about") {
-  const about = mainPages.value?.find((el) => el.subTitle === "AboutUs");
-  const sponsor = mainPages.value?.find((el) => el.subTitle === "Sponsors");
-  const career = mainPages.value?.find((el) => el.subTitle === "Careers");
-  const education = mainPages.value?.find((el) => el.subTitle === "Education");
-  const volunteer = mainPages.value?.find((el) => el.subTitle === "Volunteer");
-  contactPage.value?.length && (contacts.value = contactPage.value[0]);
+  const about = mainPages.value?.find((el) => el.subTitle === "aboutus");
+  const sponsor = mainPages.value?.find((el) => el.subTitle === "sponsors");
+  const career = mainPages.value?.find((el) => el.subTitle === "careers");
+  const education = mainPages.value?.find((el) => el.subTitle === "education");
+  const volunteer = mainPages.value?.find((el) => el.subTitle === "volunteer");
+  contactPage.value && (contacts.value = contactPage.value);
 
   eboutData.value = [];
+  about && eboutData.value.push(about);
+  career && eboutData.value.push(career);
+  education && eboutData.value.push(education);
+  volunteer && eboutData.value.push(volunteer);
+  sponsor && eboutData.value.push(sponsor);
+  contacts.value &&
+    eboutData.value.push({
+      id: contacts.value?.id,
+      imageBgLink: contacts.value?.imageBgLink,
+      imagePreviewLink: contacts.value?.imagePreviewLink,
+      title: contacts.value?.title,
+      subTitle: contacts.value?.title,
+      shortDescription: contacts.value?.description,
+      description: contacts.value?.description,
+      extraeDscription: contacts.value?.extraeDscription,
+    });
 
-  about &&
-    sponsor &&
-    career &&
-    education &&
-    volunteer &&
-    contacts.value &&
-    (eboutData.value = [
-      about,
-      sponsor,
-      career,
-      education,
-      volunteer,
-      {
-        id: contacts.value?.id,
-        timeStamp: contacts.value?.timeStamp,
-        imageBgLink: contacts.value?.imageBgLink,
-        imagePreviewLink: contacts.value?.imagePreviewLink,
-        title: contacts.value?.title,
-        subTitle: contacts.value?.title,
-        shortDescription: contacts.value?.description,
-        description: contacts.value?.description,
-        extraeDscription: contacts.value?.extraeDscription,
-      },
-    ]);
-
-  metaTitle.value = about?.title;
+  about?.title && (metaTitle.value = about.title);
 }
 if (route.params.id === "membership") {
-  newsMainPageContent.value = mainPages.value?.find((el) => el.subTitle === "Membership");
+  newsMainPageContent.value = mainPages.value?.find((el) => el.subTitle === "membership");
   if (membershipTable.value?.length) {
     stateMonth.value = membershipTable.value[0];
     stateYaer.value = membershipTable.value[1];
   }
-  metaTitle.value = newsMainPageContent.value?.title;
+  newsMainPageContent.value?.title && (metaTitle.value = newsMainPageContent.value.title);
 }
 if (route.params.id === "ticket") {
-  newsMainPageContent.value = mainPages.value?.find((el) => el.subTitle === "Tickets");
+  newsMainPageContent.value = mainPages.value?.find((el) => el.subTitle === "tickets");
   if (ticketTable.value?.length) {
     singleState.value = ticketTable.value[0];
     unlimitedSTate.value = ticketTable.value[1];
   }
-  metaTitle.value = newsMainPageContent.value?.title;
+  newsMainPageContent.value?.title && (metaTitle.value = newsMainPageContent.value.title);
 }
 if (route.params.id === "donate") {
-  newsMainPageContent.value = mainPages.value?.find((el) => el.subTitle === "Donate");
-  metaTitle.value = newsMainPageContent.value?.title;
+  newsMainPageContent.value = mainPages.value?.find((el) => el.subTitle === "donate");
+  newsMainPageContent.value?.title && (metaTitle.value = newsMainPageContent.value.title);
 }
 if (route.params.id === "contact") {
-  contactPage.value?.length && (contacts.value = contactPage.value[0]);
-  metaTitle.value = contacts.value?.title;
+  contactPage.value && (contacts.value = contactPage.value);
+  contacts.value?.title && (metaTitle.value = contacts.value?.title);
 }
 useSeoMeta({
   title: metaTitle.value ? metaTitle.value : "Error result",
@@ -121,7 +113,7 @@ useSeoMeta({
       v-if="route.params.id === 'donate' && newsMainPageContent"
       :donate="newsMainPageContent" />
     <LazyInfoAbout
-      v-else-if="route.params.id === 'about' && eboutData?.length && contacts"
+      v-else-if="route.params.id === 'about' && eboutData?.length"
       :about-us="eboutData"
       :contacts="contacts" />
     <LazyInfoExtinction
