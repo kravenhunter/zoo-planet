@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { IContentPage, IPost } from "~/types";
+import type { IContentPage, IPost } from "~/types";
+
 interface Props {
   mainContent: IContentPage;
   news: IPost[];
@@ -19,7 +20,7 @@ defineProps<Props>();
         :enable-button="false" />
     </article>
     <v-row class="justify-center">
-      <v-col cols="7" lg="4" md="5" v-for="item in news" :key="item.id" class="news_item">
+      <v-col v-for="item in news" :key="item.id" cols="7" lg="4" md="5" class="news_item">
         <CardColumn
           class-card="mx-auto"
           max-width-card="373"
@@ -31,7 +32,7 @@ defineProps<Props>();
           class-text-block="overflow-hidden mb-5"
           class-text="pa-1  text-black"
           text-block-size="280px"
-          :image-source="item.imagePreviewLink!"
+          :image-source="`/${item.imagePreviewLink}`"
           :button-slot="true">
           <v-btn
             class="news_btn px-10 w-100 font-weight-medium"
