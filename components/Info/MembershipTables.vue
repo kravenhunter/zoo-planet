@@ -76,7 +76,7 @@ function parseData(price: string) {
           <v-table theme="light">
             <thead class="bg-orange-lighten-5 text-subtitle-2">
               <tr>
-                <th class="py-5 text-left font-weight-bold" v-for="(el, i) in tableRow" :key="i">
+                <th v-for="(el, i) in tableRow" :key="i" class="py-5 text-left font-weight-bold">
                   {{ el.title }}
                 </th>
               </tr>
@@ -148,15 +148,16 @@ function parseData(price: string) {
         <article class="order bg-brown-lighten-5">
           <CardColumn :enable-card-slot="true">
             <v-img
+              v-if="membership.imageBgLink"
               :alt="membership.title"
-              :src="membership.imageBgLink"
+              :src="`/${membership.imageBgLink}`"
               class="align-end"
               gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
               :max-height="100"
               :aspect-ratio="16 / 9"
               cover>
               <template #sources>
-                <source :srcset="membership.imageBgLink" />
+                <source :srcset="`/${membership.imageBgLink}`" />
               </template>
               <v-card-title class="text-amber text-center mb-1">Summory</v-card-title>
             </v-img>
@@ -181,8 +182,8 @@ function parseData(price: string) {
                     </td>
                     <td class="d-flex align-center">
                       <v-icon
-                        title="close-icon"
                         v-if="selectedPrecesState.adult"
+                        title="close-icon"
                         color="error"
                         icon="mdi-close-thick"
                         size="17px"

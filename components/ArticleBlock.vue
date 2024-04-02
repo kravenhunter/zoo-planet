@@ -45,11 +45,13 @@ const items = [
 </script>
 
 <template>
-  <section class="article" v-if="specie">
+  <section v-if="specie" class="article">
     <article class="main_cover">
       <CardColumn heigth-card="600" :enable-card-slot="true">
         <v-img
-          :src="specie.imageBgLink"
+          v-if="specie.imageBgLink"
+          :src="`/${specie.imageBgLink}`"
+          :alt="specie.title"
           class="align-end"
           gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
           :max-height="600"

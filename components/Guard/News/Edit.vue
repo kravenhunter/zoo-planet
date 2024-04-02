@@ -23,9 +23,7 @@ const state = reactive({
   extraeDscription: getPost?.extraeDscription ?? "",
 });
 
-const isEmpty = computed(() =>
-  state.title && state.description && state.extraeDscription ? false : true,
-);
+const isEmpty = computed(() => !(state.title && state.description && state.extraeDscription));
 const rules = [
   (value: string) => {
     if (value) {

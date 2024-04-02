@@ -24,7 +24,7 @@ if (route.params.id === "about") {
 </script>
 
 <template>
-  <section class="about" v-if="aboutUs">
+  <section v-if="aboutUs" class="about">
     <article class="card">
       <CardColumn :enable-card-slot="true">
         <v-img

@@ -101,7 +101,7 @@ const addPrices = async () => {
               <thead class="bg-orange-lighten-5 text-subtitle-2">
                 <tr>
                   <th></th>
-                  <th class="py-5 text-left font-weight-bold" v-for="(el, i) in tableRow" :key="i">
+                  <th v-for="(el, i) in tableRow" :key="i" class="py-5 text-left font-weight-bold">
                     {{ el.title }}
                   </th>
                 </tr>
@@ -185,8 +185,8 @@ const addPrices = async () => {
                       color="light-blue-darken-4"
                       variant="flat"
                       size="x-large"
-                      @click="addPrices"
-                      append-icon="mdi-paw">
+                      append-icon="mdi-paw"
+                      @click="addPrices">
                       Update prices
                     </v-btn>
                   </td>

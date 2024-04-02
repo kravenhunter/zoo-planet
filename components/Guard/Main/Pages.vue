@@ -11,14 +11,14 @@ defineProps<{
 <template>
   <div>
     <v-row>
-      <v-col cols="12" v-if="currentPage">
+      <v-col v-if="currentPage" cols="12">
         <CardInline
           max-width-card="1200px"
           class-card="bg-grey-darken-4 mx-auto"
           :title-card="currentPage.title"
           class-title="text-amber text-center"
           :text-card="currentPage.shortDescription"
-          :image-source="currentPage.imagePreviewLink"
+          :image-source="`/${currentPage.imagePreviewLink}`"
           image-width="400px"
           image-heigth="300px"
           image-cols-size="4"
@@ -44,7 +44,7 @@ defineProps<{
     </v-row>
 
     <v-row v-if="pages">
-      <v-col cols="12" v-for="el in pages" :key="el.id">
+      <v-col v-for="el in pages" :key="el.id" cols="12">
         <CardInline
           max-width-card="1200px"
           class-card="bg-grey-darken-4 mx-auto"
@@ -52,7 +52,7 @@ defineProps<{
           class-title="text-amber text-center"
           :text-card="el.shortDescription"
           class-text="text-center"
-          :image-source="el.imagePreviewLink!"
+          :image-source="`/${el.imagePreviewLink}`"
           image-width="400px"
           image-heigth="300px"
           image-cols-size="4"

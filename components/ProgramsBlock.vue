@@ -23,7 +23,7 @@ defineProps<Props>();
       :enable-button="false" />
     <div class="program_retrospective_one">
       <v-row align="start">
-        <v-col cols="6" v-for="el in programsList.slice(0, 2)" :key="el.id">
+        <v-col v-for="el in programsList.slice(0, 2)" :key="el.id" cols="6">
           <NuxtLink :to="{ path: `/news/${el.id}` }">
             <CardColumn heigth-card="450" :enable-card-slot="true">
               <v-img
@@ -42,7 +42,7 @@ defineProps<Props>();
           </NuxtLink>
         </v-col>
 
-        <v-col cols="4" v-for="el in programsList.slice(2, 5)" :key="el.id">
+        <v-col v-for="el in programsList.slice(2, 5)" :key="el.id" cols="4">
           <NuxtLink :to="{ path: `/news/${el.id}` }">
             <CardColumn heigth-card="450" :enable-card-slot="true">
               <v-img
@@ -66,7 +66,7 @@ defineProps<Props>();
     </div>
     <div class="program_retrospective_two">
       <v-row align="start">
-        <v-col cols="12" v-for="el in programsList.slice(2, 6)" :key="el.id">
+        <v-col v-for="el in programsList.slice(2, 6)" :key="el.id" cols="12">
           <NuxtLink :to="{ path: `/news/${el.id}` }">
             <CardColumn heigth-card="100%" max-height-card="475" :enable-card-slot="true">
               <v-img

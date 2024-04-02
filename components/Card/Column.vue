@@ -67,7 +67,20 @@ defineProps({
     :max-width="maxWidthCard">
     <v-row>
       <v-col class="d-flex flex-column">
-        <nuxt-img
+        <v-img
+          v-if="imageSource"
+          :src="imageSource"
+          :alt="titleCard"
+          :class="imageClass"
+          class="nuxt_img"
+          :width="imageWidth"
+          :height="imageHeigth"
+          :title="titleCard">
+          <template #sources>
+            <source :srcset="imageSource" />
+          </template>
+        </v-img>
+        <!-- <nuxt-img
           v-if="imageSource"
           format="webp"
           :width="imageWidth"
@@ -77,8 +90,8 @@ defineProps({
           :title="titleCard"
           :class="imageClass"
           class="nuxt_img">
-        </nuxt-img>
-        <v-card-title :class="classTitle" v-if="titleCard">{{ titleCard }}</v-card-title>
+        </nuxt-img> -->
+        <v-card-title v-if="titleCard" :class="classTitle">{{ titleCard }}</v-card-title>
         <v-card-subtitle v-if="subtitleCard" :class="classSubtitle">
           {{ subtitleCard }}
         </v-card-subtitle>
@@ -89,7 +102,7 @@ defineProps({
           <v-card-text :class="classText" v-html="textHtmlCard"></v-card-text>
         </div>
         <div v-if="enableButton">
-          <div class="d-flex" :class="buttonPosition" v-if="!buttonSlot">
+          <div v-if="!buttonSlot" class="d-flex" :class="buttonPosition">
             <v-btn
               :title="buttonTitle"
               :class="buttonClass"
@@ -100,7 +113,7 @@ defineProps({
               {{ buttonTitle }}
             </v-btn>
           </div>
-          <div class="d-flex" :class="buttonPosition" v-if="buttonSlot">
+          <div v-if="buttonSlot" class="d-flex" :class="buttonPosition">
             <slot />
           </div>
         </div>

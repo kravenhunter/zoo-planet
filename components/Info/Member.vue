@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref } from "#imports";
 import { useCurrentMemberTab, useSelectedPrecesState } from "@/composables/states";
 import type { IContentPage, IMembershipPrice } from "~/types";
 
@@ -16,7 +15,6 @@ const currentTab = useCurrentMemberTab();
 
 const items = ["Member", "Details", "Payment", "Confirmation"];
 
-const count = ref(0);
 const goBack = () => {
   selectedPrecesState.value = {
     adult: 0,
@@ -37,15 +35,16 @@ const goBack = () => {
     <article class="main_cover">
       <CardColumn :enable-card-slot="true">
         <v-img
+          v-if="memberMain.imageBgLink"
           :alt="memberMain.title"
-          :src="memberMain.imageBgLink"
+          :src="`/${memberMain.imageBgLink}`"
           class="align-end"
           gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
           :max-height="600"
           :aspect-ratio="16 / 9"
           cover>
           <template #sources>
-            <source :srcset="memberMain.imageBgLink" />
+            <source :srcset="`/${memberMain.imageBgLink}`" />
           </template>
           <v-card-title
             class="text-amber text-center mb-10"

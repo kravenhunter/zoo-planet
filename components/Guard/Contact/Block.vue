@@ -14,7 +14,7 @@ defineProps<{ contactData: IContacts }>();
           :title-card="contactData.title"
           class-title="text-amber text-center"
           :text-card="contactData.description"
-          :image-source="contactData.imagePreviewLink!"
+          :image-source="`/${contactData.imagePreviewLink}`"
           image-width="400px"
           image-heigth="300px"
           image-cols-size="4"

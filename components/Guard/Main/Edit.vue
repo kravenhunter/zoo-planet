@@ -41,8 +41,8 @@ const subtitle = [
   "donate",
 ];
 
-const isEmpty = computed(() =>
-  state.title && state.subTitle && state.shortDescription && state.description ? false : true,
+const isEmpty = computed(
+  () => !(state.title && state.subTitle && state.shortDescription && state.description),
 );
 
 const rules = [

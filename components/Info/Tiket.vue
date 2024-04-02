@@ -38,15 +38,16 @@ const tableHeaders = [
     <article class="main_cover">
       <CardColumn :enable-card-slot="true">
         <v-img
+          v-if="ticketMain.imageBgLink"
+          :src="`/${ticketMain.imageBgLink}`"
           :alt="ticketMain.title"
-          :src="ticketMain.imageBgLink"
           class="align-end"
           gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
           :max-height="600"
           :aspect-ratio="16 / 9"
           cover>
           <template #sources>
-            <source :srcset="ticketMain.imageBgLink" />
+            <source :srcset="`/${ticketMain.imageBgLink}`" />
           </template>
           <v-card-title
             class="text-amber text-center mb-10"

@@ -26,7 +26,7 @@ defineProps<Props>();
           class-title="text-green-darken-4 text-center"
           :text-card="post.description"
           class-text="text-center"
-          :image-source="post.imagePreviewLink!"
+          :image-source="`/${post.imagePreviewLink}`"
           image-width="650px"
           image-heigth="350px"
           image-cols-size="6"

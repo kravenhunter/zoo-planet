@@ -11,15 +11,16 @@ defineProps<{
     <article class="card">
       <CardColumn :enable-card-slot="true">
         <v-img
+          v-if="donate.imageBgLink"
           :alt="donate.title"
-          :src="donate.imageBgLink"
+          :src="`/${donate.imageBgLink}`"
           class="align-end"
           :max-height="600"
           :aspect-ratio="16 / 9"
           gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
           cover>
           <template #sources>
-            <source :srcset="donate.imageBgLink" />
+            <source :srcset="`/${donate.imageBgLink}`" />
           </template>
           <v-card-title class="text-amber text-center mb-10" v-text="donate.title"></v-card-title>
         </v-img>

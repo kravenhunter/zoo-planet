@@ -60,15 +60,16 @@ const tableHeaders = [
     <article>
       <CardColumn :enable-card-slot="true">
         <v-img
+          v-if="plain.imageBgLink"
           :alt="plain.title"
-          :src="plain.imageBgLink"
+          :src="`/${plain.imageBgLink}`"
           class="align-end"
           gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
           :max-height="600"
           :aspect-ratio="16 / 9"
           cover>
           <template #sources>
-            <source :srcset="plain.imageBgLink" />
+            <source :srcset="`/${plain.imageBgLink}`" />
           </template>
           <v-card-title class="text-amber text-center mb-10" v-text="plain.title"></v-card-title>
         </v-img>

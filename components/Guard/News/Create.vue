@@ -19,9 +19,7 @@ const pendingData = useIsLoading();
 
 const category = ["Education", "FightingExtinction", "News"];
 
-const isEmpty = computed(() =>
-  state.title && state.description && state.extraeDscription ? false : true,
-);
+const isEmpty = computed(() => !(state.title && state.description && state.extraeDscription));
 const rules = [
   (value: string) => {
     if (value) {

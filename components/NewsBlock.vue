@@ -5,18 +5,19 @@ defineProps<{ article: IPost }>();
 </script>
 
 <template>
-  <section class="article" v-if="article">
+  <section v-if="article" class="article">
     <article class="main_cover">
       <CardColumn :enable-card-slot="true">
         <v-img
-          :src="article.imageBgLink"
+          v-if="article.imageBgLink"
+          :src="`/${article.imageBgLink}`"
           class="align-end"
           gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
           :max-height="600"
           :aspect-ratio="16 / 9"
           cover>
           <template #sources>
-            <source :srcset="article.imageBgLink" />
+            <source :srcset="`/${article.imageBgLink}`" />
           </template>
           <v-card-title class="text-amber text-center mb-10" v-text="article.title"></v-card-title>
         </v-img>

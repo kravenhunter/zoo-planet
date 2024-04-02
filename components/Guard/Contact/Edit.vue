@@ -6,9 +6,8 @@ import type { IContacts } from "~/types";
 import extractFileFromEvent from "~/utils/extractFileFromEvent";
 import packToFormData from "~/utils/packToFormData";
 
-const route = useRoute();
 const props = defineProps<{ contacTable: IContacts }>();
-
+const route = useRoute();
 const { createOrUpdateData } = useUnionStorage();
 // const { contacTable } = toRefs(props);
 
@@ -27,7 +26,7 @@ const state = reactive({
 });
 const isLoadingContacts = useIsLoading();
 
-const isEmpty = computed(() => (state?.title && state.extraeDscription ? false : true));
+const isEmpty = computed(() => !(state?.title && state.extraeDscription));
 
 const rules = [
   (value: string) => {
@@ -88,7 +87,7 @@ const addPost = async () => {
 </script>
 
 <template>
-  <v-container v-if="contacTable" class="d-flex" fluid>
+  <v-container class="d-flex" fluid>
     <v-row>
       <v-col cols="12">
         <v-sheet class="pa-2 mx-auto bg-black w-50">
@@ -103,40 +102,37 @@ const addPost = async () => {
             >update data</v-btn
           >
           <v-form class="bg-grey-darken-4">
-            <v-text-field v-model="contacTable.title" :rules="rules" label="Title"></v-text-field>
+            <v-text-field v-model="state.title" :rules="rules" label="Title"></v-text-field>
             <v-file-input clearable label="Image cover" @change="selectCoverImage"></v-file-input>
             <v-file-input
               clearable
               label="Image preview"
               @change="selectPreviewImage"></v-file-input>
-            <v-text-field v-model="contacTable.phone" :rules="rules" label="Phone"></v-text-field>
-            <v-text-field v-model="contacTable.email" :rules="rules" label="Email"></v-text-field>
+            <v-text-field v-model="state.phone" :rules="rules" label="Phone"></v-text-field>
+            <v-text-field v-model="state.email" :rules="rules" label="Email"></v-text-field>
+            <v-text-field v-model="state.copyright" :rules="rules" label="Copyright"></v-text-field>
             <v-text-field
-              v-model="contacTable.copyright"
-              :rules="rules"
-              label="Copyright"></v-text-field>
-            <v-text-field
-              v-model="contacTable.socialLink_1"
+              v-model="state.socialLink_1"
               :rules="rules"
               label="Socials"></v-text-field>
             <v-text-field
-              v-model="contacTable.socialLink_2"
+              v-model="state.socialLink_2"
               :rules="rules"
               label="Socials"></v-text-field>
             <v-text-field
-              v-model="contacTable.socialLink_3"
+              v-model="state.socialLink_3"
               :rules="rules"
               label="Socials"></v-text-field>
             <v-text-field
-              v-model="contacTable.socialLink_4"
+              v-model="state.socialLink_4"
               :rules="rules"
               label="Socials"></v-text-field>
             <v-text-field
-              v-model="contacTable.socialLink_5"
+              v-model="state.socialLink_5"
               :rules="rules"
               label="Socials"></v-text-field>
             <v-text-field
-              v-model="contacTable.description"
+              v-model="state.description"
               :rules="rules"
               label="Shord Description"></v-text-field>
           </v-form>
@@ -146,13 +142,11 @@ const addPost = async () => {
       <v-col cols="6">
         <v-sheet>
           <v-card-title class="text-center">Description</v-card-title>
-          <UiElementsAddEditor
-            v-if="contacTable.extraeDscription"
-            v-model:value="contacTable.extraeDscription" />
+          <UiElementsAddEditor v-model:value="state.extraeDscription" />
         </v-sheet>
       </v-col>
       <v-col cols="6" class="content_news">
-        <div class="editor_content bg-white" v-html="contacTable.extraeDscription"></div>
+        <div class="editor_content bg-white" v-html="state.extraeDscription"></div>
       </v-col>
     </v-row>
   </v-container>

@@ -37,7 +37,7 @@ console.log(specieList.value);
 selected.value = getRecord ? getRecord.conservationStatus : "LC";
 selectedPopulation.value = getRecord ? getRecord.populationTrend : "Stable";
 
-const isEmpty = computed(() => (currentSpecie?.title && currentSpecie.description ? false : true));
+const isEmpty = computed(() => !(currentSpecie?.title && currentSpecie.description));
 const rules = [
   (value: string) => {
     if (value) {

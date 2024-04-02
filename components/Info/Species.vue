@@ -14,14 +14,16 @@ defineProps<Props>();
     <article class="main_cover">
       <CardColumn :enable-card-slot="true">
         <v-img
-          :src="species.imageBgLink"
+          v-if="species.imageBgLink"
+          :alt="species.title"
+          :src="`/${species.imageBgLink}`"
           class="align-end"
           gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
           :max-height="600"
           :aspect-ratio="16 / 9"
           cover>
           <template #sources>
-            <source :srcset="species.imageBgLink!" />
+            <source :srcset="`/${species.imageBgLink}`" />
           </template>
           <v-card-title class="text-amber text-center mb-10" v-text="species.title"></v-card-title>
         </v-img>
@@ -39,16 +41,18 @@ defineProps<Props>();
           <v-icon icon="mdi-menu-down" size="large"></v-icon> SCROLL DOWN TO EXPLORE
         </h4>
         <v-row>
-          <v-col cols="12" sm="6" v-for="(el, i) in specieList" :key="i">
+          <v-col v-for="el in specieList" :key="el.id" cols="12" sm="6">
             <NuxtLink :to="{ path: `/article/${el.id}` }">
               <v-img
+                v-if="el.imagePreviewLink"
+                :alt="el.title"
+                :src="`/${el.imagePreviewLink}`"
                 class="align-end"
-                :src="el.imagePreviewLink!"
                 max-height="338px"
                 max-width="500px"
                 gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)">
                 <template #sources>
-                  <source :srcset="el.imagePreviewLink!" />
+                  <source :srcset="`/${el.imagePreviewLink}`" />
                 </template>
                 <h4 class="text-amber text-center mb-1 ml-10" v-text="el.title"></h4>
               </v-img>

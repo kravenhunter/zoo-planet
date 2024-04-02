@@ -31,14 +31,14 @@ console.log(route);
       </v-btn> -->
     </v-col>
     <div v-if="latestNewsList"></div>
-    <v-col cols="12" v-for="el in latestNewsList" :key="el.id">
+    <v-col v-for="el in latestNewsList" :key="el.id" cols="12">
       <CardInline
         max-width-card="1200px"
         class-card="bg-grey-darken-4 mx-auto"
         :title-card="el.title"
         class-title="text-amber text-center"
         :text-card="el.description"
-        :image-source="el.imagePreviewLink!"
+        :image-source="`/${el.imagePreviewLink}`"
         image-width="400px"
         image-heigth="300px"
         image-cols-size="4"

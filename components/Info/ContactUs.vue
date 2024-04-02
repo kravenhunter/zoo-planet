@@ -29,15 +29,16 @@ Australia`,
     <article v-if="contactMain" class="main_cover">
       <CardColumn :enable-card-slot="true">
         <v-img
+          v-if="contactMain.imageBgLink"
           :alt="contactMain.title"
-          :src="contactMain.imageBgLink"
+          :src="`/${contactMain.imageBgLink}`"
           class="align-end"
           :max-height="600"
           :aspect-ratio="16 / 9"
           cover
           gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)">
           <template #sources>
-            <source :srcset="contactMain.imageBgLink" />
+            <source :srcset="`/${contactMain.imageBgLink}`" />
           </template>
           <v-card-title
             class="text-amber text-center mb-10"
