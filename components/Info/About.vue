@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { ref, useRoute } from "#imports";
+import { ref } from "#imports";
 import type { IContentPage } from "~/types";
 
 const props = defineProps<{
   aboutUs: IContentPage[];
 }>();
-const route = useRoute();
 
 const about = ref<IContentPage>();
 const sponsor = ref<IContentPage>();
@@ -18,9 +17,6 @@ sponsor.value = props.aboutUs?.find((el) => el.subTitle === "Sponsors");
 career.value = props.aboutUs?.find((el) => el.subTitle === "Careers");
 education.value = props.aboutUs?.find((el) => el.subTitle === "Education");
 volunteer.value = props.aboutUs?.find((el) => el.subTitle === "Volunteer");
-if (route.params.id === "about") {
-  console.log(props.aboutUs);
-}
 </script>
 
 <template>
