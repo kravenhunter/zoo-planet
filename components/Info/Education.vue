@@ -5,7 +5,7 @@ interface Props {
   education: IContentPage;
   programs: IPost[];
 }
-const props = defineProps<Props>();
+defineProps<Props>();
 
 const carousel = [
   {
@@ -164,7 +164,7 @@ const communityLinks = [
         title-card="Explore education at Zoos Victoria"
         font-title-size="2.5rem"
         :enable-button="false" />
-      <v-carousel hide-delimiters class="card_main" cycle height="100vh" :show-arrows="false">
+      <v-carousel hide-delimiters class="card_main" cycle height="90vh" :show-arrows="false">
         <v-carousel-item v-for="(slide, i) in carousel" :key="i">
           <v-img
             :alt="slide.title"
@@ -293,7 +293,7 @@ const communityLinks = [
         text-class="text-center text-black" />
     </article>
     <article class="plan">
-      <v-container>
+      <v-container class="visit">
         <CardInline
           class="plan_card_inline"
           :shadow-card="3"
@@ -428,7 +428,9 @@ const communityLinks = [
       display: block;
     }
   }
-  & .description {
+  & .description,
+  & .conservation,
+  & .plan {
     padding: 50px 0;
   }
   & .conservation {
@@ -436,8 +438,9 @@ const communityLinks = [
   }
   & .who_we_are {
   }
-  & .plan {
-    justify-self: center;
+  & .plan .visit {
+    display: flex;
+    justify-content: center;
   }
   & .book {
     background-color: #004c67;

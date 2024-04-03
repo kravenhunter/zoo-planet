@@ -1,84 +1,75 @@
 <script setup lang="ts">
-import { navigateTo, reactive, useRoute } from "#imports";
+import { reactive } from "#imports";
 import { delayLoading, useIsLoading } from "@/composables/states";
 import { useUnionStorage } from "@/stores/unionStore";
+import sender from "~/composables/sender";
 import type { ITicketPrice } from "~/types";
-import packToFormData from "~/utils/packToFormData";
 
 const props = defineProps<{
   singlEntry: ITicketPrice | null | undefined;
   unlimited: ITicketPrice | null | undefined;
 }>();
 const loadingMemberPrices = useIsLoading();
-const route = useRoute();
-console.log(route);
-const { createOrUpdateData } = useUnionStorage();
+
+const { createOrUpdateData, loadDataList } = useUnionStorage();
 
 const stateSingle = reactive({
-  adult: props.singlEntry?.adult ?? "",
-  childCategoryFirst: props.singlEntry?.childCategoryFirst ?? "",
-  childCategorySecond: props.singlEntry?.childCategorySecond ?? "",
-  concession: props.singlEntry?.concession ?? "",
-  seniors: props.singlEntry?.seniors ?? "",
+  adult: props.singlEntry?.adult ?? "30",
+  childCategoryFirst: props.singlEntry?.childCategoryFirst ?? "FREE",
+  childCategorySecond: props.singlEntry?.childCategorySecond ?? "FREE",
+  concession: props.singlEntry?.concession ?? "22.50",
+  seniors: props.singlEntry?.seniors ?? "27.00",
 });
 
 const stateUnlimited = reactive({
-  adult: props.unlimited?.adult ?? "",
-  childCategoryFirst: props.unlimited?.childCategoryFirst ?? "",
-  childCategorySecond: props.unlimited?.childCategorySecond ?? "",
-  concession: props.unlimited?.concession ?? "",
-  seniors: props.unlimited?.seniors ?? "",
+  adult: props.unlimited?.adult ?? "11.50",
+  childCategoryFirst: props.unlimited?.childCategoryFirst ?? "FREE",
+  childCategorySecond: props.unlimited?.childCategorySecond ?? "FREE",
+  concession: props.unlimited?.concession ?? "8.50",
+  seniors: props.unlimited?.seniors ?? "10.50",
 });
 
 const addPrices = async () => {
+  const createPath = `base/create-by-type/ticket-price`;
+  const updatePath = "base/update-by-type/ticket-price";
+  const loadDataPath = "base/list-by-type/ticket-price";
+
   loadingMemberPrices.value = true;
 
   if (props.singlEntry?.id && props.unlimited?.id) {
-    //  const { data } = await useFetch("/api/prisma/base/create-by-type/membership-price");
-
-    const getpacksinglEntry = await packToFormData(props.singlEntry, props.singlEntry?.id);
-    const getpackunlimited = await packToFormData(props.unlimited, props.unlimited.id);
-
-    const singlEntryResult = await createOrUpdateData(
-      `base/update-by-type/ticket-price`,
-      getpacksinglEntry,
+    const singlEntryPrimose = sender(
+      { ...stateSingle },
+      updatePath,
+      props.singlEntry.id,
+      createOrUpdateData,
     );
-    const unlimitedResult = await createOrUpdateData(
-      `base/update-by-type/ticket-price`,
-      getpackunlimited,
+    const unlimitedPrimose = sender(
+      { ...stateUnlimited },
+      updatePath,
+      props.unlimited.id,
+      createOrUpdateData,
     );
+    const promiseResult = await Promise.all([singlEntryPrimose, unlimitedPrimose]);
 
-    if (singlEntryResult.statusCode === 200 && unlimitedResult.statusCode === 200) {
+    if (promiseResult[0].statusCode === 200) {
+      await loadDataList(loadDataPath);
       delayLoading("Success");
-      await new Promise((resolve) =>
-        setTimeout(() => {
-          navigateTo(String(route.query.id));
-        }, 2500),
-      );
     } else {
+      console.log(promiseResult[0].statusMessage);
+
       delayLoading("Error");
     }
   } else {
-    const getpacksinglEntry = await packToFormData(props.singlEntry, null);
-    const getpackunlimited = await packToFormData(props.unlimited, null);
+    const singlEntryPrimose = sender({ ...stateSingle }, createPath, null, createOrUpdateData);
+    const unlimitedPrimose = sender({ ...stateUnlimited }, createPath, null, createOrUpdateData);
+    const promiseResult = await Promise.all([singlEntryPrimose, unlimitedPrimose]);
 
-    const singlEntryResult = await createOrUpdateData(
-      `base/create-by-type/ticket-price`,
-      getpacksinglEntry,
-    );
-    const unlimitedResult = await createOrUpdateData(
-      `base/create-by-type/ticket-price`,
-      getpackunlimited,
-    );
-
-    if (singlEntryResult.statusCode === 200 && unlimitedResult.statusCode === 200) {
+    if (promiseResult[0].statusCode === 200) {
+      await loadDataList(loadDataPath);
       delayLoading("Success");
-      await new Promise((resolve) =>
-        setTimeout(() => {
-          navigateTo(String(route.query.id));
-        }, 2500),
-      );
     } else {
+      console.log(promiseResult[0].statusMessage);
+
       delayLoading("Error");
     }
   }

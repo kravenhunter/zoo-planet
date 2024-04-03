@@ -1,87 +1,86 @@
 <script setup lang="ts">
-import { navigateTo, reactive, useRoute } from "#imports";
+import { reactive } from "#imports";
 import { delayLoading, useIsLoading } from "@/composables/states";
 import { useUnionStorage } from "@/stores/unionStore";
+import sender from "~/composables/sender";
 import type { IMembershipPrice } from "~/types";
-import packToFormData from "~/utils/packToFormData";
 
 const props = defineProps<{
   monthly?: IMembershipPrice;
   yarly?: IMembershipPrice;
 }>();
 
-const route = useRoute();
-console.log(route);
 const stateMonth = reactive({
-  adult: props.monthly?.adult ?? "",
-  childCategoryFirst: props.monthly?.childCategoryFirst ?? "",
-  childCategorySecond: props.monthly?.childCategorySecond ?? "",
-  concession: props.monthly?.concession ?? "",
-  seniors: props.monthly?.seniors ?? "",
-  teacher: props.monthly?.teacher ?? "",
-  supporter: props.monthly?.supporter ?? "",
+  adult: props.monthly?.adult ?? "11.50",
+  childCategoryFirst: props.monthly?.childCategoryFirst ?? "Free",
+  childCategorySecond: props.monthly?.childCategorySecond ?? "4.50",
+  concession: props.monthly?.concession ?? "8.50",
+  seniors: props.monthly?.seniors ?? "10.50",
+  teacher: props.monthly?.teacher ?? "8.25",
+  supporter: props.monthly?.supporter ?? "5",
 });
 
 const stateYaer = reactive({
-  adult: props.monthly?.adult ?? "",
-  childCategoryFirst: props.yarly?.childCategoryFirst ?? "",
-  childCategorySecond: props.yarly?.childCategorySecond ?? "",
-  concession: props.yarly?.concession ?? "",
-  seniors: props.yarly?.seniors ?? "",
-  teacher: props.yarly?.teacher ?? "",
-  supporter: props.yarly?.supporter ?? "",
+  adult: props.yarly?.adult ?? "138",
+  childCategoryFirst: props.yarly?.childCategoryFirst ?? "Free",
+  childCategorySecond: props.yarly?.childCategorySecond ?? "54",
+  concession: props.yarly?.concession ?? "102",
+  seniors: props.yarly?.seniors ?? "126",
+  teacher: props.yarly?.teacher ?? "99",
+  supporter: props.yarly?.supporter ?? "60",
 });
 
-const { createOrUpdateData } = useUnionStorage();
+const { createOrUpdateData, loadDataList } = useUnionStorage();
 const loadingMemberPrices = useIsLoading();
 
 const tableRow = [{ title: "Monthly" }, { title: "Yearly" }];
 
 const addPrices = async () => {
+  const createPath = `base/create-by-type/membership-price`;
+  const updatePath = "base/update-by-type/membership-price";
+  const loadDataPath = "base/list-by-type/membership-price";
+
   loadingMemberPrices.value = true;
   if (props.monthly?.id && props.yarly?.id) {
-    //  const { data } = await useFetch("/api/prisma/base/create-by-type/membership-price");
-
-    const getpackDataMonth = await packToFormData(stateMonth, props.monthly.id);
-    const getpackDataYar = await packToFormData(stateMonth, props.yarly.id);
-    const monthlyResult = await createOrUpdateData(
-      `base/update-by-type/membership-price`,
-      getpackDataMonth,
+    // Old
+    // const getpackDataMonth = await packToFormData({ ...stateMonth }, props.monthly.id);
+    // const getpackDataYar = await packToFormData({ ...stateYaer }, props.yarly.id);
+    // const monthlyResult = await createOrUpdateData(
+    //   `base/update-by-type/membership-price`,
+    //   getpackDataMonth,
+    // );
+    // const yearlyResult = await createOrUpdateData(
+    //   `base/update-by-type/membership-price`,
+    //   getpackDataYar,
+    // );
+    const monthlyPromise = sender(
+      { ...stateMonth },
+      updatePath,
+      props.monthly.id,
+      createOrUpdateData,
     );
-    const yearlyResult = await createOrUpdateData(
-      `base/update-by-type/membership-price`,
-      getpackDataYar,
-    );
+    const yearlyPromise = sender({ ...stateYaer }, updatePath, props.yarly.id, createOrUpdateData);
+    const promiseResult = await Promise.all([monthlyPromise, yearlyPromise]);
 
-    if (monthlyResult.statusCode === 200 && yearlyResult.statusCode === 200) {
+    if (promiseResult[0].statusCode === 200) {
+      await loadDataList(loadDataPath);
       delayLoading("Success");
-      await new Promise((resolve) =>
-        setTimeout(() => {
-          navigateTo(String(route.query.id));
-        }, 2500),
-      );
     } else {
+      console.log(promiseResult[0].statusMessage);
+
       delayLoading("Error");
     }
   } else {
-    const getpackDataMonth = await packToFormData(stateMonth, null);
-    const getpackDataYar = await packToFormData(stateMonth, null);
-    const monthlyResult = await createOrUpdateData(
-      `base/create-by-type/membership-price`,
-      getpackDataMonth,
-    );
-    const yearlyResult = await createOrUpdateData(
-      `base/create-by-type/membership-price`,
-      getpackDataYar,
-    );
-    if (monthlyResult.statusCode === 200 && yearlyResult.statusCode === 200) {
+    const monthlyPromise = sender({ ...stateMonth }, createPath, null, createOrUpdateData);
+    const yearlyPromise = sender({ ...stateYaer }, createPath, null, createOrUpdateData);
+    const promiseResult = await Promise.all([monthlyPromise, yearlyPromise]);
+
+    if (promiseResult[0].statusCode === 200) {
+      await loadDataList(loadDataPath);
       delayLoading("Success");
-      await new Promise((resolve) =>
-        setTimeout(() => {
-          navigateTo(String(route.query.id));
-        }, 2500),
-      );
     } else {
+      console.log(promiseResult[0].statusMessage);
+
       delayLoading("Error");
     }
   }
@@ -110,61 +109,57 @@ const addPrices = async () => {
                 <tr>
                   <td class="pl-7 py-5">Adult</td>
                   <td class="py-5">
-                    <v-text-field v-model="stateMonth!.adult" label="$0"></v-text-field>
+                    <v-text-field v-model="stateMonth.adult" label="$0"></v-text-field>
                   </td>
                   <td class="py-5">
-                    <v-text-field v-model="stateYaer!.adult" label="$0"></v-text-field>
+                    <v-text-field v-model="stateYaer.adult" label="$0"></v-text-field>
                   </td>
                 </tr>
                 <tr>
                   <td class="pl-7 py-5">Child (under 16)</td>
                   <td class="py-5">
-                    <v-text-field
-                      v-model="stateMonth!.childCategoryFirst"
-                      label="$0"></v-text-field>
+                    <v-text-field v-model="stateMonth.childCategoryFirst" label="$0"></v-text-field>
                   </td>
                   <td class="py-5">
-                    <v-text-field v-model="stateYaer!.childCategoryFirst" label="$0"></v-text-field>
+                    <v-text-field v-model="stateYaer.childCategoryFirst" label="$0"></v-text-field>
                   </td>
                 </tr>
                 <tr>
                   <td class="pl-7 py-5">Zoo Crew (under 16)</td>
                   <td class="py-5">
                     <v-text-field
-                      v-model="stateMonth!.childCategorySecond"
+                      v-model="stateMonth.childCategorySecond"
                       label="$0"></v-text-field>
                   </td>
                   <td class="py-5">
-                    <v-text-field
-                      v-model="stateYaer!.childCategorySecond"
-                      label="$0"></v-text-field>
+                    <v-text-field v-model="stateYaer.childCategorySecond" label="$0"></v-text-field>
                   </td>
                 </tr>
                 <tr>
                   <td class="pl-7 py-5">Concession</td>
                   <td class="py-5">
-                    <v-text-field v-model="stateMonth!.concession" label="$0"></v-text-field>
+                    <v-text-field v-model="stateMonth.concession" label="$0"></v-text-field>
                   </td>
                   <td class="py-5">
-                    <v-text-field v-model="stateYaer!.concession" label="$0"></v-text-field>
+                    <v-text-field v-model="stateYaer.concession" label="$0"></v-text-field>
                   </td>
                 </tr>
                 <tr>
                   <td class="pl-7 py-5">Senior</td>
                   <td class="py-5">
-                    <v-text-field v-model="stateMonth!.seniors" label="$0"></v-text-field>
+                    <v-text-field v-model="stateMonth.seniors" label="$0"></v-text-field>
                   </td>
                   <td class="py-5">
-                    <v-text-field v-model="stateYaer!.seniors" label="$0"></v-text-field>
+                    <v-text-field v-model="stateYaer.seniors" label="$0"></v-text-field>
                   </td>
                 </tr>
                 <tr>
                   <td class="pl-7 py-5">Teacher</td>
                   <td class="py-5">
-                    <v-text-field v-model="stateMonth!.teacher" label="$0"></v-text-field>
+                    <v-text-field v-model="stateMonth.teacher" label="$0"></v-text-field>
                   </td>
                   <td class="py-5">
-                    <v-text-field v-model="stateYaer!.teacher" label="$0"></v-text-field>
+                    <v-text-field v-model="stateYaer.teacher" label="$0"></v-text-field>
                   </td>
                 </tr>
                 <tr>

@@ -1,5 +1,6 @@
 import { assertMethod, createError, defineEventHandler } from "#imports";
 import type { H3Error } from "h3";
+
 interface IProps {
   table: string;
   title?: string;
@@ -14,7 +15,7 @@ export default defineEventHandler(async (event) => {
   if (table) {
     try {
       switch (table) {
-        case "post":
+        case "post": {
           const postItemList = await event.context.prisma.post.findMany({
             orderBy: { timeStamp: "desc" },
           });
@@ -26,30 +27,34 @@ export default defineEventHandler(async (event) => {
             method: "list",
             objectResult: postItemList,
           };
-        case "plan":
-          const planPriceList = await event.context.prisma.planPrice.findMany({
-            orderBy: { timeStamp: "desc" },
-          });
+        }
+
+        case "plan": {
+          const planPriceList = await event.context.prisma.planPrice.findMany();
 
           return {
             statusCode: 200,
             statusMessage: "Success",
-            table: "plan-price",
+            table: "plan",
             method: "list",
             objectResult: planPriceList,
           };
-        case "specie":
+        }
+
+        case "specie": {
           const specieList = await event.context.prisma.specie.findMany({
             orderBy: { timeStamp: "desc" },
           });
           return {
             statusCode: 200,
             statusMessage: "Success",
-            table: "specie",
+            table: "species",
             method: "list",
             objectResult: specieList,
           };
-        case "main-content-pages":
+        }
+
+        case "main-content-pages": {
           const contentPageList = await event.context.prisma.contentPages.findMany();
           return {
             statusCode: 200,
@@ -58,7 +63,9 @@ export default defineEventHandler(async (event) => {
             method: "list",
             objectResult: contentPageList,
           };
-        case "contacts":
+        }
+
+        case "contacts": {
           const contactUs = await event.context.prisma.contactUs.findFirst();
           return {
             statusCode: 200,
@@ -67,10 +74,10 @@ export default defineEventHandler(async (event) => {
             method: "list",
             objectResult: contactUs,
           };
-        case "membership-price":
-          const membershipPriceList = await event.context.prisma.membershipPrice.findMany({
-            orderBy: { timeStamp: "desc" },
-          });
+        }
+        case "membership-price": {
+          const membershipPriceList = await event.context.prisma.membershipPrice.findMany();
+
           return {
             statusCode: 200,
             statusMessage: "Success",
@@ -78,8 +85,9 @@ export default defineEventHandler(async (event) => {
             method: "list",
             objectResult: membershipPriceList,
           };
+        }
 
-        case "ticket-price":
+        case "ticket-price": {
           const ticketPriceList = await event.context.prisma.ticketPrice.findMany();
           return {
             statusCode: 200,
@@ -88,12 +96,14 @@ export default defineEventHandler(async (event) => {
             method: "list",
             objectResult: ticketPriceList,
           };
+        }
 
-        default:
+        default: {
           return {
             statusCode: 400,
             statusMessage: "Error - Wrong table type",
           };
+        }
       }
     } catch (error) {
       console.log(error);

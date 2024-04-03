@@ -10,6 +10,7 @@ const { postlist, specieList, mainPages, contactPage, membershipTable, ticketTab
 
 const metaTitle = ref<string>("");
 const newsMainPageContent = ref<IContentPage>();
+const mainPageList = ref<IContentPage[]>();
 const latestNewsList = ref<IPost[]>();
 // // Membership Prices
 const stateMonth = ref<IMembershipPrice>();
@@ -20,8 +21,6 @@ const unlimitedSTate = ref<ITicketPrice>();
 // //Contacts Data
 const contacts = ref<IContacts>();
 //About Data
-
-const eboutData = ref<IContentPage[]>();
 
 //Checking ROutes
 if (route.params.id === "news") {
@@ -57,14 +56,14 @@ if (route.params.id === "about") {
   const volunteer = mainPages.value?.find((el) => el.subTitle === "volunteer");
   contactPage.value && (contacts.value = contactPage.value);
 
-  eboutData.value = [];
-  about && eboutData.value.push(about);
-  career && eboutData.value.push(career);
-  education && eboutData.value.push(education);
-  volunteer && eboutData.value.push(volunteer);
-  sponsor && eboutData.value.push(sponsor);
+  mainPageList.value = [];
+  about && mainPageList.value.push(about);
+  career && mainPageList.value.push(career);
+  education && mainPageList.value.push(education);
+  volunteer && mainPageList.value.push(volunteer);
+  sponsor && mainPageList.value.push(sponsor);
   contacts.value &&
-    eboutData.value.push({
+    mainPageList.value.push({
       id: contacts.value?.id,
       imageBgLink: contacts.value?.imageBgLink,
       imagePreviewLink: contacts.value?.imagePreviewLink,
@@ -78,7 +77,7 @@ if (route.params.id === "about") {
   about?.title && (metaTitle.value = about.title);
 }
 if (route.params.id === "membership") {
-  newsMainPageContent.value = mainPages.value?.find((el) => el.subTitle === "membership");
+  newsMainPageContent.value = mainPages.value?.find((el) => el.title === "Membership");
   if (membershipTable.value?.length) {
     stateMonth.value = membershipTable.value[0];
     stateYaer.value = membershipTable.value[1];
@@ -94,8 +93,11 @@ if (route.params.id === "ticket") {
   newsMainPageContent.value?.title && (metaTitle.value = newsMainPageContent.value.title);
 }
 if (route.params.id === "donate") {
-  newsMainPageContent.value = mainPages.value?.find((el) => el.subTitle === "donate");
+  newsMainPageContent.value = mainPages.value?.find((el) => el.title === "Donate");
   newsMainPageContent.value?.title && (metaTitle.value = newsMainPageContent.value.title);
+  mainPageList.value = mainPages.value.filter(
+    (el) => el.subTitle === "donate" && el.title !== "Donate",
+  );
 }
 if (route.params.id === "contact") {
   contactPage.value && (contacts.value = contactPage.value);
@@ -111,10 +113,11 @@ useSeoMeta({
   <div class="wrapper">
     <LazyInfoDonate
       v-if="route.params.id === 'donate' && newsMainPageContent"
-      :donate="newsMainPageContent" />
+      :mane-page="newsMainPageContent"
+      :donate-list="mainPageList" />
     <LazyInfoAbout
-      v-else-if="route.params.id === 'about' && eboutData?.length"
-      :about-us="eboutData"
+      v-else-if="route.params.id === 'about' && mainPageList?.length"
+      :about-us="mainPageList"
       :contacts="contacts" />
     <LazyInfoExtinction
       v-else-if="route.params.id === 'extinction' && newsMainPageContent && latestNewsList"

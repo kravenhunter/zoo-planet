@@ -7,7 +7,6 @@ import extractFileFromEvent from "~/utils/extractFileFromEvent";
 import packToFormData from "~/utils/packToFormData";
 
 const route = useRoute();
-console.log(route);
 
 const { specieList } = storeToRefs(useUnionStorage());
 
@@ -17,7 +16,6 @@ const getRecord = specieList.value?.find((el) => el.id === route.params.id);
 
 const currentSpecie = reactive({
   title: getRecord?.title ?? "",
-  imageBgLink: getRecord?.imageBgLink ?? "",
   habitain: getRecord?.habitain ?? "",
   populationTrend: getRecord?.populationTrend ?? "Stable",
   countLeft: getRecord?.countLeft ?? "",
@@ -30,9 +28,6 @@ const selected = ref("LC");
 const conservationStatus = ["LC", "NT", "VU", "EN", "CR", "EW", "EX"];
 const selectedPopulation = ref("Stable");
 const popelationStatus = ["Decreasing", "Increasing", "Stable"];
-
-console.log(getRecord);
-console.log(specieList.value);
 
 selected.value = getRecord ? getRecord.conservationStatus : "LC";
 selectedPopulation.value = getRecord ? getRecord.populationTrend : "Stable";

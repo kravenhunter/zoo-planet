@@ -169,7 +169,6 @@ export const useUnionStorage = defineStore("union-storage", () => {
         action === "delete" &&
           (planTable.value = planTable.value.filter((el) => el.id !== (data as IPlan).id));
         !action && (planTable.value = data as IPlan[]);
-
         break;
 
       default:

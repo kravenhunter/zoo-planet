@@ -14,7 +14,7 @@ const state = reactive({
 });
 
 const route = useRoute();
-console.log(route);
+
 const pendingData = useIsLoading();
 
 const category = ["Education", "FightingExtinction", "News"];

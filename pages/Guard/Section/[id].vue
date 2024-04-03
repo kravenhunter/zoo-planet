@@ -10,6 +10,7 @@ const { postlist, mainPages, contactPage, membershipTable, ticketTable, specieLi
   storeToRefs(useUnionStorage());
 
 const newsMainPageContent = ref<IContentPage>();
+const mainPagesList = ref<IContentPage[]>();
 const latestNewsList = ref<IPost[]>();
 // // Membership Prices
 const stateMonth = ref<IMembershipPrice>();
@@ -57,10 +58,14 @@ if (router.params.id === "tickets") {
 }
 if (router.params.id === "donate") {
   newsMainPageContent.value = mainPages.value?.find((el) => el.subTitle === "donate");
+
+  newsMainPageContent.value = mainPages.value?.find((el) => el.title === "Donate");
+
+  mainPagesList.value = mainPages.value.filter(
+    (el) => el.subTitle === "donate" && el.title !== "Donate",
+  );
 }
-if (router.params.id === "contactus") {
-  contactPage.value && (contacts.value = contactPage.value);
-}
+
 if (router.params.id === "plan") {
   newsMainPageContent.value = mainPages.value?.find((el) => el.subTitle === "plan");
 }
@@ -76,8 +81,16 @@ definePageMeta({
     <v-container class="py-8 px-6" fluid>
       <!-- Main Pages List -->
       <GuardMainPages v-if="router.params.id === 'main'" :pages="mainPages" />
-      <!-- Curreent Section Page-->
-      <GuardMainPages v-if="router.params.id !== 'main'" :current-page="newsMainPageContent" />
+
+      <!-- Donate Pages List -->
+      <GuardMainPages
+        v-else-if="router.params.id === 'donate'"
+        :current-page="newsMainPageContent"
+        :pages="mainPagesList" />
+      <!-- Curreent Section Page -->
+      <GuardMainPages
+        v-else-if="router.params.id !== 'contactus'"
+        :current-page="newsMainPageContent" />
       <!--       <v-row v-if="newsMainPageContent?.imagePreviewLink">
         <v-col cols="12">
           <CardInline
@@ -114,7 +127,7 @@ definePageMeta({
         :yarly="stateYaer" />
 
       <!-- Contacts -->
-      <LazyGuardContactBlock v-if="contacts" :contact-data="contacts" />
+      <LazyGuardContactBlock v-if="router.params.id === 'contactus'" :contact-data="contactPage" />
       <!-- List of Species -->
       <LazyGuardSpeciesList v-if="router.params.id === 'species'" :specias="specieList" />
 

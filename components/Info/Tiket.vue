@@ -85,8 +85,7 @@ const tableHeaders = [
                   variant="flat"
                   size="x-large"
                   title="Buy ticket"
-                  append-icon="mdi-paw"
-                  to="/info/help">
+                  append-icon="mdi-paw">
                   Buy ticket
                 </v-btn>
               </td>

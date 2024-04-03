@@ -42,7 +42,7 @@ const extinction = {
           :text-html-card="fightingMain.description"
           :enable-button="false" />
       </v-container>
-      <v-container v-if="programs">
+      <v-container v-if="programs" class="sustainability">
         <CardInline
           v-if="programs[0].imagePreviewLink"
           class="getting_lead_inline"
@@ -69,7 +69,7 @@ const extinction = {
             :enable-button="false" />
         </v-sheet>
       </v-container>
-      <article class="bg-black pa-16">
+      <article class="our_species bg-black pa-16">
         <v-row class="bg-black">
           <v-col cols="12">
             <CardColumn
@@ -98,7 +98,7 @@ const extinction = {
           </v-col>
         </v-row>
       </article>
-      <article class="pa-16">
+      <article class="can_help pa-16">
         <v-container>
           <CardColumn
             title-card="How you can help"
@@ -201,7 +201,7 @@ const extinction = {
         </v-container>
       </article>
 
-      <article class="bg-black pa-16">
+      <article class="leading bg-black pa-16">
         <v-container>
           <v-row>
             <v-col cols="12">
@@ -284,7 +284,7 @@ const extinction = {
           </v-row>
         </v-container>
       </article>
-      <article class="pa-16">
+      <article class="community pa-16">
         <ProgramsBlock
           :programs-list="programs.slice(0, 5)"
           title="Fighting Extinction Schools Community"
@@ -317,6 +317,10 @@ const extinction = {
 .extinction {
   height: 100%;
   background-color: var(--color-grey);
+  & .sustainability {
+    display: flex;
+    justify-content: center;
+  }
 }
 
 .card {

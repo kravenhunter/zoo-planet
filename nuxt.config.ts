@@ -3,7 +3,7 @@
 export default defineNuxtConfig({
   devtools: { enabled: false },
   imports: { autoImport: false },
-  modules: ["@pinia/nuxt", "@vueuse/nuxt", "@nuxt/image"],
+  modules: ["@pinia/nuxt", "@nuxt/image"],
 
   runtimeConfig: {
     private: {

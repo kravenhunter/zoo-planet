@@ -1,28 +1,28 @@
 <script setup lang="ts">
-import { computed, navigateTo, reactive, ref, useRoute } from "#imports";
+import { computed, reactive, ref, useRoute } from "#imports";
 import { delayLoading, useIsLoading } from "@/composables/states";
 import { useUnionStorage } from "@/stores/unionStore";
+import sender from "~/composables/sender";
 import type { IContacts } from "~/types";
 import extractFileFromEvent from "~/utils/extractFileFromEvent";
-import packToFormData from "~/utils/packToFormData";
 
-const props = defineProps<{ contacTable: IContacts }>();
+const props = defineProps<{ contacTable?: IContacts | null }>();
 const route = useRoute();
 const { createOrUpdateData } = useUnionStorage();
 // const { contacTable } = toRefs(props);
 
 const state = reactive({
-  title: props.contacTable.title ?? "",
-  description: props.contacTable.description ?? "",
-  email: props.contacTable.email ?? "",
-  extraeDscription: props.contacTable.extraeDscription ?? "",
-  phone: props.contacTable.phone ?? "",
-  socialLink_1: props.contacTable.socialLink_1 ?? "",
-  socialLink_2: props.contacTable.socialLink_2 ?? "",
-  socialLink_3: props.contacTable.socialLink_3 ?? "",
-  socialLink_4: props.contacTable.socialLink_4 ?? "",
-  socialLink_5: props.contacTable.socialLink_5 ?? "",
-  copyright: props.contacTable.copyright ?? "",
+  title: props.contacTable?.title ?? "",
+  description: props.contacTable?.description ?? "",
+  email: props.contacTable?.email ?? "",
+  extraeDscription: props.contacTable?.extraeDscription ?? "",
+  phone: props.contacTable?.phone ?? "",
+  socialLink_1: props.contacTable?.socialLink_1 ?? "",
+  socialLink_2: props.contacTable?.socialLink_2 ?? "",
+  socialLink_3: props.contacTable?.socialLink_3 ?? "",
+  socialLink_4: props.contacTable?.socialLink_4 ?? "",
+  socialLink_5: props.contacTable?.socialLink_5 ?? "",
+  copyright: props.contacTable?.copyright ?? "",
 });
 const isLoadingContacts = useIsLoading();
 
@@ -48,36 +48,38 @@ const selectPreviewImage = (event: Event) => {
 };
 
 const addPost = async () => {
+  const createPath = `base/create-by-type/contacts`;
+  const updatePath = "contacts/update";
+
   isLoadingContacts.value = !isLoadingContacts.value;
   if (!isEmpty.value) {
-    if (props.contacTable.id) {
-      const getpackData = await packToFormData(state, null, filCover.value, filePreview.value);
-
-      const result = await createOrUpdateData(
-        `contacts/update/${props.contacTable.id}`,
-        getpackData,
+    if (props.contacTable?.id) {
+      const resultPromise = await sender(
+        { ...state },
+        `${updatePath}/${props.contacTable.id}`,
+        null,
+        createOrUpdateData,
+        filCover.value,
+        filePreview.value,
       );
 
-      if (result.statusCode === 200) {
+      if (resultPromise.statusCode === 200) {
         delayLoading("Success");
-        await new Promise((resolve) =>
-          setTimeout(() => {
-            navigateTo(String(route.query.id));
-          }, 2500),
-        );
       } else {
         delayLoading("Error");
       }
     } else {
-      const getpackData = await packToFormData(state, null, filCover.value, filePreview.value);
-      const result = await createOrUpdateData(`base/create-by-type/contacts`, getpackData);
-      if (result.statusCode === 200) {
+      const resultPromise = await sender(
+        { ...state },
+        createPath,
+        null,
+        createOrUpdateData,
+        filCover.value,
+        filePreview.value,
+      );
+
+      if (resultPromise.statusCode === 200) {
         delayLoading("Success");
-        await new Promise((resolve) =>
-          setTimeout(() => {
-            navigateTo(String(route.query.id));
-          }, 2500),
-        );
       } else {
         delayLoading("Error");
       }

@@ -58,7 +58,7 @@ const items = [
           :aspect-ratio="16 / 9"
           cover>
           <template #sources>
-            <source :srcset="specie.imageBgLink!" />
+            <source :srcset="`/${specie.imageBgLink}`" />
           </template>
           <v-card-title class="text-amber text-center mb-10" v-text="specie.title"></v-card-title>
         </v-img>

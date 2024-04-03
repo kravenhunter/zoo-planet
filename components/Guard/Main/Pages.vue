@@ -1,11 +1,12 @@
 <script setup lang="ts">
+import { useRoute } from "#imports";
 import type { IContentPage } from "~/types";
 
 defineProps<{
   pages?: IContentPage[] | null;
   currentPage?: IContentPage | null;
 }>();
-//const { mainPages } = storeToRefs(useUnionStore());
+const route = useRoute();
 </script>
 
 <template>
@@ -36,7 +37,7 @@ defineProps<{
           color="light-blue-darken-4"
           variant="flat"
           size="large"
-          to="/guard/main/create"
+          :to="{ path: '/guard/main/create', query: { id: route.fullPath } }"
           append-icon="mdi-paw">
           Create Main Page
         </v-btn>
@@ -60,8 +61,9 @@ defineProps<{
           button-position="justify-center"
           button-size="large"
           button-title="Edit"
-          :button-params="`/guard/main/${el.subTitle?.toLocaleLowerCase()}`"
+          :button-params="`/guard/main/${el.id}`"
           icon="mdi-paw" />
+        <!--    :button-params="`/guard/main/${el.subTitle?.toLocaleLowerCase()}`" -->
       </v-col>
     </v-row>
   </div>

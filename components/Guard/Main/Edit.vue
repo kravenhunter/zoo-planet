@@ -3,20 +3,20 @@ import { computed, navigateTo, reactive, ref, useRoute } from "#imports";
 import { delayLoading, useIsLoading } from "@/composables/states";
 import { useUnionStorage } from "@/stores/unionStore";
 import { storeToRefs } from "pinia";
+import sender from "~/composables/sender";
 import extractFileFromEvent from "~/utils/extractFileFromEvent";
-import packToFormData from "~/utils/packToFormData";
 
 const route = useRoute();
-console.log(route);
 
 const { mainPages } = storeToRefs(useUnionStorage());
 
 const { createOrUpdateData, loadDataList } = useUnionStorage();
 
 const pendingData = useIsLoading();
-const getRecord = mainPages.value?.find((el) =>
-  el.subTitle?.toLocaleLowerCase().includes(String(route.params.id)),
-);
+// const getRecord = mainPages.value?.find((el) =>
+//   el.subTitle?.toLocaleLowerCase().includes(String(route.params.id)),
+// );
+const getRecord = mainPages.value?.find((el) => el.id === String(route.params.id));
 
 const state = reactive({
   title: getRecord?.title ?? "",
@@ -65,21 +65,33 @@ const selectPreviewImage = (event: Event) => {
 };
 
 const addPost = async () => {
+  const createPath = `base/create-by-type/main-content-pages`;
+  const updatePath = "maincontent/update-by-id";
+
   pendingData.value = true;
   if (!isEmpty.value) {
     if (getRecord?.id) {
-      const getpackData = await packToFormData(
+      const resultPromise = await sender(
         { ...state },
+        `${updatePath}/${getRecord.id}`,
         null,
+        createOrUpdateData,
         filCover.value,
         filePreview.value,
       );
-      const result = await createOrUpdateData(
-        `maincontent/update-by-id/${getRecord.id}`,
-        getpackData,
-      );
 
-      if (result.statusCode === 200) {
+      // const getpackData = await packToFormData(
+      //   { ...state },
+      //   null,
+      //   filCover.value,
+      //   filePreview.value,
+      // );
+      // const result = await createOrUpdateData(
+      //   `${updatePath}/${getRecord.id}`,
+      //   getpackData,
+      // );
+
+      if (resultPromise.statusCode === 200) {
         delayLoading("Success");
         await new Promise((resolve) =>
           setTimeout(() => {
@@ -94,13 +106,22 @@ const addPost = async () => {
       }
     } else {
       if (filCover.value && filePreview.value) {
-        const getpackData = await packToFormData(state, null, filCover.value, filePreview.value);
-
-        const result = await createOrUpdateData(
-          `base/create-by-type/main-content-pages`,
-          getpackData,
+        const resultPromise = await sender(
+          { ...state },
+          createPath,
+          null,
+          createOrUpdateData,
+          filCover.value,
+          filePreview.value,
         );
-        if (result.statusCode === 200) {
+
+        // const getpackData = await packToFormData(state, null, filCover.value, filePreview.value);
+
+        // const result = await createOrUpdateData(
+        //   `base/create-by-type/main-content-pages`,
+        //   getpackData,
+        // );
+        if (resultPromise.statusCode === 200) {
           delayLoading("Success");
           await new Promise((resolve) =>
             setTimeout(() => {

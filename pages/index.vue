@@ -174,7 +174,9 @@ useSeoMeta({
                   <div class="rabbit_block">
                     <div class="rabbit">
                       <v-avatar class="mx-3 mb-4" size="50" rounded="0">
-                        <v-img src="/images/rabbit_in_hat.svg" :alt="`rabbit_in_hat_${n}`"></v-img>
+                        <v-img
+                          src="/images/bgImages/rabbit_in_hat.svg"
+                          :alt="`rabbit_in_hat_${n}`"></v-img>
                       </v-avatar>
                     </div>
 
@@ -251,7 +253,7 @@ useSeoMeta({
         :news="educationNews" />
     </section>
     <section class="conversation_wrapper">
-      <v-img class="lynx_bg" src="images/lynx_bg.jpg" cover alt=" lynx_bg">
+      <v-img class="lynx_bg" src="images/bgImages/lynx_bg.webp" cover alt=" lynx_bg">
         <div class="d-flex flex-column h-100">
           <v-row>
             <v-container class="d-flex align-center">

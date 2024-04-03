@@ -8,7 +8,7 @@ const showSearch = ref(false);
 const searchRequest = ref<string>("");
 const { logOut, checkAuth } = useAuthStore();
 const { isAuthorized } = storeToRefs(useAuthStore());
-const { mainPages, contactPage } = storeToRefs(useUnionStorage());
+const { mainPages, contactPage, planTable } = storeToRefs(useUnionStorage());
 const { loadDataList } = useUnionStorage();
 // const { data } = await useFetch("/api/prisma/base/list-by-type/:id");
 
@@ -112,21 +112,18 @@ const socials = [
 const bgImages = [
   {
     title: "header top",
-    imageBgLink:
-      "https://epjfkkmrnhyxzevpvbjf.supabase.co/storage/v1/object/public/images/cover/header_bg.webp",
+    imageBgLink: "/images/bgImages/header_bg.webp",
   },
   {
     title: "panda",
 
-    imageBgLink:
-      "https://epjfkkmrnhyxzevpvbjf.supabase.co/storage/v1/object/public/images/cover/panda1.webp",
+    imageBgLink: "/images/bgImages/panda1.webp",
   },
 ];
 
 const searchHandler = (search: string) => {
   search && navigateTo(`/search/${search}`);
 };
-console.log(contactPage.value);
 
 onMounted(() => {
   isAuthorized.value = checkAuth();
@@ -140,7 +137,7 @@ useSeoMeta({
 
 <template>
   <v-layout class="d-flex flex-column pa-0" style="min-height: 100vh">
-    <v-navigation-drawer color="black" v-model="collapseBurger" location="top" temporary>
+    <v-navigation-drawer v-model="collapseBurger" color="black" location="top" temporary>
       <v-col class="burger_nav pt-10">
         <v-row justify="center" class="pb-5">
           <UiElementsSearch
@@ -189,8 +186,8 @@ useSeoMeta({
               color="#FBB03B"
               variant="text"
               title="Icon-logout"
-              @click="logOut"
-              rounded="xl">
+              rounded="xl"
+              @click="logOut">
               <v-icon> mdi-logout </v-icon>
             </v-btn>
           </div>
@@ -206,7 +203,7 @@ useSeoMeta({
         :alt="bgImages[0].title">
         <v-row no-gutters>
           <v-col :cols="1" class="logo">
-            <v-img src="/images/logos.svg" height="99px" width="126px" alt="logos" />
+            <v-img src="/images/bgImages/logos.svg" height="99px" width="126px" alt="logos" />
           </v-col>
           <v-col class="nav_menu">
             <v-row justify="end" class="mb-5">
@@ -218,12 +215,12 @@ useSeoMeta({
               </v-expand-x-transition>
 
               <v-btn
-                @click="showSearch = !showSearch"
                 color="#FBB03B"
                 variant="text"
                 class="mx-2 text-subtitle-1"
                 title="btn-search"
-                rounded="xl">
+                rounded="xl"
+                @click="showSearch = !showSearch">
                 <UiElementsIcons
                   icon-name="material-symbols:search"
                   color-icon="white"
@@ -257,8 +254,8 @@ useSeoMeta({
                 color="#FBB03B"
                 variant="text"
                 title="icon-logout-vurger"
-                @click="logOut"
-                rounded="xl">
+                rounded="xl"
+                @click="logOut">
                 <v-icon> mdi-logout </v-icon>
               </v-btn>
               <AuthLogin v-else />
@@ -279,14 +276,18 @@ useSeoMeta({
           </v-col>
           <div class="burger_btn">
             <div class="burger_logo">
-              <v-img src="/images/logos.svg" height="99px" width="126px" alt="logos-burger" />
+              <v-img
+                src="/images/bgImages/logos.svg"
+                height="99px"
+                width="126px"
+                alt="logos-burger" />
             </div>
             <div class="burger_icon">
               <v-btn
                 title="burger-icon"
                 icon
-                @click="collapseBurger = !collapseBurger"
-                color="white">
+                color="white"
+                @click="collapseBurger = !collapseBurger">
                 <v-icon title="burget-menu" size="x-large">mdi-menu </v-icon>
               </v-btn>
             </div>
@@ -300,7 +301,7 @@ useSeoMeta({
     </v-main>
     <footer>
       <section class="subscribe_wrapper">
-        <v-img src="/images/parrto_subscribe.png" cover alt="subscribe">
+        <v-img src="/images/bgImages/parrto_subscribe.png" cover alt="subscribe">
           <div class="subscribe">
             <div class="title_block">
               <v-avatar class="ma-3" size="50" rounded="0">
@@ -413,7 +414,7 @@ useSeoMeta({
         </div>
         <div class="footer_copyright">
           <div class="footer_copyright_logo">
-            <v-img alt="logo_footer" src="/images/logos.svg" height="99px" width="126px" />
+            <v-img alt="logo_footer" src="/images/bgImages/logos.svg" height="99px" width="126px" />
           </div>
 
           <div class="footer_copyright_title">
@@ -425,7 +426,7 @@ useSeoMeta({
             <h4 class="text-center">FOLOW US</h4>
             <ul v-if="socialsLink?.length">
               <li v-for="(icon, i) in socials" :key="i">
-                <NuxtLink :to="socialsLink[i]" :title="icon.icon">
+                <NuxtLink :to="`https://${socialsLink[i]}`" target="_blank" :title="icon.icon">
                   <v-avatar color="#395A03" class="ma-3" size="47" rounded="50">
                     <UiElementsIcons
                       :icon-name="icon.icon"

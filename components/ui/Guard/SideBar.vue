@@ -3,7 +3,6 @@ import { navigateTo, useRoute } from "#imports";
 import { useAuthStore } from "@/stores/authStore";
 
 const route = useRoute();
-console.log(route);
 
 const { logOut } = useAuthStore();
 const nav = [

@@ -1,6 +1,6 @@
 import { createError, defineEventHandler, readMultipartFormData } from "#imports";
 import type { H3Error } from "h3";
-import { IPropsContacts } from "~/server/types";
+import type { IPropsContacts } from "~/server/types";
 import { extractMultipartData } from "~/server/utils/extractFormData";
 import { write_MultiPartData_To_File } from "~/server/utils/saving_file_helper";
 

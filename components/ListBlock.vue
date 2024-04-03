@@ -19,7 +19,7 @@ defineProps<Props>();
         font-title-size="2rem"
         :enable-button="false" />
     </article>
-    <v-row class="justify-center">
+    <div class="news__list mx-auto">
       <v-col v-for="item in news" :key="item.id" cols="7" lg="4" md="5" class="news_item">
         <CardColumn
           class-card="mx-auto"
@@ -45,7 +45,7 @@ defineProps<Props>();
           </v-btn>
         </CardColumn>
       </v-col>
-    </v-row>
+    </div>
   </v-container>
 </template>
 
@@ -57,6 +57,11 @@ defineProps<Props>();
   @media (max-width: 1000px) {
     font-size: 1.5rem;
   }
+}
+.news__list {
+  max-width: 1280px;
+  display: flex;
+  flex-wrap: wrap;
 }
 .news_item {
   @media (max-width: 1280px) {

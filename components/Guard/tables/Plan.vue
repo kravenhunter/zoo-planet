@@ -1,92 +1,94 @@
 <script setup lang="ts">
-import { navigateTo, ref, useRoute } from "#imports";
+import { reactive } from "#imports";
 import { delayLoading, useIsLoading } from "@/composables/states";
 import { useUnionStorage } from "@/stores/unionStore";
+import sender from "~/composables/sender";
 import type { IPlan } from "~/types";
-import packToFormData from "~/utils/packToFormData";
 
 const props = defineProps<{
   planPrices?: IPlan[];
 }>();
 const loadingMemberPrices = useIsLoading();
-const route = useRoute();
-console.log(route);
 
-const { createOrUpdateData } = useUnionStorage();
-const firstTable = ref<IPlan>();
-const secondTable = ref<IPlan>();
-const thirdTable = ref<IPlan>();
-// console.log(props.planPrices);
-firstTable.value = props.planPrices && { ...props.planPrices[0] };
-secondTable.value = props.planPrices && { ...props.planPrices[1] };
-thirdTable.value = props.planPrices && { ...props.planPrices[2] };
+const { createOrUpdateData, loadDataList } = useUnionStorage();
 
+const getfirstTable = props.planPrices && props.planPrices[0];
+const getsecondTable = props.planPrices && props.planPrices[1];
+const getthirdTable = props.planPrices && props.planPrices[2];
+
+const firstTable = reactive({
+  title: getfirstTable?.title ?? "Early Childhood Centres and Kindergartens ",
+  admission: getfirstTable?.admission ?? "23",
+  faunaPark: getfirstTable?.faunaPark ?? "15",
+  adultRatio: getfirstTable?.adultRatio ?? "1 for every 3 children",
+});
+const secondTable = reactive({
+  title: getsecondTable?.title ?? "Foundation to Year 2",
+  admission: getsecondTable?.admission ?? "23",
+  faunaPark: getsecondTable?.faunaPark ?? "15",
+  adultRatio: getsecondTable?.adultRatio ?? "1 for every 5  students",
+});
+const thirdTable = reactive({
+  title: getthirdTable?.title ?? "Tertiary",
+  admission: getthirdTable?.admission ?? "23",
+  faunaPark: getthirdTable?.faunaPark ?? "15",
+  adultRatio: getthirdTable?.adultRatio ?? "1 for every 5  students",
+});
 const addPrices = async () => {
+  const createPath = "base/create-by-type/plan";
+  const updatePath = `base/update-by-type/plan`;
+  const loadDataPath = "base/list-by-type/plan";
   loadingMemberPrices.value = true;
-  if (firstTable.value?.id && secondTable.value?.id && thirdTable.value?.id) {
-    //  const { data } = await useFetch("/api/prisma/base/create-by-type/membership-price");
-
-    const getpackfirstTable = await packToFormData(firstTable.value, firstTable.value.id);
-    const getpacksecondTable = await packToFormData(secondTable.value, secondTable.value.id);
-    const getpackthirdTable = await packToFormData(thirdTable.value, thirdTable.value.id);
-
-    const firstTableResult = await createOrUpdateData(
-      `base/update-by-type/plan`,
-      getpackfirstTable,
+  if (getfirstTable?.id && getsecondTable?.id && getthirdTable?.id) {
+    const firstTablePromise = sender(
+      { ...firstTable },
+      updatePath,
+      getfirstTable.id,
+      createOrUpdateData,
     );
-    const secondTableResult = await createOrUpdateData(
-      `base/update-by-type/plan`,
-      getpacksecondTable,
+    const secondTablePromise = sender(
+      { ...secondTable },
+      updatePath,
+      getsecondTable.id,
+      createOrUpdateData,
     );
-    const thirdTableResult = await createOrUpdateData(
-      `base/update-by-type/plan`,
-      getpackthirdTable,
+    const thirdTablePromise = sender(
+      { ...thirdTable },
+      updatePath,
+      getthirdTable.id,
+      createOrUpdateData,
     );
 
-    if (
-      firstTableResult.statusCode === 200 &&
-      secondTableResult.statusCode === 200 &&
-      thirdTableResult.statusCode === 200
-    ) {
+    const promiseResult = await Promise.all([
+      firstTablePromise,
+      secondTablePromise,
+      thirdTablePromise,
+    ]);
+
+    if (promiseResult[0].statusCode === 200) {
+      await loadDataList(loadDataPath);
       delayLoading("Success");
-      await new Promise((resolve) =>
-        setTimeout(() => {
-          navigateTo(String(route.query.id));
-        }, 2500),
-      );
     } else {
+      console.log(promiseResult[0].statusMessage);
+
       delayLoading("Error");
     }
   } else {
-    const getpackfirstTable = await packToFormData(firstTable.value, null);
-    const getpacksecondTable = await packToFormData(secondTable.value, null);
-    const getpackthirdTable = await packToFormData(thirdTable.value, null);
+    const firstTablePromise = sender({ ...firstTable }, createPath, null, createOrUpdateData);
+    const secondTablePromise = sender({ ...secondTable }, createPath, null, createOrUpdateData);
+    const thirdTablePromise = sender({ ...thirdTable }, createPath, null, createOrUpdateData);
+    const promiseResult = await Promise.all([
+      firstTablePromise,
+      secondTablePromise,
+      thirdTablePromise,
+    ]);
 
-    const firstTableResult = await createOrUpdateData(
-      `base/create-by-type/plan`,
-      getpackfirstTable,
-    );
-    const secondTableResult = await createOrUpdateData(
-      `base/create-by-type/plan`,
-      getpacksecondTable,
-    );
-    const thirdTableResult = await createOrUpdateData(
-      `base/create-by-type/plan`,
-      getpackthirdTable,
-    );
-
-    if (
-      firstTableResult.statusCode === 200 &&
-      secondTableResult.statusCode === 200 &&
-      thirdTableResult.statusCode === 200
-    ) {
+    if (promiseResult[0].statusCode === 200) {
+      await loadDataList(loadDataPath);
       delayLoading("Success");
-      await new Promise((resolve) =>
-        setTimeout(() => {
-          navigateTo(String(route.query.id));
-        }, 2500),
-      );
     } else {
+      console.log(promiseResult[0].statusMessage);
+
       delayLoading("Error");
     }
   }
@@ -108,7 +110,7 @@ const ticketTableHeaders = [
     <v-container class="py-8 px-6 d-flex" fluid>
       <v-row>
         <v-col cols="12">
-          <article v-if="firstTable && secondTable && thirdTable" class="table pb-16">
+          <article class="table pb-16">
             <v-table theme="light">
               <thead class="bg-orange-lighten-5 text-subtitle-2">
                 <tr>

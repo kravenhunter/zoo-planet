@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import type { IContacts } from "~/types";
 
-defineProps<{ contactData: IContacts }>();
+defineProps<{ contactData?: IContacts | null }>();
 </script>
 
 <template>
-  <div v-if="contactData">
-    <v-row>
+  <div>
+    <v-row v-if="contactData">
       <v-col cols="12">
         <CardInline
           max-width-card="1200px"
@@ -24,7 +24,7 @@ defineProps<{ contactData: IContacts }>();
     </v-row>
     <v-row>
       <v-col cols="12">
-        <GuardContactEdit v-if="contactData" :contac-table="contactData" />
+        <GuardContactEdit :contac-table="contactData" />
       </v-col>
     </v-row>
   </div>

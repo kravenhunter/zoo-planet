@@ -1,18 +1,20 @@
 <script setup lang="ts">
+import { useRoute } from "#imports";
 import type { ISpecie } from "~/types";
 
 defineProps<{ specias?: ISpecie[] | null }>();
+const route = useRoute();
 </script>
 
 <template>
-  <v-row>
+  <v-row class="justify-center">
     <v-col cols="12" class="d-flex justify-center">
       <v-btn
         class="px-10 text-subtitle-1 ma-6 text-white text-grey-lighten-5"
         color="light-blue-darken-4"
         variant="flat"
         size="large"
-        to="/guard/species/create"
+        :to="{ path: '/guard/species/create', query: { id: route.fullPath } }"
         append-icon="mdi-paw">
         Create post
       </v-btn>
@@ -20,6 +22,7 @@ defineProps<{ specias?: ISpecie[] | null }>();
     <div v-if="specias?.length">
       <v-col v-for="el in specias" :key="el.id" cols="12">
         <CardInline
+          v-if="el.imagePreviewLink"
           max-width-card="1200px"
           class-card="bg-grey-darken-4 mx-auto"
           :title-card="el.title"

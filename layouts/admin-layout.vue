@@ -45,7 +45,7 @@ if (!mainPages.value.length) {
       <div
         class="position-absolute d-flex justify-end"
         style="width: 95%; z-index: 100; top: 4.5rem">
-        <div class="alert" v-if="alertDialog.dialogModal">
+        <div v-if="alertDialog.dialogModal" class="alert">
           <v-fade-transition hide-on-leave>
             <v-alert v-if="alertDialog.dialogModal" :color="alertDialog.colorIcon" variant="flat">
               <div class="d-flex align-center justify-center">

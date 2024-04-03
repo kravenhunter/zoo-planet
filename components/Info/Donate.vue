@@ -2,34 +2,43 @@
 import type { IContentPage } from "~/types";
 
 defineProps<{
-  donate: IContentPage;
+  manePage: IContentPage;
+  donateList?: IContentPage[];
 }>();
 </script>
 
 <template>
-  <section v-if="donate" class="donate">
+  <section v-if="manePage" class="donate">
     <article class="card">
       <CardColumn :enable-card-slot="true">
         <v-img
-          v-if="donate.imageBgLink"
-          :alt="donate.title"
-          :src="`/${donate.imageBgLink}`"
+          v-if="manePage.imageBgLink"
+          :alt="manePage.title"
+          :src="`/${manePage.imageBgLink}`"
           class="align-end"
           :max-height="600"
           :aspect-ratio="16 / 9"
           gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
           cover>
           <template #sources>
-            <source :srcset="`/${donate.imageBgLink}`" />
+            <source :srcset="`/${manePage.imageBgLink}`" />
           </template>
-          <v-card-title class="text-amber text-center mb-10" v-text="donate.title"></v-card-title>
+          <v-card-title class="text-amber text-center mb-10" v-text="manePage.title"></v-card-title>
         </v-img>
       </CardColumn>
 
       <article class="donate_text">
         <v-container>
-          <CardColumn :text-html-card="donate.description" />
+          <CardColumn :text-html-card="manePage.description" />
         </v-container>
+      </article>
+      <article v-if="donateList?.length" class="community pa-16">
+        <ProgramsBlock
+          :programs-list="donateList"
+          title="Fighting Extinction Schools Community"
+          title-class="text-amber-darken-2 text center"
+          text="Get support and grow your network."
+          text-class="text-center text-black" />
       </article>
     </article>
   </section>
