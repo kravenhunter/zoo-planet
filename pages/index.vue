@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, useSeoMeta } from "#imports";
+import { ref, useHead, useSeoMeta } from "#imports";
 import { useUnionStorage } from "@/stores/unionStore";
 
 import { storeToRefs } from "pinia";
@@ -91,6 +91,24 @@ const bgImages = [
     imageBgLink: "/images/bgImages/red_bear2.webp",
   },
 ];
+// useHeadSafe({
+//   link: [
+//     {
+//       rel: "preload",
+//       type: "image/webp",
+//       href: "/images/bgImages/citten_bg.webp",
+//     },
+//   ],
+// });
+useHead({
+  link: [
+    {
+      rel: "preload",
+      as: "image",
+      href: "/images/bgImages/citten_bg.webp",
+    },
+  ],
+});
 useSeoMeta({
   title: "Visit ZOO-PLANET",
   ogTitle: "Visit ZOO-PLANET",
