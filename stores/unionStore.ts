@@ -45,19 +45,19 @@ export const useUnionStorage = defineStore("union-storage", () => {
   const isItemExist = (idItem: string, table: TypeTables): boolean => {
     switch (table) {
       case "post":
-        return postlist.value?.some((el) => el.id === idItem) ?? false;
+        return postlist.value?.some((el) => el.id === idItem);
       case "species":
-        return specieList.value?.some((el) => el.id === idItem) ?? false;
+        return specieList.value?.some((el) => el.id === idItem);
       case "main-pages":
-        return mainPages.value?.some((el) => el.id === idItem) ?? false;
+        return mainPages.value?.some((el) => el.id === idItem);
       case "contacts":
-        return contactPage.value?.id === idItem ?? false;
+        return contactPage.value?.id === idItem;
       case "membership-price":
-        return membershipTable.value?.some((el) => el.id === idItem) ?? false;
+        return membershipTable.value?.some((el) => el.id === idItem);
       case "ticket-price":
-        return ticketTable.value?.some((el) => el.id === idItem) ?? false;
+        return ticketTable.value?.some((el) => el.id === idItem);
       case "plan":
-        return planTable.value?.some((el) => el.id === idItem) ?? false;
+        return planTable.value?.some((el) => el.id === idItem);
 
       default:
         return false;
