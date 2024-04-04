@@ -17,11 +17,6 @@ import type { IResponse } from "~/types";
 const CATEGORY_LIST = ["Education", "FightingExtinction", "News", "Species"];
 const POPULATION_TREND = ["Decreasing", "Increasing", "Stable"];
 const CONVERSION_STATUS = ["LC", "NT", "VU", "EN", "CR", "EW", "EX"];
-interface IPropsaPlanObjects {
-  frist: IPropsPlan;
-  second: IPropsPlan;
-  third: IPropsPlan;
-}
 
 export default defineEventHandler(async (event) => {
   try {

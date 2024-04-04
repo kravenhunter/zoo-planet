@@ -1,8 +1,7 @@
 import { createError, defineEventHandler, readBody } from "#imports";
-import { PrismaClient } from "@prisma/client";
+
 import type { H3Error } from "h3";
 
-const prismaCLient = new PrismaClient();
 interface IProps {
   type: string;
 }
@@ -13,7 +12,7 @@ export default defineEventHandler(async (event) => {
     if (type) {
       switch (type) {
         case "post":
-          await prismaCLient.post.delete({
+          await event.context.prisma.post.delete({
             where: {
               id: event?.context?.params?.id,
             },
@@ -27,7 +26,7 @@ export default defineEventHandler(async (event) => {
           };
 
         case "contacts":
-          await prismaCLient.contactUs.delete({
+          await event.context.prisma.contactUs.delete({
             where: {
               id: event?.context?.params?.id,
             },
@@ -40,7 +39,7 @@ export default defineEventHandler(async (event) => {
             // objectResult: getItem,
           };
         case "main-content-pages":
-          await prismaCLient.contentPages.delete({
+          await event.context.prisma.contentPages.delete({
             where: {
               id: event?.context?.params?.id,
             },
@@ -53,7 +52,7 @@ export default defineEventHandler(async (event) => {
             // objectResult: getItem,
           };
         case "specie":
-          await prismaCLient.specie.delete({
+          await event.context.prisma.specie.delete({
             where: {
               id: event?.context?.params?.id,
             },
@@ -66,7 +65,7 @@ export default defineEventHandler(async (event) => {
             // objectResult: getItem,
           };
         case "plan":
-          await prismaCLient.planPrice.delete({
+          await event.context.prisma.planPrice.delete({
             where: {
               id: event?.context?.params?.id,
             },
@@ -80,7 +79,7 @@ export default defineEventHandler(async (event) => {
           };
 
         case "membership-price":
-          await prismaCLient.membershipPrice.delete({
+          await event.context.prisma.membershipPrice.delete({
             where: {
               id: event?.context?.params?.id,
             },
@@ -94,7 +93,7 @@ export default defineEventHandler(async (event) => {
           };
 
         case "ticket-price":
-          await prismaCLient.ticketPrice.delete({
+          await event.context.prisma.ticketPrice.delete({
             where: {
               id: event?.context?.params?.id,
             },
