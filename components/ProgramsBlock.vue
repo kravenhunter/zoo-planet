@@ -51,8 +51,7 @@ defineProps<Props>();
                 class="align-end"
                 gradient="to bottom, rgba(0,0,0,.1), rgba(0,0,0,.4)"
                 :aspect-ratio="4 / 3"
-                cover
-                >>
+                cover>
                 <template #sources>
                   <source :srcset="`/${el.imagePreviewLink}`" />
                 </template>

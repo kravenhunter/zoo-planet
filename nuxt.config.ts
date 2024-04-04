@@ -17,12 +17,26 @@ export default defineNuxtConfig({
       app_url: process.env.ENDPOINT ?? "http://localhost:3000",
     },
   },
+
   // image: {
   //   provider: "supabase",
   //   supabase: {
   //     baseURL: "https://epjfkkmrnhyxzevpvbjf.supabase.co/storage/v1/object/public/images/ec8697b5-0988-44b5-866c-a2a32cad4955fighting_extinction_cover.jpg",
   //   },
   // },
+  routeRules: {
+    "https://www.zoo.org.au/media/**": {
+      cors: true,
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "*",
+        "Access-Control-Allow-Methods": "GET,HEAD",
+        "Access-Control-Allow-Credentials": "true",
+        //  'access-Control-Allow-origin': 'http://localhost:3000',
+        //  'access-control-allow-credentials': 'true'
+      },
+    },
+  },
   app: {
     pageTransition: { name: "blog", mode: "out-in" },
     head: {

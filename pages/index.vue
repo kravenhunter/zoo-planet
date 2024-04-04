@@ -1,23 +1,17 @@
 <script setup lang="ts">
-import { ref, useHead, useSeoMeta } from "#imports";
+import { useHead, useSeoMeta } from "#imports";
 import { useUnionStorage } from "@/stores/unionStore";
-
 import { storeToRefs } from "pinia";
-import type { IContentPage, IPost } from "~/types";
 
 const { postlist, mainPages } = storeToRefs(useUnionStorage());
 
 // Education Data
-const educationMain = ref<IContentPage>();
-const educationNews = ref<IPost[]>();
-educationMain.value = mainPages.value?.find((el) => el.subTitle === "education");
-educationNews.value = postlist.value?.filter((el) => el.category === "Education");
+const educationMain = mainPages.value?.find((el) => el.subTitle === "education");
+const educationNews = postlist.value?.filter((el) => el.category === "Education");
 
 // News Data
-const newsMain = ref<IContentPage>();
-const lastNews = ref<IPost[]>();
-newsMain.value = mainPages.value?.find((el) => el.subTitle === "news");
-lastNews.value = postlist.value?.filter((el) => el.category === "News");
+const newsMain = mainPages.value?.find((el) => el.subTitle === "news");
+const lastNews = postlist.value?.filter((el) => el.category === "News");
 
 const conversationIcons = [
   {

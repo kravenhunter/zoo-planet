@@ -26,6 +26,7 @@ const clienSKey = ref<string | null>();
 const loading = ref(true);
 
 let elements: StripeElements;
+
 const stripeInit = async () => {
   stripe = await loadStripe(runtimeCOnfig.public.stripePK);
   console.log(totalPrice.value);
@@ -72,7 +73,6 @@ const payment = async () => {
     console.log("fill form correctly");
   }
   if (clienSKey.value && cardElement.value) {
-    console.log(clienSKey.value);
     try {
       const result = await stripe?.confirmCardPayment(clienSKey.value, {
         payment_method: {

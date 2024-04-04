@@ -9,17 +9,6 @@ interface Props {
   stateYaer: IMembershipPrice;
 }
 
-interface Person {
-  firstName?: string;
-  lastName?: string;
-  phone?: string;
-  personGender?: string;
-  dateOfBirth?: string;
-  adress?: string;
-  email?: string;
-  isEmpty: boolean;
-}
-
 defineProps<Props>();
 
 const state = {
@@ -42,8 +31,6 @@ const statePersons = reactive({
   senior: [{ ...state }, { ...state }, { ...state }, { ...state }, { ...state }],
   supporter: [{ ...state }, { ...state }, { ...state }, { ...state }, { ...state }],
 });
-
-console.log(statePersons.adults[0].firstName);
 
 const personList = ["Male", "Female", "Self-described"];
 const selectedPrecesState = useSelectedPrecesState();

@@ -24,9 +24,6 @@ onMounted(() => {
   document.querySelectorAll(".link").forEach((el) => {
     el.addEventListener("click", (event) => {
       activeLink.value = el?.textContent;
-      console.log("activeLink", activeLink);
-
-      console.log(el);
     });
   });
 });

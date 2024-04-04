@@ -2,7 +2,7 @@
 import { ref, useRoute, useSeoMeta } from "#imports";
 import { useUnionStorage } from "@/stores/unionStore";
 import { storeToRefs } from "pinia";
-import type { IContacts, IContentPage, IMembershipPrice, IPost, ITicketPrice } from "~/types";
+import type { IContentPage, IMembershipPrice, IPost, ITicketPrice } from "~/types";
 
 const route = useRoute();
 const { postlist, specieList, mainPages, contactPage, membershipTable, ticketTable, planTable } =
@@ -18,8 +18,7 @@ const stateYaer = ref<IMembershipPrice>();
 // // Ticket Prices & Table
 const singleState = ref<ITicketPrice>();
 const unlimitedSTate = ref<ITicketPrice>();
-// //Contacts Data
-const contacts = ref<IContacts>();
+
 //About Data
 
 //Checking ROutes
@@ -49,32 +48,31 @@ if (route.params.id === "education") {
   newsMainPageContent.value?.title && (metaTitle.value = newsMainPageContent.value.title);
 }
 if (route.params.id === "about") {
-  const about = mainPages.value?.find((el) => el.subTitle === "aboutus");
+  newsMainPageContent.value = mainPages.value?.find((el) => el.subTitle === "aboutus");
+
   const sponsor = mainPages.value?.find((el) => el.subTitle === "sponsors");
   const career = mainPages.value?.find((el) => el.subTitle === "careers");
   const education = mainPages.value?.find((el) => el.subTitle === "education");
   const volunteer = mainPages.value?.find((el) => el.subTitle === "volunteer");
-  contactPage.value && (contacts.value = contactPage.value);
 
   mainPageList.value = [];
-  about && mainPageList.value.push(about);
   career && mainPageList.value.push(career);
   education && mainPageList.value.push(education);
   volunteer && mainPageList.value.push(volunteer);
   sponsor && mainPageList.value.push(sponsor);
-  contacts.value &&
+  contactPage.value &&
     mainPageList.value.push({
-      id: contacts.value?.id,
-      imageBgLink: contacts.value?.imageBgLink,
-      imagePreviewLink: contacts.value?.imagePreviewLink,
-      title: contacts.value?.title,
-      subTitle: contacts.value?.title,
-      shortDescription: contacts.value?.description,
-      description: contacts.value?.description,
-      extraeDscription: contacts.value?.extraeDscription,
+      id: contactPage.value?.id,
+      imageBgLink: contactPage.value?.imageBgLink,
+      imagePreviewLink: contactPage.value?.imagePreviewLink,
+      title: contactPage.value?.title,
+      subTitle: contactPage.value?.title,
+      shortDescription: contactPage.value?.description,
+      description: contactPage.value?.description,
+      extraeDscription: contactPage.value?.extraeDscription,
     });
 
-  about?.title && (metaTitle.value = about.title);
+  newsMainPageContent.value?.title && (metaTitle.value = newsMainPageContent.value.title);
 }
 if (route.params.id === "membership") {
   newsMainPageContent.value = mainPages.value?.find((el) => el.title === "Membership");
@@ -100,12 +98,11 @@ if (route.params.id === "donate") {
   );
 }
 if (route.params.id === "contact") {
-  contactPage.value && (contacts.value = contactPage.value);
-  contacts.value?.title && (metaTitle.value = contacts.value?.title);
+  contactPage.value?.title && (metaTitle.value = contactPage.value?.title);
 }
 useSeoMeta({
-  title: metaTitle.value ? metaTitle.value : "Error result",
-  ogTitle: metaTitle.value ? metaTitle.value : "Error result",
+  title: metaTitle.value ?? "Error result",
+  ogTitle: metaTitle.value ?? "Error result",
 });
 </script>
 
@@ -116,9 +113,9 @@ useSeoMeta({
       :mane-page="newsMainPageContent"
       :donate-list="mainPageList" />
     <LazyInfoAbout
-      v-else-if="route.params.id === 'about' && mainPageList?.length"
-      :about-us="mainPageList"
-      :contacts="contacts" />
+      v-else-if="route.params.id === 'about' && newsMainPageContent"
+      :about-us="newsMainPageContent"
+      :about-pages="mainPageList" />
     <LazyInfoExtinction
       v-else-if="route.params.id === 'extinction' && newsMainPageContent && latestNewsList"
       :fighting-main="newsMainPageContent"
@@ -140,8 +137,8 @@ useSeoMeta({
       :species="newsMainPageContent"
       :specie-list="specieList" />
     <LazyInfoContactUs
-      v-else-if="route.params.id === 'contact' && contacts"
-      :contact-main="contacts" />
+      v-else-if="route.params.id === 'contact' && contactPage"
+      :contact-main="contactPage" />
     <LazyInfoTiket
       v-else-if="
         route.params.id === 'ticket' && newsMainPageContent && singleState && unlimitedSTate

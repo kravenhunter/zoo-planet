@@ -2,8 +2,8 @@
 import { computed, navigateTo, reactive, ref, useRoute } from "#imports";
 import { delayLoading, useIsLoading } from "@/composables/states";
 import { useUnionStorage } from "@/stores/unionStore";
+import sender from "~/composables/sender";
 import extractFileFromEvent from "~/utils/extractFileFromEvent";
-import packToFormData from "~/utils/packToFormData";
 
 const { createOrUpdateData } = useUnionStorage();
 const state = reactive({
@@ -40,11 +40,20 @@ const selectPreviewImage = (event: Event) => {
 };
 
 const addPost = async () => {
+  const createPath = `base/create-by-type/post`;
+
   pendingData.value = true;
   if (filCover.value && filePreview.value) {
-    const getpackData = await packToFormData(state, null, filCover.value, filePreview.value);
-    const result = await createOrUpdateData(`base/create-by-type/post`, getpackData);
-    if (result.statusCode === 200) {
+    const resultPromise = await sender(
+      { ...state },
+      createPath,
+      null,
+      createOrUpdateData,
+      filCover.value,
+      filePreview.value,
+    );
+
+    if (resultPromise.statusCode === 200) {
       delayLoading("Success");
       await new Promise((resolve) =>
         setTimeout(() => {

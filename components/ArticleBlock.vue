@@ -1,16 +1,7 @@
 <script setup lang="ts">
-import { ref, useRoute } from "#imports";
-import { useUnionStorage } from "@/stores/unionStore";
-import { storeToRefs } from "pinia";
 import type { ISpecie } from "~/types";
 
 defineProps<{ specie: ISpecie }>();
-
-const route = useRoute();
-const { specieList } = storeToRefs(useUnionStorage());
-
-const currentSpecie = ref<ISpecie>();
-currentSpecie.value = specieList.value?.find((el) => el.id === route.params.id);
 
 const items = [
   {

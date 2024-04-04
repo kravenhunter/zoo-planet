@@ -1,17 +1,16 @@
 <script setup lang="ts">
-import { ref, useRoute, useSeoMeta } from "#imports";
+import { useRoute, useSeoMeta } from "#imports";
 import { useUnionStorage } from "@/stores/unionStore";
 import { storeToRefs } from "pinia";
-import type { ISpecie } from "~/types";
 
 const route = useRoute();
 const { specieList } = storeToRefs(useUnionStorage());
 
-const currentSpecie = ref<ISpecie>();
-currentSpecie.value = specieList.value?.find((el) => el.id === route.params.id);
+const currentSpecie = specieList.value?.find((el) => el.id === route.params.id);
+
 useSeoMeta({
-  title: currentSpecie.value ? currentSpecie.value.title : "Error search",
-  ogTitle: currentSpecie.value ? currentSpecie.value.title : "Error search",
+  title: currentSpecie?.title ?? "Error search",
+  ogTitle: currentSpecie?.title ?? "Error search",
 });
 </script>
 

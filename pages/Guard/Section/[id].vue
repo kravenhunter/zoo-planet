@@ -2,7 +2,7 @@
 import { definePageMeta, ref, useRoute } from "#imports";
 import { useUnionStorage } from "@/stores/unionStore";
 import { storeToRefs } from "pinia";
-import type { IContacts, IContentPage, IMembershipPrice, IPost, ITicketPrice } from "~/types";
+import type { IContentPage, IMembershipPrice, IPost, ITicketPrice } from "~/types";
 
 const router = useRoute();
 
@@ -18,8 +18,6 @@ const stateYaer = ref<IMembershipPrice>();
 // // Ticket Prices & Table
 const singleState = ref<ITicketPrice>();
 const unlimitedSTate = ref<ITicketPrice>();
-// //Contacts Data
-const contacts = ref<IContacts>();
 
 //Checking ROutes
 //console.log(mainPages.value);

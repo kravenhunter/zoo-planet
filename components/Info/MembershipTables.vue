@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from "#imports";
 import { useCurrentMemberTab, useSelectedPrecesState, useTotalPrice } from "@/composables/states";
-
 import type { IContentPage, IMembershipPrice } from "~/types";
 
 interface Props {

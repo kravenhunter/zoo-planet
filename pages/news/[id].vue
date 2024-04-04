@@ -1,17 +1,15 @@
 <script setup lang="ts">
-import { ref, useRoute, useSeoMeta } from "#imports";
+import { useRoute, useSeoMeta } from "#imports";
 import { useUnionStorage } from "@/stores/unionStore";
 import { storeToRefs } from "pinia";
-import type { IPost } from "~/types";
 
 const route = useRoute();
 const { postlist } = storeToRefs(useUnionStorage());
 
-const currentArticle = ref<IPost>();
-currentArticle.value = postlist.value?.find((el) => el.id === route.params.id);
+const currentArticle = postlist.value?.find((el) => el.id === route.params.id);
 useSeoMeta({
-  title: currentArticle.value ? currentArticle.value.title : "Error search",
-  ogTitle: currentArticle.value ? currentArticle.value.title : "Error search",
+  title: currentArticle?.title ?? "Error search",
+  ogTitle: currentArticle?.title ?? "Error search",
 });
 </script>
 

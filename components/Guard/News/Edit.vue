@@ -3,8 +3,8 @@ import { computed, navigateTo, reactive, ref, useRoute } from "#imports";
 import { delayLoading, useIsLoading } from "@/composables/states";
 import { useUnionStorage } from "@/stores/unionStore";
 import { storeToRefs } from "pinia";
+import sender from "~/composables/sender";
 import extractFileFromEvent from "~/utils/extractFileFromEvent";
-import packToFormData from "~/utils/packToFormData";
 
 const route = useRoute();
 
@@ -44,13 +44,20 @@ const selectPreviewImage = (event: Event) => {
 };
 
 const addPost = async () => {
+  const updatePath = "post/update";
   pendingData.value = true;
 
   if (getPost?.id) {
-    const getpackData = await packToFormData({ ...state }, null, filCover.value, filePreview.value);
+    const resultPromise = await sender(
+      { ...state },
+      `${updatePath}/${getPost.id}`,
+      null,
+      createOrUpdateData,
+      filCover.value,
+      filePreview.value,
+    );
 
-    const result = await createOrUpdateData(`post/update/${getPost.id}`, getpackData);
-    if (result.statusCode === 200) {
+    if (resultPromise.statusCode === 200) {
       delayLoading("Success");
       await new Promise((resolve) =>
         setTimeout(() => {
